@@ -1,5 +1,6 @@
 // Dependencies
 const {
+  HotModuleReplacementPlugin,
   NamedModulesPlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack');
@@ -42,7 +43,7 @@ module.exports = {
           use: ExtractTextPlugin.extract({
             fallback: require.resolve('style-loader'),
             use: [
-              { loader: require.resolve('css-loader'), options: { importLoaders: 1 } },
+              { loader: require.resolve('css-loader'), options: { importLoaders: 1, minimize: !isDev } },
               { loader: require.resolve('resolve-url-loader') },
               { loader: require.resolve('sass-loader'), options: { sourceMap: true, precision: 10 } },
             ],
@@ -58,17 +59,10 @@ module.exports = {
   },
   plugins: [
     isDev && new NamedModulesPlugin(),
+    isDev && new HotModuleReplacementPlugin(),
     new NoEmitOnErrorsPlugin(),
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
   ].filter(e => e),
-  // optimization:
-  //   { noEmitOnErrors: true,
-  //     concatenateModules: false,
-  //     namedModules: true,
-  //     splitChunks: { chunks: 'all' },
-  //     runtimeChunk: { name: 'webpack_runtime' },
-  //     minimize: false,
-  //     minimizer: [] } }
 };

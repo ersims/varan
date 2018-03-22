@@ -20,8 +20,10 @@ npm i --save-dev varan
 2. Add the following in the `"scripts"` section in your project's `package.json`
 ```
 "build": "varan build",
-"watch": "varan watch"
+"watch": "varan watch -- --inspect"
 ```
+
+Any options passed after `--` is sent directly to nodemon - this makes it easy to add debugging options to the server in `watch` mode.
 
 ### Development
 Start the development server with hot reloading in browser and on server by running 

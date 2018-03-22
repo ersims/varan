@@ -12,6 +12,7 @@ program
   .action(() => require('./scripts/build')());
 program
   .command('watch')
+  .allowUnknownOption()
   .action(() => require('./scripts/watch')());
 
 // Run

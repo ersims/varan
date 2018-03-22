@@ -1,8 +1,5 @@
 // Dependencies
-const {
-  EnvironmentPlugin,
-  HotModuleReplacementPlugin,
-} = require('webpack');
+const { EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const defaultsDeep = require('lodash.defaultsdeep');
@@ -86,7 +83,6 @@ module.exports = (opts) => {
         BUILD_TARGET: 'server',
         DEBUG: false,
       }),
-      isDev && new HotModuleReplacementPlugin(),
     ].filter(Boolean),
     node: {
       __dirname: false,

@@ -72,9 +72,10 @@ module.exports = ({ configFile } = {}) => {
   serverCompiler.hooks.done.tap(`${pkg.name}`, (stats) => {
     if (!watcher) {
       // Pass in arguments to child
-      const debugArgs = [...new Set(process.execArgv.concat(process.env.NODE_DEBUG_OPTION || []).filter(arg => arg.startsWith('--inspect') || arg.startsWith('--debug')))];
+      const launchArgs = process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [];
+      const debugArgs = [...new Set(launchArgs.concat(process.env.NODE_DEBUG_OPTION || []).filter(arg => arg.startsWith('--inspect') || arg.startsWith('--debug')))];
       const debugPort = (debugArgs.length > 0) ? process.debugPort + 1 : process.debugPort;
-      const execArgs = process.execArgv.filter(arg => !debugArgs.includes(arg)).concat(debugArgs.map(arg => arg.replace(process.debugPort, debugPort)));
+      const execArgs = launchArgs.filter(arg => !debugArgs.includes(arg)).concat(debugArgs.map(arg => arg.replace(process.debugPort, debugPort)));
       watcher = nodemon({ quiet: true, verbose: false, script: binary, watch: false, execArgs });
 
       watcher.on('log', log => console.info(log.colour));

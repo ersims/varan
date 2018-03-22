@@ -2,12 +2,13 @@
 const {
   EnvironmentPlugin,
   NamedModulesPlugin,
-  HotModuleReplacementPlugin,
   DefinePlugin,
 } = require('webpack');
 const merge = require('webpack-merge');
 const WriteFilePlugin = require('write-file-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const defaultsDeep = require('lodash.defaultsdeep');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
@@ -62,7 +63,7 @@ module.exports = (options) => {
     ].filter(e => e),
     output: {
       path: path.dirname(path.resolve(opts.targetDir, opts.entry)),
-      filename: outputFilename,
+      filename: isDev ? outputFilename : 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
       pathinfo: true,
       publicPath,
@@ -121,9 +122,13 @@ module.exports = (options) => {
         DEBUG: false,
       }),
       isDev && new NamedModulesPlugin(),
-      isDev && new HotModuleReplacementPlugin(),
       isDev && new WriteFilePlugin({ log: true }),
       isDev && new DefinePlugin({ 'window.location.port': opts.devPort }),
+      new ExtractTextPlugin({
+        disable: isDev,
+        filename: 'static/css/[name].[contenthash:8].css',
+        allChunks: true,
+      }),
       new HtmlWebpackPlugin({ // Inject script to index.hbs template
         inject: true,
         template: `!!${require.resolve('html-loader')}!${path.join(paths.templates.sourceDir, paths.templates.entries.app)}`,
@@ -143,6 +148,32 @@ module.exports = (options) => {
         },
       }),
     ].filter(Boolean),
+    optimization: isDev
+      ? {}
+      : {
+        minimizer: [
+          new UglifyJSPlugin({
+            parallel: true,
+            uglifyOptions: {
+              compress: true,
+              output: {
+                comments: false,
+                ascii_only: true,
+              },
+            },
+            sourceMap: true,
+          }),
+        ],
+        splitChunks: {
+          cacheGroups: {
+            commons: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendor',
+              chunks: 'all',
+            },
+          },
+        },
+      },
     node: {
       dgram: 'empty',
       fs: 'empty',

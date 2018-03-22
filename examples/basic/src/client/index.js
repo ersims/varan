@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 
+// Styles
+import './sass/index.scss';
+
 // Init
 const render = () => {
   ReactDOM.hydrate(
