@@ -6,7 +6,7 @@ const nodemon = require('nodemon');
 const fs = require('fs');
 const path = require('path');
 const WebpackDevServer = require('webpack-dev-server');
-const { createCompiler, prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
+const { createCompiler, prepareUrls, choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const clearConsole = require('react-dev-utils/clearConsole');
 const pkg = require('../package.json');
 const defaultServerConfig = require('../config/webpack/server');
@@ -15,12 +15,15 @@ const defaultClientConfig = require('../config/webpack/client');
 // Init
 process.on('unhandledRejection', (err) => { throw err; });
 const isInteractive = process.stdout.isTTY;
-const PORT = parseInt(process.env.PORT, 10) || 3000;
-const DEV_PORT = parseInt(process.env.DEV_PORT, 10) || 8080;
-const HOST = process.env.HOST || '0.0.0.0';
 
 // Run watcher
-module.exports = ({ configFile } = {}) => {
+module.exports = async ({ configFile } = {}) => {
+  const HOST = process.env.HOST || '0.0.0.0';
+  const providedDevPort = parseInt(process.env.DEV_PORT, 10) || 3000;
+  const providedPort = parseInt(process.env.PORT, 10) || providedDevPort + 1;
+  const DEV_PORT = process.env.DEV_PORT = await choosePort(HOST, providedDevPort);
+  const PORT = process.env.PORT = await choosePort(HOST, providedPort);
+
   let config = defaultServerConfig();
   const clientConfig = defaultClientConfig({ devPort: DEV_PORT });
   if (configFile) {
@@ -34,7 +37,7 @@ module.exports = ({ configFile } = {}) => {
 
   // Init
   const binary = path.resolve(config.output.path, config.output.filename);
-  const urls = prepareUrls('http', HOST, PORT);
+  const urls = prepareUrls('http', HOST, DEV_PORT);
   const serverCompiler = webpack(config);
   const clientCompiler = createCompiler(webpack, clientConfig, pkg.name, urls, false);
 

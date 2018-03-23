@@ -4,6 +4,7 @@ const {
   NamedModulesPlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack');
+const WriteFilePlugin = require('write-file-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
@@ -64,5 +65,6 @@ module.exports = {
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
     }),
+    new WriteFilePlugin({ test: /^(?!.*(\.hot-update\.)).*/ }),
   ].filter(e => e),
 };

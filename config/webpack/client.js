@@ -2,10 +2,8 @@
 const {
   EnvironmentPlugin,
   NamedModulesPlugin,
-  DefinePlugin,
 } = require('webpack');
 const merge = require('webpack-merge');
-const WriteFilePlugin = require('write-file-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
@@ -32,11 +30,15 @@ module.exports = (options) => {
   const opts = defaultsDeep({}, options, defaultOpts);
   const outputFilename = isDev ? 'bundle.js' : path.extname(opts.entry) ? path.basename(opts.entry) : `${path.basename(opts.entry)}.js`;
   const publicPath = isDev ? `http://localhost:${opts.devPort}/` : `/${path.dirname(opts.entry)}`;
+  const publicPath2 = isDev ? `http://localhost:3001/` : `/${path.dirname(opts.entry)}`;
   return merge.smart(common, {
     target: 'web',
     devtool: isDev ? 'cheap-module-source-map' : 'none',
     devServer: {
       port: opts.devPort,
+      proxy: {
+        '/': publicPath2,
+      },
       compress: true,
       clientLogLevel: 'none',
       quiet: true,
@@ -122,8 +124,6 @@ module.exports = (options) => {
         DEBUG: false,
       }),
       isDev && new NamedModulesPlugin(),
-      isDev && new WriteFilePlugin({ log: true }),
-      isDev && new DefinePlugin({ 'window.location.port': opts.devPort }),
       new ExtractTextPlugin({
         disable: isDev,
         filename: 'static/css/[name].[contenthash:8].css',
@@ -153,6 +153,7 @@ module.exports = (options) => {
       : {
         minimizer: [
           new UglifyJSPlugin({
+            cache: true,
             parallel: true,
             uglifyOptions: {
               compress: true,
