@@ -5,7 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 const defaultsDeep = require('lodash.defaultsdeep');
 const path = require('path');
 const common = require('./common.js');
-const paths = require('../paths');
+const paths = require('../config/paths');
 
 // Init
 const isDev = process.env.NODE_ENV !== 'production';

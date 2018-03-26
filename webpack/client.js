@@ -13,7 +13,7 @@ const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMi
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const path = require('path');
 const common = require('./common.js');
-const paths = require('../paths');
+const paths = require('../config/paths');
 
 // Init
 const isDev = process.env.NODE_ENV !== 'production';
@@ -22,22 +22,19 @@ const defaultOpts = {
   sourceDir: paths.client.sourceDir,
   entry: paths.client.entries.app,
   template: paths.client.templates,
-  devPort: 8080,
 };
 
 // Exports
 module.exports = (options) => {
   const opts = defaultsDeep({}, options, defaultOpts);
   const outputFilename = isDev ? 'bundle.js' : path.extname(opts.entry) ? path.basename(opts.entry) : `${path.basename(opts.entry)}.js`;
-  const publicPath = isDev ? `http://localhost:${opts.devPort}/` : `/${path.dirname(opts.entry)}`;
-  const publicPath2 = isDev ? `http://localhost:3001/` : `/${path.dirname(opts.entry)}`;
+  const publicPath = isDev ? `http://localhost:${process.env.DEV_PORT}/` : `/${path.dirname(opts.entry)}`;
   return merge.smart(common, {
     target: 'web',
     devtool: isDev ? 'cheap-module-source-map' : 'none',
     devServer: {
-      port: opts.devPort,
       proxy: {
-        '/': publicPath2,
+        '/': `http://localhost:${process.env.PORT}/`,
       },
       compress: true,
       clientLogLevel: 'none',

@@ -8,7 +8,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
-const paths = require('../paths');
+const paths = require('../config/paths');
 
 // Init
 const isDev = process.env.NODE_ENV !== 'production';

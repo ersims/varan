@@ -1,85 +1,53 @@
 #!/usr/bin/env node
 
+// Prepare
+process.env.BABEL_ENV = process.env.NODE_ENV = 'development';
+
 // Dependencies
 const webpack = require('webpack');
 const nodemon = require('nodemon');
-const fs = require('fs');
 const path = require('path');
 const WebpackDevServer = require('webpack-dev-server');
 const { createCompiler, prepareUrls, choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const clearConsole = require('react-dev-utils/clearConsole');
-const pkg = require('../package.json');
-const defaultServerConfig = require('../config/webpack/server');
-const defaultClientConfig = require('../config/webpack/client');
+const defaultsDeep = require('lodash.defaultsdeep');
+const paths = require('../config/paths');
+const pkg = require(path.resolve(paths.appDirectory, 'package.json'));
 
 // Init
-process.on('unhandledRejection', (err) => { throw err; });
 const isInteractive = process.stdout.isTTY;
+const defaultOpts = {
+  clientConfigFile: undefined,
+  serverConfigFile: undefined,
+  devServerHost: process.env.HOST || '0.0.0.0',
+  devServerPort: parseInt(process.env.DEV_PORT, 10) || 3000,
+  serverPort: parseInt(process.env.PORT, 10) || undefined,
+};
 
-// Run watcher
-module.exports = async ({ configFile } = {}) => {
-  const HOST = process.env.HOST || '0.0.0.0';
-  const providedDevPort = parseInt(process.env.DEV_PORT, 10) || 3000;
-  const providedPort = parseInt(process.env.PORT, 10) || providedDevPort + 1;
-  const DEV_PORT = process.env.DEV_PORT = await choosePort(HOST, providedDevPort);
-  const PORT = process.env.PORT = await choosePort(HOST, providedPort);
-
-  let config = defaultServerConfig();
-  const clientConfig = defaultClientConfig({ devPort: DEV_PORT });
-  if (configFile) {
-    try {
-      config = require(path.resolve(fs.realpathSync(process.cwd()), configFile));
-    } catch (err) {
-      console.error(err);
-      process.exit(1);
-    }
-  }
-
-  // Init
-  const binary = path.resolve(config.output.path, config.output.filename);
-  const urls = prepareUrls('http', HOST, DEV_PORT);
-  const serverCompiler = webpack(config);
-  const clientCompiler = createCompiler(webpack, clientConfig, pkg.name, urls, false);
-
-  /**
-   * Run
-   */
-  let devServer;
-  serverCompiler.watch({ ignored: '!**/server/**' }, (err, stats) => {
+// Helpers
+const startServer = (compiler) => {
+  compiler.watch({ ignored: '!**/server/**' }, (err, stats) => {
     if (err) {
       console.error(err.stack || err);
       if (err.details) console.error(err.details);
       process.exit(1);
     }
-
     const info = stats.toJson();
     if (stats.hasErrors()) console.error(info.errors.map(e => e.split('\n')));
     if (stats.hasWarnings()) console.warn(info.warnings);
-
-    // Start devserver if it has not been started yet
-    if (!devServer) {
-      console.log('Starting the client HMR server...\n');
-      devServer = new WebpackDevServer(clientCompiler, clientConfig.devServer);
-      devServer.listen(clientConfig.devServer.port, HOST, (err) => {
-        if (err) throw err;
-        if (isInteractive) clearConsole();
-      });
-
-      // Handle closing
-      ['SIGINT', 'SIGTERM'].forEach(signal => process.on(signal, () => { devServer.close(); process.exit(); }));
-    }
   });
 
   // Add event handling
+  const serverOutputEntry = path.resolve(compiler.options.output.path, compiler.options.output.filename);
   let watcher;
-  serverCompiler.hooks.done.tap(`${pkg.name}`, (stats) => {
+  compiler.hooks.done.tap(`${pkg.name}`, (stats) => {
     if (!watcher) {
       // Pass in arguments to child
       const launchArgs = process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [];
       const debugArgs = [...new Set(launchArgs.concat(process.env.NODE_DEBUG_OPTION || []).filter(arg => arg.startsWith('--inspect') || arg.startsWith('--debug')))];
       const debugPort = (debugArgs.length > 0) ? process.debugPort + 1 : process.debugPort;
       const execArgs = launchArgs.filter(arg => !debugArgs.includes(arg)).concat(debugArgs.map(arg => arg.replace(process.debugPort, debugPort)));
-      watcher = nodemon({ quiet: true, verbose: false, script: binary, watch: false, execArgs });
+      watcher = nodemon({ quiet: true, verbose: false, script: serverOutputEntry, watch: false, execArgs });
 
       watcher.on('log', log => console.info(log.colour));
       watcher.on('start', () => {
@@ -107,4 +75,67 @@ module.exports = async ({ configFile } = {}) => {
     } else if (watcher._shouldRestart) watcher.restart();
     else console.info('🔁  Assets recompiled');
   });
+};
+const startDevServer = (compiler, port, host) => {
+  const devServer = new WebpackDevServer(compiler, compiler.options.devServer);
+  devServer.listen(port, host, (err) => {
+    if (err) throw err;
+    if (isInteractive) clearConsole();
+  });
+
+  // Handle closing
+  ['SIGINT', 'SIGTERM'].forEach(signal => process.on(signal, () => { devServer.close(); process.exit(); }));
+
+  return devServer;
+};
+
+// Run watcher
+module.exports = async (options) => {
+  const opts = defaultsDeep({}, options, defaultOpts);
+
+  // Init
+  const HOST = opts.devServerHost;
+  const DEV_PORT = process.env.DEV_PORT = await choosePort(opts.devServerHost, opts.devServerPort);
+  const PORT = process.env.PORT = await choosePort(opts.devServerHost, opts.serverPort || DEV_PORT + 1);
+  let serverConfig;
+  let clientConfig;
+
+  // Load server configuration
+  if (opts.serverConfigFile) {
+    try {
+      const rawServerConfig = require(opts.serverConfigFile);
+      serverConfig = typeof rawServerConfig === 'function' ? rawServerConfig(opts) : rawServerConfig;
+    } catch (err) {
+      console.error('Failed to load server webpack config');
+      console.error(err);
+      process.exit(1);
+    }
+  }
+
+  // Load client configuration
+  if (opts.clientConfigFile) {
+    try {
+      const rawClientConfig = require(opts.clientConfigFile);
+      clientConfig = typeof rawClientConfig === 'function' ? rawClientConfig(opts) : rawClientConfig;
+    } catch (err) {
+      console.error('Failed to load client webpack config');
+      console.error(err);
+      process.exit(1);
+    }
+  }
+
+  // Prepare
+  const urls = prepareUrls('http', HOST, DEV_PORT);
+  const clientCompiler = clientConfig && createCompiler(webpack, clientConfig, pkg.name, urls, false);
+  const serverCompiler = serverConfig && webpack(serverConfig);
+
+  /**
+   * Begin watching
+   */
+
+  // Should we start the server?
+  if (serverCompiler) startServer(serverCompiler);
+
+  // Should we start the devserver?
+  if (clientCompiler) startDevServer(clientCompiler, DEV_PORT, HOST);
 };
