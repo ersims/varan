@@ -7,7 +7,7 @@ const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-const defaultsDeep = require('lodash.defaultsdeep');
+const defaults = require('lodash.defaults');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
@@ -26,7 +26,7 @@ const defaultOpts = {
 
 // Exports
 module.exports = (options) => {
-  const opts = defaultsDeep({}, options, defaultOpts);
+  const opts = defaults({}, options, defaultOpts);
   const outputFilename = isDev ? 'bundle.js' : path.extname(opts.entry) ? path.basename(opts.entry) : `${path.basename(opts.entry)}.js`;
   const publicPath = isDev ? `http://localhost:${process.env.DEV_PORT}/` : `/${path.dirname(opts.entry)}`;
   return merge.smart(common, {
@@ -123,7 +123,7 @@ module.exports = (options) => {
       isDev && new NamedModulesPlugin(),
       new ExtractTextPlugin({
         disable: isDev,
-        filename: 'static/css/[name].[contenthash:8].css',
+        filename: 'static/css/[name].[hash:8].css',
         allChunks: true,
       }),
       new HtmlWebpackPlugin({ // Inject script to index.hbs template

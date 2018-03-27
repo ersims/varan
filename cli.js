@@ -22,7 +22,7 @@ program
   .action(cmd => require('./scripts/build')({
     configFiles: cmd.length > 0
       ? cmd.map(resolve)
-      : ['./webpack/client', './webpack/server'].map(p => path.resolve(__dirname, p)),
+      : undefined,
   }));
 
 /**
@@ -40,11 +40,11 @@ program
   .option('--server-port <port number>', 'Specify server port to listen on', port => parseInt(port, 10))
   .allowUnknownOption()
   .action((cmd, opts) => require('./scripts/watch')({
-    serverConfigFile: opts.server && (opts.server !== true ? opts.server : path.resolve(__dirname, './webpack/server')),
-    clientConfigFile: opts.client && (opts.client !== true ? opts.client : path.resolve(__dirname, './webpack/client')),
-    devServerHost: opts.host,
-    devServerPort: opts.clientPort,
-    serverPort: opts.serverPort,
+    serverConfigFile: opts && opts.server && (opts.server !== true ? opts.server : path.resolve(__dirname, './webpack/server')),
+    clientConfigFile: opts && opts.client && (opts.client !== true ? opts.client : path.resolve(__dirname, './webpack/client')),
+    devServerHost: opts && opts.host,
+    devServerPort: opts && opts.clientPort,
+    serverPort: opts && opts.serverPort,
   }));
 
 // Run

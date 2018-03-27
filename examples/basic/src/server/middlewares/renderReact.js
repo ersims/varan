@@ -7,10 +7,10 @@ import App from '../../client/components/App';
 if (module.hot) module.hot.accept('../../client/components/App');
 
 // Exports
-export default () => function renderReact(ctx) {
+export default () => function renderReact(req, res) {
   const templateVars = {
     body: renderToStaticMarkup(<App />),
     append: '<p>Appended from server template</p>',
   };
-  return ctx.render('index', templateVars);
+  return res.render('index', templateVars);
 };

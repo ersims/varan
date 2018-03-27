@@ -14,21 +14,21 @@ const {
 } = require('react-dev-utils/FileSizeReporter');
 const printBuildError = require('react-dev-utils/printBuildError');
 const clearConsole = require('react-dev-utils/clearConsole');
-const defaultsDeep = require('lodash.defaultsdeep');
+const defaults = require('lodash.defaults');
 const paths = require('../config/paths');
 const pkg = require(path.resolve(paths.appDirectory, 'package.json'));
 
 // Init
 const isInteractive = process.stdout.isTTY;
 const defaultOpts = {
-  configFiles: [],
+  configFiles: ['../webpack/client.js', '../webpack/server.js'].map(p => path.resolve(__dirname, p)),
 };
 const WARN_AFTER_BUNDLE_GZIP_SIZE = 512 * 1024;
 const WARN_AFTER_CHUNK_GZIP_SIZE = 1024 * 1024;
 
 // Run watcher
 module.exports = async (options) => {
-  const opts = defaultsDeep({}, options, defaultOpts);
+  const opts = defaults({}, options, defaultOpts);
 
   // Load configurations
   let configs;
@@ -40,7 +40,7 @@ module.exports = async (options) => {
   } catch (err) {
     console.error('Failed to load webpack config');
     console.error(err);
-    process.exit(1);
+    throw err;
   }
 
   // Prepare
@@ -54,13 +54,13 @@ module.exports = async (options) => {
   compiler.hooks.done.tap(`${pkg.name}`, () => console.info('✅  Assets compiled'));
 
   // Run
-  Promise.all(configs.map(config => measureFileSizesBeforeBuild(config.output.path)))
-    .then((previousFileSizes) => {
+  return Promise.all(configs.map(config => measureFileSizesBeforeBuild(config.output.path)))
+    .then((previousFileSizes) => new Promise((resolve, reject) => {
       compiler.run((err, stats) => {
         if (err) {
           console.error(err.stack || err);
           if (err.details) console.error(err.details);
-          process.exit(1);
+          return reject(err);
         }
 
         const info = stats.toJson();
@@ -73,6 +73,7 @@ module.exports = async (options) => {
           printFileSizesAfterBuild(stats.stats[i], previousFileSizes[i], config.output.path, WARN_AFTER_BUNDLE_GZIP_SIZE, WARN_AFTER_CHUNK_GZIP_SIZE);
         });
         console.log();
+        resolve();
       });
-  })
+    }));
 };

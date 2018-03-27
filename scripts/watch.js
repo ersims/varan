@@ -10,15 +10,15 @@ const path = require('path');
 const WebpackDevServer = require('webpack-dev-server');
 const { createCompiler, prepareUrls, choosePort } = require('react-dev-utils/WebpackDevServerUtils');
 const clearConsole = require('react-dev-utils/clearConsole');
-const defaultsDeep = require('lodash.defaultsdeep');
+const defaults = require('lodash.defaults');
 const paths = require('../config/paths');
 const pkg = require(path.resolve(paths.appDirectory, 'package.json'));
 
 // Init
 const isInteractive = process.stdout.isTTY;
 const defaultOpts = {
-  clientConfigFile: undefined,
-  serverConfigFile: undefined,
+  clientConfigFile: path.resolve(__dirname, '../webpack/client'),
+  serverConfigFile: path.resolve(__dirname, '../webpack/server'),
   devServerHost: process.env.HOST || '0.0.0.0',
   devServerPort: parseInt(process.env.DEV_PORT, 10) || 3000,
   serverPort: parseInt(process.env.PORT, 10) || undefined,
@@ -91,7 +91,7 @@ const startDevServer = (compiler, port, host) => {
 
 // Run watcher
 module.exports = async (options) => {
-  const opts = defaultsDeep({}, options, defaultOpts);
+  const opts = defaults({}, options, defaultOpts);
 
   // Init
   const HOST = opts.devServerHost;

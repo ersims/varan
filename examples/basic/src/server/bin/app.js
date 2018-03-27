@@ -1,19 +1,20 @@
-import App from 'koa';
-import serve from 'koa-static';
-import views from 'koa-views';
+import Express from 'express';
+import exphbs from 'express-handlebars';
 import renderReact from '../middlewares/renderReact';
 import path from 'path';
-const app = new App();
 
 // Init
+const app = new Express();
 const PORT = process.env.PORT || 3000;
 
 // Templates
-app.use(views(path.resolve(__dirname, '..', '..', 'templates'), { extension: 'hbs', map: { hbs: 'handlebars' } }));
-app.use(serve(path.resolve(__dirname, '..', '..', 'client')));
+app.engine('hbs', exphbs());
+app.set('view engine', 'hbs');
+app.set('views', path.resolve(__dirname, '..', '..', 'templates'));
+app.use(Express.static(path.resolve(__dirname, '..', '..', 'client')));
 
 // Render react server side
-app.use(renderReact());
+app.get('*', renderReact());
 
 // Start server
 app.listen(PORT, () => {

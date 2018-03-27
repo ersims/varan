@@ -2,7 +2,7 @@
 const { EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
-const defaultsDeep = require('lodash.defaultsdeep');
+const defaults = require('lodash.defaults');
 const path = require('path');
 const common = require('./common.js');
 const paths = require('../config/paths');
@@ -19,7 +19,7 @@ const defaultOpts = {
 
 // Exports
 module.exports = (opts) => {
-  const options = defaultsDeep({}, opts, defaultOpts);
+  const options = defaults({}, opts, defaultOpts);
   return merge.smart(common, {
     target: 'node',
     devtool: isDev ? 'cheap-module-source-map' : 'source-map',
@@ -34,7 +34,16 @@ module.exports = (opts) => {
       publicPath: '/',
       libraryTarget: 'commonjs2',
     },
-    externals: nodeExternals({ whitelist: [ isDev && HotReloadEntry ].filter(Boolean), }),
+    externals: [
+      nodeExternals({
+        modulesDir: path.resolve(process.cwd(), 'node_modules'),
+        whitelist: [isDev && HotReloadEntry].filter(Boolean),
+      }),
+      nodeExternals({
+        whitelist: [isDev && HotReloadEntry].filter(Boolean),
+        modulesDir: path.resolve(__dirname, '..', 'node_modules'),
+      }),
+    ],
     module: {
       rules: [{
         test: /\.(js|jsx|mjs)$/,
