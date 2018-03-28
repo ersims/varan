@@ -25,7 +25,7 @@
     "node": ">= 8.10.0",
     "npm": ">= 5.6.0"
   },
-  "main": "cli",
+  "main": "index",
   "bin": {
     "varan": "./cli.js"
   },
@@ -82,14 +82,13 @@
     "collectCoverage": true,
     "collectCoverageFrom": [
       "src/**/*.js",
-      "cli.js",
-      "!**/node_modules/**",
-      "!**/vendor/**"
+      "webpack/**/*.js",
+      "cli.js"
     ],
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 70,
+        "branches": 50,
         "functions": 90,
         "lines": 90,
         "statements": 90

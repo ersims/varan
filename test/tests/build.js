@@ -7,7 +7,7 @@ const build = require('../../src/build');
 const slowTimeout = 20000;
 
 // Tests
-describe('varan build', () => {
+describe('build', () => {
   it('should work with default values', async (done) => {
     jest.setTimeout(slowTimeout);
     const mockProject = new MockProject('build-default', 'basic');
