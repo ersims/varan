@@ -23,7 +23,18 @@ module.exports = class MockProject {
     shell.mkdir('-p', this.rootDir);
     shell.cp('-R', this.sourceDir, this.targetDir);
     shell.ln('-s', path.resolve(this.sourceDir, '../../../node_modules'), path.resolve(this.targetDir, 'node_modules'));
-    shell.cd(this.targetDir);
+  }
+  getMatch(glob) {
+    return this.shell.ls(path.resolve(this.targetDir, glob));
+  }
+  hasFile(file) {
+    return this.shell.test('-f', path.resolve(this.targetDir, file));
+  }
+  hasDir(dir) {
+    return this.shell.test('-d', path.resolve(this.targetDir, dir));
+  }
+  getFile(file) {
+    return this.shell.ls('-l', path.resolve(this.targetDir, file));
   }
   teardown() {
     shell.rm('-rf', this.targetDir);

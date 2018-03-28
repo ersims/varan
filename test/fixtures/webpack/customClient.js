@@ -10,7 +10,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
 
 // Init
-const resolve = p => path.resolve(process.cwd(), p);
+const resolve = p => path.resolve(process.env.TEST_USER_CWD, p);
 
 // Exports
 module.exports = {

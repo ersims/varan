@@ -43,10 +43,10 @@ module.exports = (options) => {
       libraryTarget: 'commonjs2',
     },
     externals: [
-      // nodeExternals({
-      //   modulesDir: path.resolve(process.cwd(), 'node_modules'),
-      //   whitelist: [isDev && HotReloadEntry].filter(Boolean),
-      // }),
+      nodeExternals({
+        modulesDir: path.resolve(process.cwd(), 'node_modules'),
+        whitelist: [isDev && HotReloadEntry].filter(Boolean),
+      }),
       nodeExternals({
         whitelist: [isDev && HotReloadEntry].filter(Boolean),
         modulesDir: path.resolve(__dirname, '..', 'node_modules'),

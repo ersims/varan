@@ -46,6 +46,7 @@
     "babel-loader": "^8.0.0-beta.2",
     "commander": "^2.15.0",
     "css-loader": "^0.28.11",
+    "detect-port-alt": "^1.1.5",
     "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "html-loader": "^0.5.5",
@@ -88,10 +89,10 @@
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 50,
-        "functions": 90,
-        "lines": 90,
-        "statements": 90
+        "branches": 70,
+        "functions": 70,
+        "lines": 70,
+        "statements": 70
       }
     },
     "testMatch": [
