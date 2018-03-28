@@ -13,11 +13,11 @@ module.exports = class MockProject {
   static cleanup() {
     shell.rm('-rf', rootDir);
   }
-  constructor(id, fixture) {
+  constructor(id, fixture, sourceDir = examplesDir) {
     this.id = id;
     this.fixture = fixture;
     this.rootDir = rootDir;
-    this.sourceDir = path.resolve(examplesDir, this.fixture);
+    this.sourceDir = path.resolve(sourceDir, this.fixture);
     this.targetDir = getTargetDir(this.fixture, this.id);
     this.shell = shell;
     shell.mkdir('-p', this.rootDir);

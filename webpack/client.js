@@ -1,8 +1,5 @@
 // Dependencies
-const {
-  EnvironmentPlugin,
-  NamedModulesPlugin,
-} = require('webpack');
+const { EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -13,24 +10,40 @@ const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMi
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const path = require('path');
 const common = require('./common.js');
-const paths = require('../config/paths');
+const getPaths = require('../src/getPaths');
 
 // Init
-const isDev = process.env.NODE_ENV !== 'production';
-const defaultOpts = {
-  targetDir: paths.client.targetDir,
-  sourceDir: paths.client.sourceDir,
-  entry: paths.client.entries.app,
-  template: paths.client.templates,
+const getOpts = (options) => {
+  const paths = getPaths(options.cwd);
+  return defaults({}, options, {
+    env: process.env.NODE_ENV,
+    name: undefined,
+    appDir: paths.appDir,
+    appSourceDir: paths.appSourceDir,
+    appTargetDir: paths.appTargetDir,
+    targetDir: paths.client.targetDir,
+    sourceDir: paths.client.sourceDir,
+    entry: paths.client.entry,
+    favicon: paths.client.favicon,
+    templateSourceDir: paths.templates.sourceDir,
+    templateTargetDir: paths.templates.targetDir,
+    templateEntry: paths.templates.entry,
+    browserSupport: [
+      '>1%',
+      'last 2 versions',
+      'ie >= 11',
+    ],
+  })
 };
 
 // Exports
 module.exports = (options) => {
-  const opts = defaults({}, options, defaultOpts);
-  const outputFilename = isDev ? 'bundle.js' : path.extname(opts.entry) ? path.basename(opts.entry) : `${path.basename(opts.entry)}.js`;
+  const opts = getOpts(options);
+  const isDev = opts.env !== 'production';
   const publicPath = isDev ? `http://localhost:${process.env.DEV_PORT}/` : `/${path.dirname(opts.entry)}`;
-  return merge.smart(common, {
+  return merge.smart(common(opts), {
     target: 'web',
+    name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'none',
     devServer: {
       proxy: {
@@ -45,7 +58,7 @@ module.exports = (options) => {
       hot: true,
       overlay: true,
       watchOptions: {
-        ignored: ignoredFiles(paths.appSrc),
+        ignored: ignoredFiles(opts.sourceDir),
       },
       headers: {
         'Access-Control-Allow-Origin': '*',
@@ -59,10 +72,10 @@ module.exports = (options) => {
     entry: [
       isDev && require.resolve('react-dev-utils/webpackHotDevClient'),
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
-    ].filter(e => e),
+    ].filter(Boolean),
     output: {
-      path: path.dirname(path.resolve(opts.targetDir, opts.entry)),
-      filename: isDev ? outputFilename : 'static/js/[name].[chunkhash:8].js',
+      path: path.resolve(opts.targetDir),
+      filename: isDev ? opts.entry : 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
       pathinfo: true,
       publicPath,
@@ -81,11 +94,7 @@ module.exports = (options) => {
               require.resolve('@babel/preset-env'),
               {
                 targets: {
-                  browsers: [
-                    '>1%',
-                    'last 2 versions',
-                    'ie >= 11',
-                  ],
+                  browsers: opts.browserSupport,
                 },
                 modules: false,
                 shippedProposals: true,
@@ -116,21 +125,20 @@ module.exports = (options) => {
     },
     plugins: [
       new EnvironmentPlugin({
-        NODE_ENV: 'development',
+        NODE_ENV: opts.env,
         BUILD_TARGET: 'client',
         DEBUG: false,
       }),
-      isDev && new NamedModulesPlugin(),
       new ExtractTextPlugin({
         disable: isDev,
         filename: 'static/css/[name].[hash:8].css',
         allChunks: true,
       }),
-      new HtmlWebpackPlugin({ // Inject script to index.hbs template
+      new HtmlWebpackPlugin({
         inject: true,
-        template: `!!${require.resolve('html-loader')}!${path.join(paths.templates.sourceDir, paths.templates.entries.app)}`,
-        filename: path.join(paths.templates.targetDir, paths.templates.entries.app),
-        // favicon: paths.assets.favicon,
+        template: `!!${require.resolve('html-loader')}!${path.resolve(opts.templateSourceDir, opts.templateEntry)}`,
+        filename: path.resolve(opts.templateTargetDir, opts.templateEntry),
+        favicon: opts.favicon,
         minify: !isDev && {
           removeComments: true,
           collapseWhitespace: true,

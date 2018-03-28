@@ -1,10 +1,17 @@
+// Depenendencies
+const path = require('path');
 const MockProject = require('../fixtures/MockProject');
+const build = require('../../src/build');
+
+// Init
+const slowTimeout = 20000;
 
 // Tests
 describe('varan build', () => {
-  it('should work with default values', () => {
+  it('should work with default values', async (done) => {
+    jest.setTimeout(slowTimeout);
     const mockProject = new MockProject('build-default', 'basic');
-    mockProject.shell.exec('node ../../../cli.js build');
+    await expect(build()).resolves.toEqual(expect.arrayContaining([]));
 
     /**
      * Assertions
@@ -33,19 +40,35 @@ describe('varan build', () => {
     // Server
     expect(mockProject.shell.test('-f', 'dist/server/bin/app.js')).toBe(true);
     expect(mockProject.shell.test('-f', 'dist/server/bin/app.js.map')).toBe(true);
-    expect(mockProject.shell.test('-f', 'dist/server/bin/asset-manifest.json')).toBe(true);
+    expect(mockProject.shell.test('-f', 'dist/server/asset-manifest.json')).toBe(true);
 
     // Templates
     expect(mockProject.shell.test('-f', 'dist/templates/index.hbs')).toBe(true);
-  });
 
-  it('should support user specified webpack config', () => {
+    // Done
+    done();
+  });
+  it('should support user specified webpack config', async (done) => {
+    jest.setTimeout(slowTimeout);
     const mockProject = new MockProject('build-user', 'basic');
-    mockProject.shell.exec('node ../../../cli.js build ../../../test/fixtures/webpack/customClient.js');
+
+    // Mock logger
+    console.log = jest.fn();
+
+    await expect(build({
+      configFiles: [
+        '../fixtures/webpack/customClient.js'
+      ].map(p => path.resolve(__dirname, p)),
+      silent: true,
+    })).resolves.toEqual(expect.arrayContaining([]));
+
 
     /**
      * Assertions
      */
+    // Check logging
+    expect(console.log).toHaveBeenCalledTimes(0);
+
     // Client
     expect(mockProject.shell.test('-f', 'dist/client/asset-manifest.json')).toBe(true);
 
@@ -66,5 +89,65 @@ describe('varan build', () => {
 
     // Templates
     expect(mockProject.shell.test('-f', 'dist/templates/index.hbs')).toBe(true);
+
+    // Done
+    done();
+  });
+  it('should give meaningful error message if no config files were provided', () => {
+    return expect(build({ configFiles: [] })).rejects.toThrow('Must specify at least one config file to build');
+  });
+  it('should reject a broken build and give give meaningful error message', async (done) => {
+    jest.setTimeout(slowTimeout);
+    const mockProject = new MockProject('build-fail', 'project-with-error', path.resolve(__dirname, '../fixtures'));
+
+    // Mock logger
+    console.error = jest.fn();
+
+    /**
+     * Assertions
+     */
+    await expect(build({
+      configFiles: [
+        '../fixtures/webpack/customClientExtends.js'
+      ].map(p => path.resolve(__dirname, p)),
+    })).rejects.toThrow('Build failed');
+
+    // Check logging
+    expect(console.error).toHaveBeenCalled();
+    expect(console.error.mock.calls[0][0][0]).toEqual(
+      expect.arrayContaining([
+        expect.stringContaining('(index.js) ./src/client/index.js'),
+        expect.stringContaining('Module build failed: SyntaxError'),
+      ])
+    );
+
+    // Done
+    done();
+  });
+  it('should display webpack warnings', async (done) => {
+    jest.setTimeout(slowTimeout);
+    const mockProject = new MockProject('build-fail', 'project-with-warning', path.resolve(__dirname, '../fixtures'));
+
+    // Mock logger
+    console.warn = jest.fn();
+
+    /**
+     * Assertions
+     */
+    await build({
+      configFiles: [
+        '../fixtures/webpack/customClientExtends.js'
+      ].map(p => path.resolve(__dirname, p)),
+      warnBundleSize: 1,
+    });
+
+    // Check logging
+    const output = console.warn.mock.calls[0][0][0];
+    expect(console.warn).toHaveBeenCalled();
+    expect(output).toEqual(expect.stringContaining('(index.js) ./src/client/index.js'));
+    expect(output).toEqual(expect.stringContaining('Critical dependency: the request of a dependency is an expression'));
+
+    // Done
+    done();
   });
 });

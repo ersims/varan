@@ -5,40 +5,48 @@ const nodeExternals = require('webpack-node-externals');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const common = require('./common.js');
-const paths = require('../config/paths');
+const getPaths = require('../src/getPaths');
 
 // Init
-const isDev = process.env.NODE_ENV !== 'production';
-const HotReloadEntry = isDev && `${require.resolve('webpack/hot/poll')}?1000`;
-const defaultOpts = {
-  targetDir: paths.server.targetDir,
-  sourceDir: paths.server.sourceDir,
-  entry: paths.server.entries.app,
-  template: paths.client.templates,
+const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;
+const getOpts = (options) => {
+  const paths = getPaths(options.cwd);
+  return defaults({}, options, {
+    env: process.env.NODE_ENV,
+    name: undefined,
+    appDir: paths.appDir,
+    appSourceDir: paths.appSourceDir,
+    appTargetDir: paths.appTargetDir,
+    targetDir: paths.server.targetDir,
+    sourceDir: paths.server.sourceDir,
+    entry: paths.server.entry,
+  })
 };
 
 // Exports
-module.exports = (opts) => {
-  const options = defaults({}, opts, defaultOpts);
-  return merge.smart(common, {
+module.exports = (options) => {
+  const opts = getOpts(options);
+  const isDev = opts.env !== 'production';
+  return merge.smart(common(options), {
     target: 'node',
+    name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'source-map',
     entry: [
       isDev && HotReloadEntry,
-      require.resolve(path.resolve(options.sourceDir, options.entry)),
+      require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {
-      path: path.dirname(path.resolve(options.targetDir, options.entry)),
-      filename: path.extname(options.entry) ? path.basename(options.entry) : `${path.basename(options.entry)}.js`,
+      path: path.resolve(opts.targetDir),
+      filename: opts.entry,
       pathinfo: true,
       publicPath: '/',
       libraryTarget: 'commonjs2',
     },
     externals: [
-      nodeExternals({
-        modulesDir: path.resolve(process.cwd(), 'node_modules'),
-        whitelist: [isDev && HotReloadEntry].filter(Boolean),
-      }),
+      // nodeExternals({
+      //   modulesDir: path.resolve(process.cwd(), 'node_modules'),
+      //   whitelist: [isDev && HotReloadEntry].filter(Boolean),
+      // }),
       nodeExternals({
         whitelist: [isDev && HotReloadEntry].filter(Boolean),
         modulesDir: path.resolve(__dirname, '..', 'node_modules'),
@@ -88,7 +96,6 @@ module.exports = (opts) => {
     },
     plugins: [
       new EnvironmentPlugin({
-        NODE_ENV: 'development',
         BUILD_TARGET: 'server',
         DEBUG: false,
       }),

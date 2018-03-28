@@ -4,6 +4,8 @@
 const program = require('commander');
 const path = require('path');
 const pkg = require('./package.json');
+const build = require('./src/build');
+const watch = require('./src/watch');
 
 // Init
 process.on('unhandledRejection', (err) => { throw err; });
@@ -19,11 +21,7 @@ program
  */
 program
   .command('build [files...]')
-  .action(cmd => require('./scripts/build')({
-    configFiles: cmd.length > 0
-      ? cmd.map(resolve)
-      : undefined,
-  }));
+  .action(opts => build({ configFiles: (opts.length > 0 && opts.map(resolve)) || undefined }).catch(err => console.error(err)));
 
 /**
  * Development watching mode
@@ -39,13 +37,14 @@ program
   .option('--client-port <port number>', 'Specify client dev server port to listen on', port => parseInt(port, 10))
   .option('--server-port <port number>', 'Specify server port to listen on', port => parseInt(port, 10))
   .allowUnknownOption()
-  .action((cmd, opts) => require('./scripts/watch')({
+  .action((opts) => watch({
     serverConfigFile: opts && opts.server && (opts.server !== true ? opts.server : path.resolve(__dirname, './webpack/server')),
     clientConfigFile: opts && opts.client && (opts.client !== true ? opts.client : path.resolve(__dirname, './webpack/client')),
     devServerHost: opts && opts.host,
     devServerPort: opts && opts.clientPort,
+    serverHost: opts && opts.host,
     serverPort: opts && opts.serverPort,
-  }));
+  }).catch(err => console.error(err)));
 
 // Run
 if (!process.argv.slice(2).length) program.outputHelp();
