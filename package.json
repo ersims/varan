@@ -1,6 +1,6 @@
 {
   "name": "varan",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A webpack starter kit for bring-your-own-code apps with server side rendering",
   "author": "ersims",
   "repository": {
