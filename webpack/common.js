@@ -9,7 +9,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const defaults = require('lodash.defaults');
 const path = require('path');
-const getPaths = require('../src/getPaths');
+const getPaths = require('../src/lib/getPaths');
 
 // Init
 const getOpts = (options) => {

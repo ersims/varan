@@ -5,7 +5,7 @@ const nodeExternals = require('webpack-node-externals');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const common = require('./common.js');
-const getPaths = require('../src/getPaths');
+const getPaths = require('../src/lib/getPaths');
 
 // Init
 const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;

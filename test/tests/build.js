@@ -1,7 +1,7 @@
 // Dependencies
 const path = require('path');
 const MockProject = require('../fixtures/MockProject');
-const build = require('../../src/build');
+const { build } = require('../../index');
 
 // Init
 const slowTimeout = 20000;

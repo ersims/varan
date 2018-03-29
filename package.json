@@ -25,7 +25,7 @@
     "node": ">= 8.10.0",
     "npm": ">= 5.6.0"
   },
-  "main": "index",
+  "main": "index.js",
   "bin": {
     "varan": "./cli.js"
   },
@@ -60,6 +60,7 @@
     "style-loader": "^0.20.3",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^1.0.1",
+    "validate-npm-package-name": "^3.0.0",
     "webpack": "^4.3.0",
     "webpack-dev-server": "^3.1.1",
     "webpack-manifest-plugin": "^2.0.0-rc.2",
@@ -84,15 +85,16 @@
     "collectCoverageFrom": [
       "src/**/*.js",
       "webpack/**/*.js",
+      "index.js",
       "cli.js"
     ],
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 70,
-        "functions": 70,
-        "lines": 70,
-        "statements": 70
+        "branches": 60,
+        "functions": 60,
+        "lines": 60,
+        "statements": 60
       }
     },
     "testMatch": [

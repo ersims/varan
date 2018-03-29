@@ -4,8 +4,9 @@
 const program = require('commander');
 const path = require('path');
 const pkg = require('./package.json');
-const build = require('./src/build');
-const watch = require('./src/watch');
+const { init } = require('./index');
+const { build } = require('./index');
+const { watch } = require('./index');
 
 // Init
 process.on('unhandledRejection', (err) => { throw err; });
@@ -15,6 +16,16 @@ const resolve = file => file && path.resolve(process.cwd(), file);
 program
   .usage('<command> [options]')
   .version(pkg.version);
+
+/**
+ * Create a new project
+ */
+program
+  .command('init')
+  .arguments('<name>')
+  .option('--template <project template>', 'Specify project template - see examples directory for the different templates')
+  .action((name, opts) => init({ name, template: opts.template }).catch(err => console.error(err)));
+
 
 /**
  * Build application for production

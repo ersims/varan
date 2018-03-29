@@ -10,7 +10,7 @@ const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMi
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const path = require('path');
 const common = require('./common.js');
-const getPaths = require('../src/getPaths');
+const getPaths = require('../src/lib/getPaths');
 
 // Init
 const getOpts = (options) => {
