@@ -26,7 +26,7 @@ describe('watch', () => {
       expect.objectContaining({
         quiet: true,
         verbose: false,
-        script: expect.stringContaining(path.normalize('bin/app.js')),
+        script: expect.stringContaining(path.normalize('app.js')),
         watch: false,
         execArgs: [],
       }),
@@ -46,8 +46,8 @@ describe('watch', () => {
     expect(mockProject.getMatch('dist/client/static/js/*.js.map').code).toBe(2);
 
     // Server
-    expect(mockProject.hasFile( 'dist/server/bin/app.js')).toBe(true);
-    expect(mockProject.hasFile( 'dist/server/bin/app.js.map')).toBe(true);
+    expect(mockProject.hasFile( 'dist/server/app.js')).toBe(true);
+    expect(mockProject.hasFile( 'dist/server/app.js.map')).toBe(true);
     expect(mockProject.hasFile( 'dist/server/asset-manifest.json')).toBe(true);
 
     // Templates
@@ -88,8 +88,8 @@ describe('watch', () => {
     expect(mockProject.getMatch('dist/client/customFileName.vendor.*.chunk.js.map').code).toBe(0);
 
     // Server
-    expect(mockProject.hasFile( 'dist/server/bin/app.js')).toBe(true);
-    expect(mockProject.hasFile( 'dist/server/bin/app.js.map')).toBe(true);
+    expect(mockProject.hasFile( 'dist/server/app.js')).toBe(true);
+    expect(mockProject.hasFile( 'dist/server/app.js.map')).toBe(true);
     expect(mockProject.hasFile( 'dist/server/asset-manifest.json')).toBe(true);
 
     // Templates

@@ -38,8 +38,8 @@ describe('build', () => {
     expect(mockProject.getMatch('dist/client/static/js/*.map').code).toBe(2);
 
     // Server
-    expect(mockProject.hasFile( 'dist/server/bin/app.js')).toBe(true);
-    expect(mockProject.hasFile( 'dist/server/bin/app.js.map')).toBe(true);
+    expect(mockProject.hasFile( 'dist/server/app.js')).toBe(true);
+    expect(mockProject.hasFile( 'dist/server/app.js.map')).toBe(true);
     expect(mockProject.hasFile( 'dist/server/asset-manifest.json')).toBe(true);
 
     // Templates

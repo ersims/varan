@@ -2,6 +2,7 @@
 const { EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
+const shell = require('shelljs');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const common = require('./common.js');
@@ -37,21 +38,18 @@ module.exports = (options) => {
     ].filter(Boolean),
     output: {
       path: path.resolve(opts.targetDir),
-      filename: opts.entry,
+      filename: path.basename(opts.entry),
       pathinfo: true,
       publicPath: '/',
       libraryTarget: 'commonjs2',
     },
     externals: [
-      nodeExternals({
-        modulesDir: path.resolve(process.cwd(), 'node_modules'),
-        whitelist: [isDev && HotReloadEntry].filter(Boolean),
-      }),
-      nodeExternals({
+      nodeExternals({ whitelist: [isDev && HotReloadEntry].filter(Boolean) }),
+      shell.test('-d', path.resolve(__dirname, '..', 'node_modules')) && nodeExternals({
         whitelist: [isDev && HotReloadEntry].filter(Boolean),
         modulesDir: path.resolve(__dirname, '..', 'node_modules'),
       }),
-    ],
+    ].filter(Boolean),
     module: {
       rules: [{
         test: /\.(js|jsx|mjs)$/,

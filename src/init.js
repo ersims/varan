@@ -26,6 +26,7 @@ module.exports = async (options) => {
   const appPath = path.resolve(opts.cwd, opts.name);
   const templatePath = path.resolve(__dirname, '../examples', opts.template);
   const printErrors = (...errorMsgs) => {
+    console.error();
     console.error(`Could not create project with name "${appName}":`);
     errorMsgs.reduce((acc, cur) => acc.concat(cur), []).forEach(errorMsg => errorMsg && console.error(`  • ${errorMsg}`));
     process.exit(1);
@@ -45,7 +46,7 @@ module.exports = async (options) => {
    * Create project
    */
   log();
-  log(`Creating project ${appName} at ${appPath}`);
+  log(`Creating ${pkg.name} project ${appName} at ${appPath}`);
   log();
 
   log('  1. Creating project directory');

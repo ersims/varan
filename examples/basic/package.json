@@ -5,7 +5,7 @@
     "prebuild": "npm run clean",
     "build": "varan build",
     "clean": "del-cli ./dist",
-    "start": "node dist/server/bin/app.js",
+    "start": "node dist/server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "varan watch"
   },
@@ -15,7 +15,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-hot-loader": "^4.0.0",
-    "varan": "*"
+    "varan": "^0.0.3"
   },
   "license": "MIT",
   "devDependencies": {
