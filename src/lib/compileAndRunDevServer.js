@@ -26,12 +26,6 @@ module.exports = log => async (config, host, port) => {
           initialBuild = false;
         }
       });
-
-      // Handle closing
-      ['SIGINT', 'SIGTERM'].forEach(signal => process.on(signal, () => {
-        devServer.close();
-        process.exit();
-      }));
       return devServer;
     });
   } else {

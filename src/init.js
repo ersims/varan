@@ -8,6 +8,7 @@ const {
   measureFileSizesBeforeBuild,
   printFileSizesAfterBuild,
 } = require('react-dev-utils/FileSizeReporter');
+const logger = require('./lib/logger');
 const pkg = require('../package.json');
 
 // Init
@@ -21,7 +22,7 @@ const getOpts = (options) => defaults({}, options, {
 // Exports
 module.exports = async (options) => {
   const opts = getOpts(options);
-  const log = (output = '') => !opts.silent && console.log(output);
+  const log = logger(opts);
   const appName = opts.name;
   const appPath = path.resolve(opts.cwd, opts.name);
   const templatePath = path.resolve(__dirname, '../examples', opts.template);

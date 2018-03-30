@@ -1,6 +1,5 @@
 // Dependencies
 const path = require('path');
-const nodemonMock = require('nodemon');
 const MockProject = require('../fixtures/MockProject');
 const { watch } = require('../../index');
 
@@ -9,28 +8,11 @@ const slowTimeout = 20000;
 
 // Tests
 describe('watch', () => {
-  beforeEach(nodemonMock.mockClear);
-
   it('should work with default values', async (done) => {
     jest.setTimeout(slowTimeout);
     await new Promise((resolve) => setTimeout(resolve, 5000));
     const mockProject = new MockProject('watch-default', 'basic');
     const [client, server] = await watch({ cwd: mockProject.targetDir });
-
-    /**
-     * Assertions
-     */
-    // Check nodemon args
-    expect(nodemonMock).toHaveBeenCalledTimes(1);
-    expect(nodemonMock).toBeCalledWith(
-      expect.objectContaining({
-        quiet: true,
-        verbose: false,
-        script: expect.stringContaining(path.normalize('app.js')),
-        watch: false,
-        execArgs: [],
-      }),
-    );
 
     // Client
     expect(mockProject.hasFile( 'dist/client/asset-manifest.json')).toBe(true);
@@ -69,8 +51,6 @@ describe('watch', () => {
     /**
      * Assertions
      */
-    // Check nodemon args
-    expect(nodemonMock).toHaveBeenCalledTimes(1);
 
     // Client
     expect(mockProject.hasFile( 'dist/client/asset-manifest.json')).toBe(true);

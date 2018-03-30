@@ -6,6 +6,7 @@ const {
   measureFileSizesBeforeBuild,
   printFileSizesAfterBuild,
 } = require('react-dev-utils/FileSizeReporter');
+const logger = require('./lib/logger');
 const pkg = require('../package.json');
 
 // Init
@@ -24,7 +25,7 @@ const getOpts = (options) => defaults({}, options, {
 // Exports
 module.exports = async (options) => {
   const opts = getOpts(options);
-  const log = (output = '') => !opts.silent && console.log(output);
+  const log = logger(opts);
   process.env.BABEL_ENV = process.env.NODE_ENV = opts.env;
 
   // Check for required files

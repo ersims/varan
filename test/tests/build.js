@@ -34,7 +34,7 @@ describe('build', () => {
     expect(js[0].size).toBeGreaterThan(0);
     expect(js[0].size).toBeLessThan(10 * 1024);
     expect(js[1].size).toBeGreaterThan(0);
-    expect(js[1].size).toBeLessThan(100 * 1024);
+    expect(js[1].size).toBeLessThan(110 * 1024);
     expect(mockProject.getMatch('dist/client/static/js/*.map').code).toBe(2);
 
     // Server

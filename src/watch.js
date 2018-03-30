@@ -4,6 +4,7 @@ const path = require('path');
 const detectPort = require('detect-port-alt');
 const compileAndRunDevServerFactory = require('./lib/compileAndRunDevServer');
 const compileAndRunServerFactory = require('./lib/compileAndRunServer');
+const logger = require('./lib/logger');
 
 // Init
 const getOpts = (options) => defaults({}, options, {
@@ -22,7 +23,7 @@ const getOpts = (options) => defaults({}, options, {
 // Exports
 module.exports = async (options) => {
   const opts = getOpts(options);
-  const log = (output = '') => !opts.silent && console.log(output);
+  const log = logger(opts);
   const compileAndRunDevServer = compileAndRunDevServerFactory(log);
   const compileAndRunServer = compileAndRunServerFactory(log);
   process.env.BABEL_ENV = process.env.NODE_ENV = opts.env;
