@@ -55,7 +55,7 @@ module.exports = log => async (config, args) => new Promise((resolve, reject) =>
 
       // Handle logging
       runner.stdout.on('data', log);
-      runner.stderr.on('data', data => console.error(data));
+      runner.stderr.on('data', data => data && data.toString && console.error(data.toString()));
 
       // Let server be restarted if it closed prematurely
       runner

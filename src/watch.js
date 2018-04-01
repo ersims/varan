@@ -5,6 +5,7 @@ const detectPort = require('detect-port-alt');
 const compileAndRunDevServerFactory = require('./lib/compileAndRunDevServer');
 const compileAndRunServerFactory = require('./lib/compileAndRunServer');
 const logger = require('./lib/logger');
+const getConfigs = require('./lib/getConfigs');
 
 // Init
 const getOpts = (options) => defaults({}, options, {
@@ -30,16 +31,8 @@ module.exports = async (options) => {
   const DEV_PORT = process.env.DEV_PORT = await detectPort(opts.devServerPort, opts.devServerHost);
   process.env.PORT = await detectPort((opts.serverPort && opts.serverPort !== DEV_PORT && opts.serverPort) || DEV_PORT + 1, opts.serverHost);
 
-  // Check for required files
-  if (!opts.clientConfigFile && !opts.serverConfigFile) throw new Error('Must specify at least one config file to watch');
-
-  // Load config files
-  const [clientConfig, serverConfig] = [opts.clientConfigFile, opts.serverConfigFile]
-    .map((configFile) => {
-      if (!configFile) return;
-      const rawConfig = require(configFile);
-      return typeof rawConfig === 'function' ? rawConfig(opts) : rawConfig;
-    });
+  // Load configs
+  const [clientConfig, serverConfig] = getConfigs([opts.clientConfigFile, opts.serverConfigFile], opts);
 
   /**
    * Begin watching

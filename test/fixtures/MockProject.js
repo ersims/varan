@@ -4,7 +4,7 @@ const path = require('path');
 
 // Init
 shell.config.silent = true;
-const examplesDir = path.resolve(__dirname, '../../examples');
+const projects = path.resolve(__dirname, './projects');
 const rootDir = path.resolve(__dirname, '../../.tmp_test_artifacts', Date.now().toString());
 const getTargetDir = (fixture, id) => path.resolve(rootDir, `${id}_${fixture}`);
 
@@ -13,7 +13,7 @@ module.exports = class MockProject {
   static cleanup() {
     shell.rm('-rf', rootDir);
   }
-  constructor(id, fixture, sourceDir = examplesDir) {
+  constructor(id, fixture, sourceDir = projects) {
     this.id = id;
     this.fixture = fixture;
     this.rootDir = rootDir;

@@ -7,19 +7,19 @@ const {
   printFileSizesAfterBuild,
 } = require('react-dev-utils/FileSizeReporter');
 const logger = require('./lib/logger');
+const getConfigs = require('./lib/getConfigs');
 const pkg = require('../package.json');
 
 // Init
 const getOpts = (options) => defaults({}, options, {
-  configFiles: [
+  configs: [
     '../webpack/client.js',
     '../webpack/server.js'
-  ].map(p => path.resolve(__dirname, p)),
+  ].map(configFile => path.resolve(__dirname, configFile)),
   warnBundleSize: 512 * 1024,
   warnChunkSize: 1024 * 1024,
   silent: false,
   env: 'production',
-  cwd: process.cwd(),
 });
 
 // Exports
@@ -28,14 +28,8 @@ module.exports = async (options) => {
   const log = logger(opts);
   process.env.BABEL_ENV = process.env.NODE_ENV = opts.env;
 
-  // Check for required files
-  if (!opts.configFiles || opts.configFiles.length === 0) throw new Error('Must specify at least one config file to build');
-
-  // Load config files
-  const configs = opts.configFiles.map((configFile) => {
-    const rawConfig = require(configFile);
-    return typeof rawConfig === 'function' ? rawConfig(opts) : rawConfig;
-  });
+  // Load configs
+  const configs = getConfigs(opts.configs, opts);
 
   // Prepare webpack compiler
   const compiler = webpack(configs);
@@ -47,7 +41,7 @@ module.exports = async (options) => {
    * Begin compile
    */
   log('🔁  Building...');
-  return Promise.all(configs.map(config => measureFileSizesBeforeBuild(config.output.path)))
+  return Promise.all(compiler.compilers.map(c => measureFileSizesBeforeBuild(c.options.output.path)))
     .then((previousFileSizes) => new Promise((resolve, reject) => {
       compiler.run((err, stats) => {
         if (err) {
@@ -66,11 +60,12 @@ module.exports = async (options) => {
         if (stats.hasWarnings()) console.warn(info.warnings);
 
         log('Potential file sizes after gzip:\n');
-        configs.forEach((config, i) => {
+        compiler.compilers.forEach((c, i) => {
+          const config = c.options;
           log(`
-  Input file:   ${path.resolve(opts.configFiles[i])}
-  Output path:  ${path.dirname(config.output.path)}
-          `);
+Input config (${i}):  ${path.resolve(typeof opts.configs[i] === 'string' ? opts.configs[i] : config.name || i)}
+Output path:          ${path.dirname(config.output.path)}
+      `);
           if (!opts.silent) printFileSizesAfterBuild(stats.stats[i], previousFileSizes[i], config.output.path, opts.warnBundleSize, opts.warnChunkSize);
         });
         log();
