@@ -8,7 +8,7 @@ const slowTimeout = 20000;
 
 // Tests
 describe('build', () => {
-  it('should reject a broken build and give give meaningful error message', async (done) => {
+  it('should reject a broken build and give meaningful error message', async (done) => {
     jest.setTimeout(slowTimeout);
     const mockProject = new MockProject('build-with-error', 'with-error');
 
