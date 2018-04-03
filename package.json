@@ -102,6 +102,9 @@
     "roots": [
       "<rootDir>/test"
     ],
+    "moduleNameMapper": {
+      "./clearConsole": "<rootDir>/test/__mocks__/react-dev-utils/clearConsole.js"
+    },
     "testEnvironment": "node",
     "silent": true,
     "verbose": true
