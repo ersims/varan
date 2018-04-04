@@ -6,6 +6,7 @@ const defaults = require('lodash.defaults');
 const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
+const serverBabelConfig = require('../babel/server');
 
 // Init
 const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;
@@ -36,10 +37,9 @@ module.exports = (options) => {
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {
-      path: path.resolve(opts.targetDir),
+      path: path.resolve(opts.targetDir, path.dirname(opts.entry)),
       filename: path.basename(opts.entry),
-      pathinfo: true,
-      publicPath: '/',
+      pathinfo: isDev,
       libraryTarget: 'commonjs2',
     },
     externals: [
@@ -60,37 +60,7 @@ module.exports = (options) => {
         options: {
           cacheDirectory: isDev,
           compact: !isDev,
-          presets: [
-            [
-              require.resolve('@babel/preset-env'),
-              {
-                targets: {
-                  node: 'current',
-                },
-                modules: false,
-                shippedProposals: true,
-              },
-            ],
-            require.resolve('@babel/preset-react'),
-          ],
-          plugins: [
-            require.resolve('@babel/plugin-proposal-class-properties'),
-            require.resolve('@babel/plugin-syntax-dynamic-import'),
-          ],
-          env: {
-            development: {
-              plugins: [
-                require.resolve('@babel/plugin-transform-react-jsx-source'),
-                require.resolve('@babel/plugin-transform-react-jsx-self'),
-              ],
-            },
-            production: {
-              plugins: [
-                require.resolve('@babel/plugin-transform-react-constant-elements'),
-                require.resolve('@babel/plugin-transform-react-inline-elements'),
-              ],
-            },
-          },
+          ...serverBabelConfig,
         },
       }],
     },

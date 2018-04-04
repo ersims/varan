@@ -10,7 +10,7 @@ const PORT = process.env.PORT || 3000;
 // Templates
 app.engine('hbs', exphbs());
 app.set('view engine', 'hbs');
-app.set('views', path.resolve(__dirname, '..', 'templates'));
+app.set('views', path.resolve(__dirname, '..', '..', 'templates'));
 app.use(Express.static(path.resolve(__dirname, '..', '..', 'client')));
 
 // Render react server side
@@ -21,4 +21,9 @@ app.listen(PORT, () => {
   if (process.send) process.send('ready');
   console.log(`Server listening on ${PORT}`);
 });
+
+// Hot reloading
 if (module.hot) module.hot.accept('../middlewares/renderReact.js');
+
+// Export app
+module.exports = app;

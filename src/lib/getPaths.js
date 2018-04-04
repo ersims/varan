@@ -18,7 +18,7 @@ module.exports = (cwd = process.cwd()) => {
     },
     server: {
       sourceDir: resolve('src/server'),
-      entry: 'bin/app.js',
+      entry: 'bin/web.js',
       targetDir: resolve('dist/server'),
     },
     templates: {

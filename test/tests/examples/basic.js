@@ -1,5 +1,6 @@
 // Dependencies
 const path = require('path');
+const request = require('supertest');
 const MockProject = require('../../fixtures/MockProject');
 const { build, watch } = require('../../../index');
 
@@ -40,12 +41,17 @@ describe('examples', () => {
         expect(mockProject.getMatch('dist/client/static/js/*.map').code).toBe(2);
 
         // Server
-        expect(mockProject.hasFile('dist/server/app.js')).toBe(true);
-        expect(mockProject.hasFile('dist/server/app.js.map')).toBe(true);
-        expect(mockProject.hasFile('dist/server/asset-manifest.json')).toBe(true);
+        expect(mockProject.hasFile('dist/server/bin/web.js')).toBe(true);
+        expect(mockProject.hasFile('dist/server/bin/web.js.map')).toBe(true);
+        expect(mockProject.hasFile('dist/server/bin/asset-manifest.json')).toBe(true);
 
         // Templates
         expect(mockProject.hasFile('dist/templates/index.hbs')).toBe(true);
+
+        // Server start
+        // const app = require(path.resolve(mockProject.targetDir, 'dist/server/bin/web.js'));
+        // const response = await request(app).get('/');
+        // expect(response.statusCode).toBe(230);
 
         // Done
         done();
@@ -114,9 +120,9 @@ describe('examples', () => {
         expect(mockProject.getMatch('dist/client/static/js/*.js.map').code).toBe(2);
 
         // Server
-        expect(mockProject.hasFile( 'dist/server/app.js')).toBe(true);
-        expect(mockProject.hasFile( 'dist/server/app.js.map')).toBe(true);
-        expect(mockProject.hasFile( 'dist/server/asset-manifest.json')).toBe(true);
+        expect(mockProject.hasFile( 'dist/server/bin/web.js')).toBe(true);
+        expect(mockProject.hasFile( 'dist/server/bin/web.js.map')).toBe(true);
+        expect(mockProject.hasFile( 'dist/server/bin/asset-manifest.json')).toBe(true);
 
         // Templates
         expect(mockProject.hasFile( 'dist/templates/index.hbs')).toBe(true);
@@ -154,9 +160,9 @@ describe('examples', () => {
         expect(mockProject.getMatch('dist/client/customFileName.vendor.*.chunk.js.map').code).toBe(0);
 
         // Server
-        expect(mockProject.hasFile( 'dist/server/app.js')).toBe(true);
-        expect(mockProject.hasFile( 'dist/server/app.js.map')).toBe(true);
-        expect(mockProject.hasFile( 'dist/server/asset-manifest.json')).toBe(true);
+        expect(mockProject.hasFile( 'dist/server/bin/web.js')).toBe(true);
+        expect(mockProject.hasFile( 'dist/server/bin/web.js.map')).toBe(true);
+        expect(mockProject.hasFile( 'dist/server/bin/asset-manifest.json')).toBe(true);
 
         // Templates
         expect(mockProject.hasFile( 'dist/templates/index.hbs')).toBe(true);

@@ -11,6 +11,7 @@ const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
+const clientBabelConfig = require('../babel/client');
 
 // Init
 const getOpts = (options) => {
@@ -28,11 +29,6 @@ const getOpts = (options) => {
     templateSourceDir: paths.templates.sourceDir,
     templateTargetDir: paths.templates.targetDir,
     templateEntry: paths.templates.entry,
-    browserSupport: [
-      '>1%',
-      'last 2 versions',
-      'ie >= 11',
-    ],
   })
 };
 
@@ -77,7 +73,7 @@ module.exports = (options) => {
       path: path.resolve(opts.targetDir),
       filename: isDev ? opts.entry : 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-      pathinfo: true,
+      pathinfo: isDev,
       publicPath,
       libraryTarget: 'var',
     },
@@ -89,37 +85,7 @@ module.exports = (options) => {
         options: {
           cacheDirectory: isDev,
           compact: !isDev,
-          presets: [
-            [
-              require.resolve('@babel/preset-env'),
-              {
-                targets: {
-                  browsers: opts.browserSupport,
-                },
-                modules: false,
-                shippedProposals: true,
-              },
-            ],
-            require.resolve('@babel/preset-react'),
-          ],
-          plugins: [
-            require.resolve('@babel/plugin-proposal-class-properties'),
-            require.resolve('@babel/plugin-syntax-dynamic-import'),
-          ],
-          env: {
-            development: {
-              plugins: [
-                require.resolve('@babel/plugin-transform-react-jsx-source'),
-                require.resolve('@babel/plugin-transform-react-jsx-self'),
-              ],
-            },
-            production: {
-              plugins: [
-                require.resolve('@babel/plugin-transform-react-constant-elements'),
-                require.resolve('@babel/plugin-transform-react-inline-elements'),
-              ],
-            },
-          },
+          ...clientBabelConfig,
         },
       }],
     },

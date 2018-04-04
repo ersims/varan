@@ -76,7 +76,8 @@
     "normalize.css": "^8.0.0",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
-    "react-hot-loader": "^4.0.0"
+    "react-hot-loader": "^4.0.0",
+    "supertest": "^3.0.0"
   },
   "jest": {
     "bail": true,
