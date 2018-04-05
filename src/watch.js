@@ -27,9 +27,10 @@ module.exports = async (options) => {
   const log = logger(opts);
   const compileAndRunDevServer = compileAndRunDevServerFactory(log);
   const compileAndRunServer = compileAndRunServerFactory(log);
-  process.env.BABEL_ENV = process.env.NODE_ENV = opts.env;
-  const DEV_PORT = process.env.DEV_PORT = await detectPort(opts.devServerPort, opts.devServerHost);
-  process.env.PORT = await detectPort((opts.serverPort && opts.serverPort !== DEV_PORT && opts.serverPort) || DEV_PORT + 1, opts.serverHost);
+  process.env.BABEL_ENV  = opts.env;
+  opts.devServerPort = await detectPort(opts.devServerPort, opts.devServerHost);
+  opts.serverPort = process.env.PORT = await detectPort((opts.serverPort && opts.serverPort !== opts.devServerPort && opts.serverPort) || opts.devServerPort + 1, opts.serverHost);
+  opts.serverHost = process.env.HOST = opts.serverHost;
 
   // Load configs
   const [clientConfig, serverConfig] = getConfigs([opts.clientConfigFile, opts.serverConfigFile], opts);
@@ -38,7 +39,7 @@ module.exports = async (options) => {
    * Begin watching
    */
   return Promise.all([
-    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, DEV_PORT),
+    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort),
     serverConfig && compileAndRunServer(serverConfig, opts.nodemonArgs),
   ].filter(Boolean));
 };

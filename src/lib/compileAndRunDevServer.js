@@ -40,7 +40,7 @@ module.exports = log => async (config, host, port) => {
       const info = stats.toJson();
       if (stats.hasErrors()) {
         console.error(info.errors.map(e => e.split('\n')));
-        const error = new Error('Build failed for ${name}');
+        const error = new Error(`Build failed for ${name}`);
         error.details = info.errors;
         return reject(error);
       }

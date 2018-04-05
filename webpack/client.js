@@ -1,5 +1,8 @@
 // Dependencies
-const { EnvironmentPlugin } = require('webpack');
+const {
+  DefinePlugin,
+  EnvironmentPlugin,
+} = require('webpack');
 const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -29,6 +32,8 @@ const getOpts = (options) => {
     templateSourceDir: paths.templates.sourceDir,
     templateTargetDir: paths.templates.targetDir,
     templateEntry: paths.templates.entry,
+    devServerPort: process.env.DEV_PORT || 3000,
+    serverPort: process.env.PORT || 3001,
   })
 };
 
@@ -36,14 +41,14 @@ const getOpts = (options) => {
 module.exports = (options) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
-  const publicPath = isDev ? `http://localhost:${process.env.DEV_PORT}/` : `/${path.dirname(opts.entry)}`;
+  const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).replace('./', '')}`;
   return merge.smart(common(opts), {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'none',
     devServer: {
       proxy: {
-        '/': `http://localhost:${process.env.PORT}/`,
+        '/': `http://localhost:${opts.serverPort}/`,
       },
       compress: true,
       clientLogLevel: 'none',
@@ -90,8 +95,11 @@ module.exports = (options) => {
       }],
     },
     plugins: [
+      new DefinePlugin({
+        'process.env.NODE_ENV': JSON.stringify(opts.env),
+        'process.env.BABEL_ENV': JSON.stringify(opts.env),
+      }),
       new EnvironmentPlugin({
-        NODE_ENV: opts.env,
         BUILD_TARGET: 'client',
         DEBUG: false,
       }),

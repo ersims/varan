@@ -11,10 +11,11 @@ class Manager {
     this.runner = runner;
 
     // Handle closing
-    ['SIGINT', 'SIGTERM'].forEach(signal => process.on(signal, () => {
-      this.close();
-      process.exit(0);
-    }));
+    ['exit', 'SIGINT', 'SIGTERM', 'SIGUSR1', 'SIGUSR2', 'uncaughtException']
+      .forEach(signal => process.on(signal, (code) => {
+        this.close();
+        process.exit(code);
+      }));
   }
   close() {
     if (this.watcher) this.watcher.close();

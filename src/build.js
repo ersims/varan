@@ -26,7 +26,7 @@ const getOpts = (options) => defaults({}, options, {
 module.exports = async (options) => {
   const opts = getOpts(options);
   const log = logger(opts);
-  process.env.BABEL_ENV = process.env.NODE_ENV = opts.env;
+  process.env.BABEL_ENV  = opts.env;
 
   // Load configs
   const configs = getConfigs(opts.configs, opts);

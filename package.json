@@ -80,6 +80,9 @@
     "supertest": "^3.0.0"
   },
   "jest": {
+    "globals": {
+      "__TEST__": true
+    },
     "bail": true,
     "collectCoverage": true,
     "collectCoverageFrom": [

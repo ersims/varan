@@ -49,9 +49,29 @@ describe('examples', () => {
         expect(mockProject.hasFile('dist/templates/index.hbs')).toBe(true);
 
         // Server start
-        // const app = require(path.resolve(mockProject.targetDir, 'dist/server/bin/web.js'));
-        // const response = await request(app).get('/');
-        // expect(response.statusCode).toBe(230);
+        const app = require(path.resolve(mockProject.targetDir, 'dist/server/bin/web.js')).default;
+        const appRequest = request(app);
+
+        // Root response
+        const rootResponse = await appRequest.get('/');
+        expect(rootResponse.statusCode).toBe(200);
+        expect(rootResponse.text).toMatch('Welcome to React that works awesomely');
+        expect(rootResponse.text).toMatch(`/static/js/${path.basename(js[0].name)}`);
+        expect(rootResponse.text).toMatch(`/static/js/${path.basename(js[1].name)}`);
+        expect(rootResponse.text).toMatch(`/static/css/${path.basename(css[0].name)}`);
+
+        // Parts
+        const JSResponse1 = await appRequest.get(`/static/js/${path.basename(js[0].name)}`);
+        expect(JSResponse1.statusCode).toBe(200);
+        expect(JSResponse1.text).toMatch('Welcome to React that works awesomely');
+
+        const JSResponse2 = await appRequest.get(`/static/js/${path.basename(js[1].name)}`);
+        expect(JSResponse2.statusCode).toBe(200);
+        expect(JSResponse2.text).not.toMatch('Welcome to React that works awesomely');
+
+        const CSSResponse = await appRequest.get(`/static/css/${path.basename(css[0].name)}`);
+        expect(CSSResponse.statusCode).toBe(200);
+        expect(CSSResponse.text).toMatch('html{background-color:#49aa6a}');
 
         // Done
         done();

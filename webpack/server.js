@@ -1,5 +1,8 @@
 // Dependencies
-const { EnvironmentPlugin } = require('webpack');
+const {
+  DefinePlugin,
+  EnvironmentPlugin,
+} = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const defaults = require('lodash.defaults');
@@ -59,12 +62,14 @@ module.exports = (options) => {
         loader: require.resolve('babel-loader'),
         options: {
           cacheDirectory: isDev,
-          compact: !isDev,
           ...serverBabelConfig,
         },
       }],
     },
     plugins: [
+      new DefinePlugin({
+        'process.env.BABEL_ENV': JSON.stringify(opts.env),
+      }),
       new EnvironmentPlugin({
         BUILD_TARGET: 'server',
         DEBUG: false,
