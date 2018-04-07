@@ -69,9 +69,9 @@ module.exports = (options) => {
     plugins: [
       new DefinePlugin({
         'process.env.BABEL_ENV': JSON.stringify(opts.env),
+        BUILD_TARGET: JSON.stringify('server'),
       }),
       new EnvironmentPlugin({
-        BUILD_TARGET: 'server',
         DEBUG: false,
       }),
     ].filter(Boolean),

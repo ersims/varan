@@ -2,24 +2,48 @@
   "name": "varan-example-basic",
   "private": true,
   "scripts": {
-    "prebuild": "npm run clean",
     "build": "varan build",
     "clean": "del-cli ./dist",
     "start": "node dist/server/bin/web.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "watch": "varan watch"
+    "test": "jest",
+    "watch": "varan watch -- --inspect"
   },
   "dependencies": {
     "express": "^4.16.3",
     "express-handlebars": "^3.0.0",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
-    "react-hot-loader": "^4.0.0",
-    "varan": "^0.0.3"
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "react-hot-loader": "^4.0.0"
   },
   "license": "MIT",
   "devDependencies": {
     "del-cli": "^1.1.0",
+    "jest": "^22.4.3",
     "normalize.css": "^8.0.0"
+  },
+  "jest": {
+    "bail": true,
+    "collectCoverage": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ],
+    "coverageDirectory": ".coverage",
+    "coverageThreshold": {
+      "global": {
+        "branches": 60,
+        "functions": 60,
+        "lines": 60,
+        "statements": 60
+      }
+    },
+    "testMatch": [
+      "**/test/tests/**/*.js?(x)"
+    ],
+    "roots": [
+      "<rootDir>/test"
+    ],
+    "testEnvironment": "node",
+    "silent": false,
+    "verbose": true
   }
 }

@@ -1,6 +1,7 @@
 // Dependencies
 const defaults = require('lodash.defaults');
 const webpack = require('webpack');
+const fs = require('fs');
 const path = require('path');
 const {
   measureFileSizesBeforeBuild,
@@ -20,6 +21,8 @@ const getOpts = (options) => defaults({}, options, {
   warnChunkSize: 1024 * 1024,
   silent: false,
   env: 'production',
+  inputFileSystem: fs,
+  outputFileSystem: fs,
 });
 
 // Exports
@@ -33,6 +36,8 @@ module.exports = async (options) => {
 
   // Prepare webpack compiler
   const compiler = webpack(configs);
+  compiler.inputFileSystem = opts.inputFileSystem;
+  compiler.outputFileSystem = opts.outputFileSystem;
 
   // Add event handlers
   compiler.hooks.done.tap(pkg.name, () => log('✅  Build complete'));
@@ -69,7 +74,7 @@ Output path:          ${path.dirname(config.output.path)}
           if (!opts.silent) printFileSizesAfterBuild(stats.stats[i], previousFileSizes[i], config.output.path, opts.warnBundleSize, opts.warnChunkSize);
         });
         log();
-        resolve();
+        resolve(stats);
       });
     }));
 };

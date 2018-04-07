@@ -5,13 +5,17 @@ const {
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
 const WebpackDevServer = require('webpack-dev-server');
+const fs = require('fs');
 const pkg = require('../../package.json');
 
 // Exports
-module.exports = log => async (config, host, port) => {
+module.exports = log => async (config, host, port, opts) => {
   const name = config.name || pkg.name;
   const urls = prepareUrls('http', host, port);
   const compiler = createCompiler(webpack, config, name, urls, false);
+  compiler.inputFileSystem = opts.inputFileSystem || fs;
+  compiler.outputFileSystem = opts.outputFileSystem || fs;
+
   if (compiler.options.devServer) {
     return new Promise((resolve, reject) => {
       let initialBuild = true;

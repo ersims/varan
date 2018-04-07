@@ -53,6 +53,7 @@ module.exports = (options) => {
       compress: true,
       clientLogLevel: 'none',
       quiet: true,
+      historyApiFallback: true,
       contentBase: opts.targetDir,
       watchContentBase: false,
       publicPath,
@@ -64,6 +65,7 @@ module.exports = (options) => {
       headers: {
         'Access-Control-Allow-Origin': '*',
       },
+      // writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       before(app) {
         app.use(errorOverlayMiddleware());
         app.use(noopServiceWorkerMiddleware());
@@ -98,9 +100,9 @@ module.exports = (options) => {
       new DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify(opts.env),
         'process.env.BABEL_ENV': JSON.stringify(opts.env),
+        BUILD_TARGET: JSON.stringify('client'),
       }),
       new EnvironmentPlugin({
-        BUILD_TARGET: 'client',
         DEBUG: false,
       }),
       new ExtractTextPlugin({

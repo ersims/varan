@@ -18,7 +18,7 @@ const getOpts = (options) => defaults({}, options, {
   silent: false,
   env: 'development',
   cwd: process.cwd(),
-  nodemonArgs: process.argv,
+  args: process.argv,
 });
 
 // Exports
@@ -39,7 +39,7 @@ module.exports = async (options) => {
    * Begin watching
    */
   return Promise.all([
-    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort),
-    serverConfig && compileAndRunServer(serverConfig, opts.nodemonArgs),
+    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts),
+    serverConfig && compileAndRunServer(serverConfig, opts),
   ].filter(Boolean));
 };
