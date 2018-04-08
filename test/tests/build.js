@@ -87,6 +87,7 @@ describe('build', () => {
 
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/favicon.ico'))).toBe(true);
 
     // CSS

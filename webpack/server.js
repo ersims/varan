@@ -31,6 +31,7 @@ const getOpts = (options) => {
 module.exports = (options) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
+  const outputPath = path.resolve(opts.targetDir, path.dirname(opts.entry));
   return merge.smart(common(options), {
     target: 'node',
     name: opts.name || path.basename(opts.entry),
@@ -40,8 +41,9 @@ module.exports = (options) => {
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {
-      path: path.resolve(opts.targetDir, path.dirname(opts.entry)),
+      path: outputPath,
       filename: path.basename(opts.entry),
+      chunkFilename: 'chunks/[name].[chunkhash:8].chunk.js',
       pathinfo: isDev,
       libraryTarget: 'commonjs2',
     },

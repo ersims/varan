@@ -28,14 +28,15 @@ describe('watch', () => {
 
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/favicon.ico'))).toBe(true);
 
     // Static files
     expect(hasFile(mfs, resolve('dist/client/static'))).toBe(false);
 
     // JS
-    expect(hasFile(mfs, resolve('dist/client/index.js'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/client/index.js.map'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/client/dev-bundle.js'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/client/dev-bundle.js.map'))).toBe(true);
 
     // Templates
     expect(hasFile(mfs, resolve('dist/templates/index.hbs'))).toBe(true);

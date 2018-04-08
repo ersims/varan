@@ -6,6 +6,7 @@ const {
 } = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const getPaths = require('../src/lib/getPaths');
@@ -74,6 +75,9 @@ module.exports = (options) => {
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
       }),
+      new StatsWriterPlugin({
+        filename: 'stats-manifest.json',
+      })
     ].filter(Boolean),
   };
 };

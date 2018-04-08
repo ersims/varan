@@ -42,6 +42,7 @@ module.exports = (options) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).substr(2)}`;
+  const outputPath = path.resolve(opts.targetDir);
   return merge.smart(common(opts), {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
@@ -77,8 +78,8 @@ module.exports = (options) => {
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {
-      path: path.resolve(opts.targetDir),
-      filename: isDev ? opts.entry : 'static/js/[name].[chunkhash:8].js',
+      path: outputPath,
+      filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
       pathinfo: isDev,
       publicPath,
