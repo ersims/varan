@@ -59,8 +59,6 @@ module.exports = async (options) => {
   log('  3. Installing project dependencies');
   const procDeps = spawn.sync('npm', ['install', '--silent'], { stdio: 'inherit' });
   if (procDeps.status !== 0) printErrors(`Failed to install project dependencies`);
-  const procVaran = spawn.sync('npm', ['install', '--silent', '--save', 'varan@latest'], { stdio: 'inherit' });
-  if (procVaran.status !== 0) printErrors(`Failed to install latest version of "varan"`);
 
   log(`  4. Success! Project ${appName} is now created at ${appPath}`);
   log(`     The following commands can be used inside your newly created project`);

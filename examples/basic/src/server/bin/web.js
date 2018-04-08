@@ -26,7 +26,7 @@ app.use(Express.static(path.resolve(__dirname, '..', '..', 'client')));
 app.get('*', renderReact());
 
 // Export app
-export default app.listen(app.get('host'), app.get('port'), () => {
+export default app.listen(app.get('port'), app.get('host'), () => {
   // if (process.send) process.send('ready'); // TODO: Re-enable https://github.com/facebook/jest/issues/5891
   console.log(`Server listening on ${app.get('port')} in ${app.get('env')} mode`);
 });

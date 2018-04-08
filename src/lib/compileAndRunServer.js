@@ -1,7 +1,6 @@
 // Dependencies
 const webpack = require('webpack');
 const path = require('path');
-const fs = require('fs');
 const spawn = require('react-dev-utils/crossSpawn');
 const pkg = require('../../package.json');
 
@@ -28,8 +27,8 @@ class Manager {
 module.exports = log => async (config, opts) => new Promise((resolve, reject) => {
   const args = opts.args;
   const compiler = webpack(config);
-  compiler.inputFileSystem = opts.inputFileSystem || fs;
-  compiler.outputFileSystem = opts.outputFileSystem || fs;
+  if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
+  if (opts.outputFileSystem) compiler.outputFileSystem = opts.outputFileSystem;
 
   const watcher = compiler.watch({}, (err, stats) => {
     if (err) {

@@ -41,7 +41,7 @@ const getOpts = (options) => {
 module.exports = (options) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
-  const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).replace('./', '')}`;
+  const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).substr(2)}`;
   return merge.smart(common(opts), {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
