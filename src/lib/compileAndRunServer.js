@@ -24,7 +24,7 @@ class Manager {
 }
 
 // Exports
-module.exports = log => async (config, opts) => new Promise((resolve, reject) => {
+module.exports = log => async (config, opts, waitForResolved) => new Promise((resolve, reject) => {
   const args = opts.args;
   const compiler = webpack(config);
   if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
@@ -44,7 +44,7 @@ module.exports = log => async (config, opts) => new Promise((resolve, reject) =>
   // Add event handling
   const serverOutputEntry = path.resolve(compiler.options.output.path, compiler.options.output.filename);
   let runner;
-  compiler.hooks.done.tap(pkg.name, (stats) => {
+  compiler.hooks.done.tap(pkg.name, async (stats) => {
     if (!runner) {
       // Pass in arguments to child
       const launchArgs = args.includes('--') ? args.slice(args.indexOf('--') + 1) : [];
@@ -52,6 +52,7 @@ module.exports = log => async (config, opts) => new Promise((resolve, reject) =>
       const debugPort = (debugArgs.length > 0) ? process.debugPort + 1 : process.debugPort;
       const execArgs = launchArgs.filter(arg => !debugArgs.includes(arg)).concat(debugArgs.map(arg => arg.replace(process.debugPort, debugPort)));
       try {
+        if (waitForResolved) await waitForResolved;
         runner = spawn('node', execArgs.concat(serverOutputEntry));
         resolve(new Manager(watcher, runner));
       } catch (err) {

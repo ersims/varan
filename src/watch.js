@@ -38,8 +38,9 @@ module.exports = async (options) => {
   /**
    * Begin watching
    */
+  const devServerPromise = clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts);
   return Promise.all([
-    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts),
-    serverConfig && compileAndRunServer(serverConfig, opts),
+    devServerPromise,
+    serverConfig && compileAndRunServer(serverConfig, opts, devServerPromise),
   ].filter(Boolean));
 };
