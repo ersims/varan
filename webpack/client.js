@@ -6,6 +6,7 @@ const {
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const defaults = require('lodash.defaults');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
@@ -106,6 +107,9 @@ module.exports = (options) => {
         disable: isDev,
         filename: 'static/css/[name].[hash:8].css',
         allChunks: true,
+      }),
+      new ManifestPlugin({
+        fileName: 'asset-manifest.json',
       }),
     ].filter(Boolean),
     optimization: isDev

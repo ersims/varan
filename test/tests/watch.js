@@ -29,7 +29,6 @@ describe('watch', () => {
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/client/favicon.ico'))).toBe(true);
 
     // Static files
     expect(hasFile(mfs, resolve('dist/client/static'))).toBe(false);
@@ -41,7 +40,7 @@ describe('watch', () => {
     // Server
     expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/server/bin/web.js.map'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/server/bin/asset-manifest.json'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/server/bin/stats-manifest.json'))).toBe(true);
 
     // Done
     servers.forEach(s => s && s.close());
@@ -68,7 +67,6 @@ describe('watch', () => {
 
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/client/favicon.ico'))).toBe(true);
 
     // CSS
     expect(hasFile(mfs, resolve('dist/client/static/css/'))).toBe(true);

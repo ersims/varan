@@ -1,8 +1,7 @@
 // Dependencies
-const path = require('path');
 const MemoryFileSystem = require('memory-fs');
-const { build, watch } = require('../../../index');
-const { hasFile, getFile, getFiles, getMatch, resolver } = require('../../fixtures/utils');
+const { build } = require('../../../index');
+const { hasFile, getFiles, resolver } = require('../../fixtures/utils');
 
 // Init
 const slowTimeout = 20000;
@@ -46,10 +45,15 @@ describe('examples', () => {
         expect(js[1].size).toBeGreaterThan(0);
         expect(js[1].size).toBeLessThan(130 * 1024);
 
+        // Media
+        const media = getFiles(mfs, resolve('dist/client/static/media'));
+        expect(media.length).toBe(1);
+        expect(media[0].name).toMatch(/favicon\.([a-z0-9]{8})\.ico/);
+
         // Server
         expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
         expect(hasFile(mfs, resolve('dist/server/bin/web.js.map'))).toBe(true);
-        expect(hasFile(mfs, resolve('dist/server/bin/asset-manifest.json'))).toBe(true);
+        expect(hasFile(mfs, resolve('dist/server/bin/stats-manifest.json'))).toBe(true);
 
         done();
       });

@@ -34,15 +34,15 @@
     "test": "jest"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.42",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.42",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.42",
-    "@babel/plugin-transform-react-constant-elements": "^7.0.0-beta.42",
-    "@babel/plugin-transform-react-inline-elements": "^7.0.0-beta.42",
-    "@babel/plugin-transform-react-jsx-self": "^7.0.0-beta.42",
-    "@babel/plugin-transform-react-jsx-source": "^7.0.0-beta.42",
-    "@babel/preset-env": "^7.0.0-beta.42",
-    "@babel/preset-react": "^7.0.0-beta.42",
+    "@babel/core": "^7.0.0-beta.44",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.44",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.44",
+    "@babel/plugin-transform-react-constant-elements": "^7.0.0-beta.44",
+    "@babel/plugin-transform-react-inline-elements": "^7.0.0-beta.44",
+    "@babel/plugin-transform-react-jsx-self": "^7.0.0-beta.44",
+    "@babel/plugin-transform-react-jsx-source": "^7.0.0-beta.44",
+    "@babel/preset-env": "^7.0.0-beta.44",
+    "@babel/preset-react": "^7.0.0-beta.44",
     "babel-loader": "^8.0.0-beta.2",
     "commander": "^2.15.0",
     "css-loader": "^0.28.11",
@@ -61,7 +61,7 @@
     "validate-npm-package-name": "^3.0.0",
     "webpack": "^4.4.1",
     "webpack-dev-server": "^3.1.3",
-    "webpack-manifest-plugin": "2.0.0-rc.2",
+    "webpack-manifest-plugin": "^2.0.0",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.7.2",
     "webpack-stats-plugin": "^0.2.1"
@@ -98,7 +98,7 @@
       }
     },
     "testMatch": [
-      "**/test/tests/**/build.js?(x)"
+      "**/test/tests/**/*.js?(x)"
     ],
     "roots": [
       "<rootDir>/test"
@@ -111,7 +111,7 @@
       "<rootDir>/examples/*"
     ],
     "testEnvironment": "node",
-    "silent": false,
+    "silent": true,
     "verbose": true
   }
 }

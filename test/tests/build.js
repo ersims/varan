@@ -88,7 +88,6 @@ describe('build', () => {
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/client/favicon.ico'))).toBe(true);
 
     // CSS
     const css = getFiles(mfs, resolve('dist/client/static/css'));
@@ -110,7 +109,7 @@ describe('build', () => {
     // Server
     expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/server/bin/web.js.map'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/server/bin/asset-manifest.json'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/server/bin/stats-manifest.json'))).toBe(true);
 
     // Done
     done();
@@ -137,7 +136,6 @@ describe('build', () => {
 
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
-    expect(hasFile(mfs, resolve('dist/client/favicon.ico'))).toBe(true);
 
     // CSS
     const css = getFiles(mfs, resolve('dist/client/static/css'));
