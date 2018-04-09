@@ -44,7 +44,7 @@ describe('examples', () => {
         expect(js[0].size).toBeGreaterThan(0);
         expect(js[0].size).toBeLessThan(10 * 1024);
         expect(js[1].size).toBeGreaterThan(0);
-        expect(js[1].size).toBeLessThan(110 * 1024);
+        expect(js[1].size).toBeLessThan(130 * 1024);
 
         // Server
         expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);

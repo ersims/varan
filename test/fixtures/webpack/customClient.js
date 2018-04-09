@@ -3,7 +3,6 @@ const {
   DefinePlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -87,24 +86,6 @@ module.exports = {
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: `!!${require.resolve('html-loader')}!${resolve('src/templates/index.hbs')}`,
-      filename: resolve('dist/templates/index.hbs'),
-      favicon: resolve('src/assets/favicon.ico'),
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
     }),
   ],
   optimization: {

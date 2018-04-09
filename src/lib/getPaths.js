@@ -21,10 +21,5 @@ module.exports = (cwd = process.cwd()) => {
       entry: 'bin/web.js',
       targetDir: resolve('dist/server'),
     },
-    templates: {
-      sourceDir: resolve('src/templates'),
-      entry: 'index.hbs',
-      targetDir: resolve('dist/templates'),
-    },
   }
 };

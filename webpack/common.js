@@ -72,12 +72,12 @@ module.exports = (options) => {
       isDev && new NamedModulesPlugin(),
       isDev && new HotModuleReplacementPlugin(),
       new NoEmitOnErrorsPlugin(),
+      new StatsWriterPlugin({
+        filename: 'stats-manifest.json',
+      }),
       new ManifestPlugin({
         fileName: 'asset-manifest.json',
       }),
-      new StatsWriterPlugin({
-        filename: 'stats-manifest.json',
-      })
     ].filter(Boolean),
   };
 };

@@ -24,6 +24,7 @@ const getOpts = (options) => {
     targetDir: paths.server.targetDir,
     sourceDir: paths.server.sourceDir,
     entry: paths.server.entry,
+    clientTargetDir: paths.client.targetDir,
   })
 };
 
@@ -70,8 +71,10 @@ module.exports = (options) => {
     },
     plugins: [
       new DefinePlugin({
-        'process.env.BABEL_ENV': JSON.stringify(opts.env),
         BUILD_TARGET: JSON.stringify('server'),
+        'process.env.BABEL_ENV': JSON.stringify(opts.env),
+        'process.env.VARAN_CLIENT_ROOT': JSON.stringify(opts.clientTargetDir),
+        'process.env.VARAN_STATS_MANIFEST': JSON.stringify('stats-manifest.json'),
       }),
       new EnvironmentPlugin({
         DEBUG: false,

@@ -1,6 +1,7 @@
 // Dependencies
+import 'source-map-support/register';
 import Express from 'express';
-import exphbs from 'express-handlebars';
+import fs from 'fs';
 import path from 'path';
 import renderReact from '../middlewares/renderReact';
 
@@ -12,18 +13,16 @@ const app = new Express();
 const ENV = process.env.NODE_ENV || 'production';
 const HOST = process.env.HOST;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
+const assets = JSON.parse(fs.readFileSync(path.resolve(process.env.VARAN_CLIENT_ROOT, process.env.VARAN_STATS_MANIFEST)));
 
 // Templates
-app.engine('hbs', exphbs());
 app.set('env', ENV);
 app.set('host', HOST);
 app.set('port', PORT);
-app.set('view engine', 'hbs');
-app.set('views', path.resolve(__dirname, '..', '..', 'templates'));
-app.use(Express.static(path.resolve(__dirname, '..', '..', 'client')));
+app.use(Express.static(path.resolve(__dirname, '../../client')));
 
 // Render react server side
-app.get('*', renderReact());
+app.get('*', renderReact(assets));
 
 // Export app
 export default app.listen(app.get('port'), app.get('host'), () => {

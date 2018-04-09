@@ -4,7 +4,6 @@ const {
   EnvironmentPlugin,
 } = require('webpack');
 const merge = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const defaults = require('lodash.defaults');
@@ -29,9 +28,6 @@ const getOpts = (options) => {
     sourceDir: paths.client.sourceDir,
     entry: paths.client.entry,
     favicon: paths.client.favicon,
-    templateSourceDir: paths.templates.sourceDir,
-    templateTargetDir: paths.templates.targetDir,
-    templateEntry: paths.templates.entry,
     devServerPort: process.env.DEV_PORT || 3000,
     serverPort: process.env.PORT || 3001,
   })
@@ -99,9 +95,9 @@ module.exports = (options) => {
     },
     plugins: [
       new DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(opts.env),
-        'process.env.BABEL_ENV': JSON.stringify(opts.env),
         BUILD_TARGET: JSON.stringify('client'),
+        'process.env.BABEL_ENV': JSON.stringify(opts.env),
+        'process.env.NODE_ENV': JSON.stringify(opts.env),
       }),
       new EnvironmentPlugin({
         DEBUG: false,
@@ -110,24 +106,6 @@ module.exports = (options) => {
         disable: isDev,
         filename: 'static/css/[name].[hash:8].css',
         allChunks: true,
-      }),
-      new HtmlWebpackPlugin({
-        inject: true,
-        template: `!!${require.resolve('html-loader')}!${path.resolve(opts.templateSourceDir, opts.templateEntry)}`,
-        filename: path.resolve(opts.templateTargetDir, opts.templateEntry),
-        favicon: opts.favicon,
-        minify: !isDev && {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true,
-          removeEmptyAttributes: true,
-          removeStyleLinkTypeAttributes: true,
-          keepClosingSlash: true,
-          minifyJS: true,
-          minifyCSS: true,
-          minifyURLs: true,
-        },
       }),
     ].filter(Boolean),
     optimization: isDev

@@ -38,9 +38,6 @@ describe('watch', () => {
     expect(hasFile(mfs, resolve('dist/client/dev-bundle.js'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/dev-bundle.js.map'))).toBe(true);
 
-    // Templates
-    expect(hasFile(mfs, resolve('dist/templates/index.hbs'))).toBe(true);
-
     // Server
     expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/server/bin/web.js.map'))).toBe(true);
@@ -79,9 +76,6 @@ describe('watch', () => {
     // JS
     expect(hasFile(mfs, resolve('dist/client/customFileName.js'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/customFileName.js.map'))).toBe(true);
-
-    // Templates
-    expect(hasFile(mfs, resolve('dist/templates/index.hbs'))).toBe(true);
 
     // Server
     expect(hasFile(mfs, resolve('dist/server'))).toBe(false);

@@ -105,10 +105,7 @@ describe('build', () => {
     expect(js[0].size).toBeGreaterThan(0);
     expect(js[0].size).toBeLessThan(2 * 1024);
     expect(js[1].size).toBeGreaterThan(0);
-    expect(js[1].size).toBeLessThan(110 * 1024);
-
-    // Templates
-    expect(hasFile(mfs, resolve('dist/templates/index.hbs'))).toBe(true);
+    expect(js[1].size).toBeLessThan(130 * 1024);
 
     // Server
     expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
@@ -161,10 +158,7 @@ describe('build', () => {
     expect(js[0].size).toBeGreaterThan(0);
     expect(js[0].size).toBeLessThan(2 * 1024);
     expect(js[2].size).toBeGreaterThan(0);
-    expect(js[2].size).toBeLessThan(110 * 1024);
-
-    // Templates
-    expect(hasFile(mfs, resolve('dist/templates/index.hbs'))).toBe(true);
+    expect(js[2].size).toBeLessThan(130 * 1024);
 
     // Server
     expect(hasFile(mfs, resolve('dist/server'))).toBe(false);
