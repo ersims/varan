@@ -2,6 +2,7 @@
 const {
   DefinePlugin,
   EnvironmentPlugin,
+  HotModuleReplacementPlugin,
 } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
@@ -70,6 +71,7 @@ module.exports = (options) => {
       }],
     },
     plugins: [
+      isDev && new HotModuleReplacementPlugin(),
       new DefinePlugin({
         BUILD_TARGET: JSON.stringify('server'),
         'process.env.BABEL_ENV': JSON.stringify(opts.env),

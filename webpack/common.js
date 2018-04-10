@@ -1,6 +1,5 @@
 // Dependencies
 const {
-  HotModuleReplacementPlugin,
   NamedModulesPlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack');
@@ -29,6 +28,9 @@ module.exports = (options) => {
     context: opts.appDir,
     resolve: {
       extensions: ['.js', '.jsx', '.mjs', '.json'],
+      alias: {
+        'webpack-hot-client/client': require.resolve('webpack-hot-client/client'),
+      }
     },
     output: {
       // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -69,7 +71,6 @@ module.exports = (options) => {
     },
     plugins: [
       isDev && new NamedModulesPlugin(),
-      isDev && new HotModuleReplacementPlugin(),
       new NoEmitOnErrorsPlugin(),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',

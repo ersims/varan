@@ -11,6 +11,9 @@ const defaults = require('lodash.defaults');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
+const convert = require('koa-connect');
+const history = require('connect-history-api-fallback');
+const proxy = require('http-proxy-middleware');
 const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
@@ -44,34 +47,63 @@ module.exports = (options) => {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'none',
-    devServer: {
-      proxy: {
-        '/': `http://localhost:${opts.serverPort}/`,
+    serve: { // webpack-serve config - stripped before sending to webpack if it exists
+      content: opts.targetDir,
+      clipboard: false,
+      logTime: true,
+      logLevel: 'silent',
+      hot: {
+        logTime: true,
+        // logLevel: 'silent',
       },
-      compress: true,
-      clientLogLevel: 'none',
-      quiet: true,
-      historyApiFallback: true,
-      contentBase: opts.targetDir,
-      watchContentBase: false,
-      publicPath,
-      hot: true,
-      overlay: true,
-      watchOptions: {
-        ignored: ignoredFiles(opts.sourceDir),
+      dev: {
+        watchOptions: {
+          ignored: ignoredFiles(opts.sourceDir),
+        },
+        publicPath,
+        logTime: true,
+        logLevel: 'silent',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+        writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      // writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
-      before(app) {
-        app.use(errorOverlayMiddleware());
-        app.use(noopServiceWorkerMiddleware());
+      add: (app, middleware, options) => {
+        console.log(options.compiler);
+        options.bus.on('listening', (server) => {
+          const hotClient = require('webpack-hot-client');
+          hotClient(options.compiler, {
+            logTime: true,
+            logLevel: 'info',
+            server,
+            reload: false,
+          });
+        });
+        // app.use(async (ctx, next) => {
+        //   if (!ctx.hotClient) {
+        //     console.log(ctx.socket);
+        //     const hotClient = require('webpack-hot-client');
+        //     ctx.hotClient = hotClient(options.compiler, {
+        //       logTime: true,
+        //       // logLevel: 'silent',
+        //       server: ctx.socket.server,
+        //     });
+        //     // ctx.app.middleware.unshift(ctx.hotClient);
+        //   }
+        //   return next();
+        // });
+        app.use(convert(errorOverlayMiddleware()));
+        app.use(convert(noopServiceWorkerMiddleware()));
+        middleware.webpack();
+        middleware.content();
+        app.use(convert(proxy('/', { target: `http://localhost:${opts.serverPort}/` })));
+        app.use(convert(history()));
       },
     },
     performance: false,
     entry: [
-      isDev && require.resolve('react-dev-utils/webpackHotDevClient'),
+      // isDev && require.resolve('react-dev-utils/webpackHotDevClient'),
+      // isDev && require.resolve('webpack-hot-client/client/hot'),
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {
