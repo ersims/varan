@@ -6,6 +6,7 @@ const {
   measureFileSizesBeforeBuild,
   printFileSizesAfterBuild,
 } = require('react-dev-utils/FileSizeReporter');
+const omit = require('lodash.omit');
 const logger = require('./lib/logger');
 const getConfigs = require('./lib/getConfigs');
 const pkg = require('../package.json');
@@ -34,7 +35,7 @@ module.exports = async (options) => {
   const configs = getConfigs(opts.configs, opts);
 
   // Prepare webpack compiler
-  const compiler = webpack(configs);
+  const compiler = webpack(configs.map(c => omit(c, ['serve'])));
   if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
   if (opts.outputFileSystem) compiler.outputFileSystem = opts.outputFileSystem;
 

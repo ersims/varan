@@ -33,7 +33,6 @@ module.exports = async (options) => {
   opts.serverHost = process.env.HOST = opts.serverHost;
   opts.devServerWSPort = await detectPort(opts.devServerPort + 10, opts.devServerHost);
 
-
   // Load configs
   const [clientConfig, serverConfig] = getConfigs([opts.clientConfigFile, opts.serverConfigFile], opts);
 

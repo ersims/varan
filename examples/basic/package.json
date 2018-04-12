@@ -15,7 +15,7 @@
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.0.0",
     "serialize-javascript": "^1.4.0",
-    "varan": "^0.0.3"
+    "varan": "^0.1.0"
   },
   "license": "MIT",
   "devDependencies": {

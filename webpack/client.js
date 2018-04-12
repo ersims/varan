@@ -54,7 +54,7 @@ module.exports = (options) => {
       logLevel: 'silent',
       hot: {
         logTime: true,
-        // logLevel: 'silent',
+        logLevel: 'silent',
       },
       dev: {
         watchOptions: {
@@ -69,29 +69,6 @@ module.exports = (options) => {
         writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
       add: (app, middleware, options) => {
-        console.log(options.compiler);
-        options.bus.on('listening', (server) => {
-          const hotClient = require('webpack-hot-client');
-          hotClient(options.compiler, {
-            logTime: true,
-            logLevel: 'info',
-            server,
-            reload: false,
-          });
-        });
-        // app.use(async (ctx, next) => {
-        //   if (!ctx.hotClient) {
-        //     console.log(ctx.socket);
-        //     const hotClient = require('webpack-hot-client');
-        //     ctx.hotClient = hotClient(options.compiler, {
-        //       logTime: true,
-        //       // logLevel: 'silent',
-        //       server: ctx.socket.server,
-        //     });
-        //     // ctx.app.middleware.unshift(ctx.hotClient);
-        //   }
-        //   return next();
-        // });
         app.use(convert(errorOverlayMiddleware()));
         app.use(convert(noopServiceWorkerMiddleware()));
         middleware.webpack();
@@ -102,8 +79,6 @@ module.exports = (options) => {
     },
     performance: false,
     entry: [
-      // isDev && require.resolve('react-dev-utils/webpackHotDevClient'),
-      // isDev && require.resolve('webpack-hot-client/client/hot'),
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {

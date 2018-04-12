@@ -16,12 +16,12 @@ class Html extends PureComponent {
     bundleJs: PropTypes.arrayOf(PropTypes.string.isRequired),
     bundleCss: PropTypes.arrayOf(PropTypes.string.isRequired),
     body: PropTypes.string,
+    initialState: PropTypes.object,
   };
   static defaultProps = {
     htmlAttributes: {},
     bodyAttributes: {},
     body: '',
-    initialState: {},
   };
 
   render() {
@@ -55,7 +55,7 @@ class Html extends PureComponent {
         <body {...bodyAttributes}>
           <div id="root" dangerouslySetInnerHTML={{ __html: body }}/>
           {bundleJs.map((js, i) => <script key={i} type="text/javascript" src={js} />)}
-          <script id="initial-state" type="text/javascript" dangerouslySetInnerHTML={{ __html: `window.__INITIAL_REDUX_STATE__ = ${serialize(initialState, { isJSON: true })}` }}/>
+          {initialState && <script id="initial-state" type="text/javascript" dangerouslySetInnerHTML={{ __html: `window.__INITIAL_REDUX_STATE__ = ${serialize(initialState, { isJSON: true })}` }}/>}
         </body>
       </html>
     );

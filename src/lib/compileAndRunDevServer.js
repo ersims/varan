@@ -24,17 +24,16 @@ module.exports = log => async (config, host, port, opts) => {
         port,
         compiler,
         ...config.serve,
-        // hot: {
-        //   host,
-        //   port: opts.devServerWSPort,
-        //   ...config.serve.hot,
-        // },
-        hot: false,
+        hot: {
+          host,
+          port: opts.devServerWSPort,
+          ...config.serve.hot,
+        },
       });
       compiler.hooks.done.tap(pkg.name, () => {
         if (initialBuild) {
           initialBuild = false;
-          return devServer.then(resolve);
+          return devServer.then(resolve).catch(reject);
         }
       });
     });
