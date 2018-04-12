@@ -6,6 +6,7 @@ const {
   measureFileSizesBeforeBuild,
   printFileSizesAfterBuild,
 } = require('react-dev-utils/FileSizeReporter');
+const omit = require('lodash.omit');
 const logger = require('./lib/logger');
 const getConfigs = require('./lib/getConfigs');
 const pkg = require('../package.json');
@@ -20,19 +21,23 @@ const getOpts = (options) => defaults({}, options, {
   warnChunkSize: 1024 * 1024,
   silent: false,
   env: 'production',
+  inputFileSystem: undefined,
+  outputFileSystem: undefined,
 });
 
 // Exports
 module.exports = async (options) => {
   const opts = getOpts(options);
   const log = logger(opts);
-  process.env.BABEL_ENV = process.env.NODE_ENV = opts.env;
+  process.env.BABEL_ENV  = opts.env;
 
   // Load configs
   const configs = getConfigs(opts.configs, opts);
 
   // Prepare webpack compiler
-  const compiler = webpack(configs);
+  const compiler = webpack(configs.map(c => omit(c, ['serve'])));
+  if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
+  if (opts.outputFileSystem) compiler.outputFileSystem = opts.outputFileSystem;
 
   // Add event handlers
   compiler.hooks.done.tap(pkg.name, () => log('✅  Build complete'));
@@ -69,7 +74,7 @@ Output path:          ${path.dirname(config.output.path)}
           if (!opts.silent) printFileSizesAfterBuild(stats.stats[i], previousFileSizes[i], config.output.path, opts.warnBundleSize, opts.warnChunkSize);
         });
         log();
-        resolve();
+        resolve(stats);
       });
     }));
 };

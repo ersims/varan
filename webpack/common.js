@@ -1,12 +1,10 @@
 // Dependencies
 const {
-  HotModuleReplacementPlugin,
   NamedModulesPlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack');
-const WriteFilePlugin = require('write-file-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const getPaths = require('../src/lib/getPaths');
@@ -70,12 +68,10 @@ module.exports = (options) => {
     },
     plugins: [
       isDev && new NamedModulesPlugin(),
-      isDev && new HotModuleReplacementPlugin(),
       new NoEmitOnErrorsPlugin(),
-      new ManifestPlugin({
-        fileName: 'asset-manifest.json',
+      new StatsWriterPlugin({
+        filename: 'stats-manifest.json',
       }),
-      new WriteFilePlugin({ test: /^(?!.*(\.hot-update\.)).*/ }),
     ].filter(Boolean),
   };
 };

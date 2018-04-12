@@ -1,16 +1,23 @@
 // Dependencies
-const { EnvironmentPlugin } = require('webpack');
+const {
+  DefinePlugin,
+  EnvironmentPlugin,
+} = require('webpack');
 const merge = require('webpack-merge');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const ManifestPlugin = require('webpack-manifest-plugin');
 const defaults = require('lodash.defaults');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
+const convert = require('koa-connect');
+const history = require('connect-history-api-fallback');
+const proxy = require('http-proxy-middleware');
 const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
+const clientBabelConfig = require('../babel/client');
 
 // Init
 const getOpts = (options) => {
@@ -25,14 +32,8 @@ const getOpts = (options) => {
     sourceDir: paths.client.sourceDir,
     entry: paths.client.entry,
     favicon: paths.client.favicon,
-    templateSourceDir: paths.templates.sourceDir,
-    templateTargetDir: paths.templates.targetDir,
-    templateEntry: paths.templates.entry,
-    browserSupport: [
-      '>1%',
-      'last 2 versions',
-      'ie >= 11',
-    ],
+    devServerPort: process.env.DEV_PORT || 3000,
+    serverPort: process.env.PORT || 3001,
   })
 };
 
@@ -40,44 +41,51 @@ const getOpts = (options) => {
 module.exports = (options) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
-  const publicPath = isDev ? `http://localhost:${process.env.DEV_PORT}/` : `/${path.dirname(opts.entry)}`;
+  const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).substr(2)}`;
+  const outputPath = path.resolve(opts.targetDir);
   return merge.smart(common(opts), {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'none',
-    devServer: {
-      proxy: {
-        '/': `http://localhost:${process.env.PORT}/`,
+    serve: { // webpack-serve config - stripped before sending to webpack if it exists
+      content: opts.targetDir,
+      clipboard: false,
+      logTime: true,
+      logLevel: 'silent',
+      hot: {
+        logTime: true,
+        logLevel: 'silent',
       },
-      compress: true,
-      clientLogLevel: 'none',
-      quiet: true,
-      contentBase: opts.targetDir,
-      watchContentBase: false,
-      publicPath,
-      hot: true,
-      overlay: true,
-      watchOptions: {
-        ignored: ignoredFiles(opts.sourceDir),
+      dev: {
+        watchOptions: {
+          ignored: ignoredFiles(opts.sourceDir),
+        },
+        publicPath,
+        logTime: true,
+        logLevel: 'silent',
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+        },
+        writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-      },
-      before(app) {
-        app.use(errorOverlayMiddleware());
-        app.use(noopServiceWorkerMiddleware());
+      add: (app, middleware, options) => {
+        app.use(convert(errorOverlayMiddleware()));
+        app.use(convert(noopServiceWorkerMiddleware()));
+        middleware.webpack();
+        middleware.content();
+        app.use(convert(proxy('/', { target: `http://localhost:${opts.serverPort}/` })));
+        app.use(convert(history()));
       },
     },
     performance: false,
     entry: [
-      isDev && require.resolve('react-dev-utils/webpackHotDevClient'),
       require.resolve(path.resolve(opts.sourceDir, opts.entry)),
     ].filter(Boolean),
     output: {
-      path: path.resolve(opts.targetDir),
-      filename: isDev ? opts.entry : 'static/js/[name].[chunkhash:8].js',
+      path: outputPath,
+      filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[chunkhash:8].js',
       chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
-      pathinfo: true,
+      pathinfo: isDev,
       publicPath,
       libraryTarget: 'var',
     },
@@ -89,44 +97,17 @@ module.exports = (options) => {
         options: {
           cacheDirectory: isDev,
           compact: !isDev,
-          presets: [
-            [
-              require.resolve('@babel/preset-env'),
-              {
-                targets: {
-                  browsers: opts.browserSupport,
-                },
-                modules: false,
-                shippedProposals: true,
-              },
-            ],
-            require.resolve('@babel/preset-react'),
-          ],
-          plugins: [
-            require.resolve('@babel/plugin-proposal-class-properties'),
-            require.resolve('@babel/plugin-syntax-dynamic-import'),
-          ],
-          env: {
-            development: {
-              plugins: [
-                require.resolve('@babel/plugin-transform-react-jsx-source'),
-                require.resolve('@babel/plugin-transform-react-jsx-self'),
-              ],
-            },
-            production: {
-              plugins: [
-                require.resolve('@babel/plugin-transform-react-constant-elements'),
-                require.resolve('@babel/plugin-transform-react-inline-elements'),
-              ],
-            },
-          },
+          ...clientBabelConfig,
         },
       }],
     },
     plugins: [
+      new DefinePlugin({
+        BUILD_TARGET: JSON.stringify('client'),
+        'process.env.BABEL_ENV': JSON.stringify(opts.env),
+        'process.env.NODE_ENV': JSON.stringify(opts.env),
+      }),
       new EnvironmentPlugin({
-        NODE_ENV: opts.env,
-        BUILD_TARGET: 'client',
         DEBUG: false,
       }),
       new ExtractTextPlugin({
@@ -134,23 +115,8 @@ module.exports = (options) => {
         filename: 'static/css/[name].[hash:8].css',
         allChunks: true,
       }),
-      new HtmlWebpackPlugin({
-        inject: true,
-        template: `!!${require.resolve('html-loader')}!${path.resolve(opts.templateSourceDir, opts.templateEntry)}`,
-        filename: path.resolve(opts.templateTargetDir, opts.templateEntry),
-        favicon: opts.favicon,
-        minify: !isDev && {
-          removeComments: true,
-          collapseWhitespace: true,
-          removeRedundantAttributes: true,
-          useShortDoctype: true,
-          removeEmptyAttributes: true,
-          removeStyleLinkTypeAttributes: true,
-          keepClosingSlash: true,
-          minifyJS: true,
-          minifyCSS: true,
-          minifyURLs: true,
-        },
+      new ManifestPlugin({
+        fileName: 'asset-manifest.json',
       }),
     ].filter(Boolean),
     optimization: isDev

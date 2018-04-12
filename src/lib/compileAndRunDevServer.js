@@ -4,29 +4,38 @@ const {
   createCompiler,
   prepareUrls,
 } = require('react-dev-utils/WebpackDevServerUtils');
-const WebpackDevServer = require('webpack-dev-server');
+const omit = require('lodash.omit');
+const serve = require('webpack-serve');
 const pkg = require('../../package.json');
 
 // Exports
-module.exports = log => async (config, host, port) => {
+module.exports = log => async (config, host, port, opts) => {
   const name = config.name || pkg.name;
   const urls = prepareUrls('http', host, port);
-  const compiler = createCompiler(webpack, config, name, urls, false);
-  if (compiler.options.devServer) {
+  const compiler = createCompiler(webpack, omit(config, ['serve']), name, urls, false);
+  if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
+  if (opts.outputFileSystem) compiler.outputFileSystem = opts.outputFileSystem;
+
+  if (config.serve) {
     return new Promise((resolve, reject) => {
       let initialBuild = true;
-      const devServer = new WebpackDevServer(compiler, compiler.options.devServer);
-      devServer.listen(port, host, (err) => {
-        if (err) return reject(err);
+      const devServer = serve({
+        host,
+        port,
+        compiler,
+        ...config.serve,
+        hot: {
+          host,
+          port: opts.devServerWSPort,
+          ...config.serve.hot,
+        },
       });
-
       compiler.hooks.done.tap(pkg.name, () => {
         if (initialBuild) {
-          resolve(devServer);
           initialBuild = false;
+          return devServer.then(resolve).catch(reject);
         }
       });
-      return devServer;
     });
   } else {
     compiler.hooks.done.tap(pkg.name, () => log(`✅  Build complete for ${name}`));
@@ -40,7 +49,7 @@ module.exports = log => async (config, host, port) => {
       const info = stats.toJson();
       if (stats.hasErrors()) {
         console.error(info.errors.map(e => e.split('\n')));
-        const error = new Error('Build failed for ${name}');
+        const error = new Error(`Build failed for ${name}`);
         error.details = info.errors;
         return reject(error);
       }

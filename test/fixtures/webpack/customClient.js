@@ -1,13 +1,13 @@
 // Dependencies
 const {
-  EnvironmentPlugin,
+  DefinePlugin,
   NoEmitOnErrorsPlugin,
 } = require('webpack');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
+const clientBabelConfig = require('../../../babel/client');
 
 // Init
 const resolve = p => path.resolve(process.env.TEST_USER_CWD, p);
@@ -45,39 +45,7 @@ module.exports = {
           options: {
             cacheDirectory: false,
             compact: true,
-            presets: [
-              [
-                require.resolve('@babel/preset-env'),
-                {
-                  targets: {
-                    browsers: [
-                      '>10%',
-                    ],
-                  },
-                  modules: false,
-                  shippedProposals: true,
-                },
-              ],
-              require.resolve('@babel/preset-react'),
-            ],
-            plugins: [
-              require.resolve('@babel/plugin-proposal-class-properties'),
-              require.resolve('@babel/plugin-syntax-dynamic-import'),
-            ],
-            env: {
-              development: {
-                plugins: [
-                  require.resolve('@babel/plugin-transform-react-jsx-source'),
-                  require.resolve('@babel/plugin-transform-react-jsx-self'),
-                ],
-              },
-              production: {
-                plugins: [
-                  require.resolve('@babel/plugin-transform-react-constant-elements'),
-                  require.resolve('@babel/plugin-transform-react-inline-elements'),
-                ],
-              },
-            },
+            ...clientBabelConfig,
           },
         },
         {
@@ -108,36 +76,16 @@ module.exports = {
     }],
   },
   plugins: [
-    new NoEmitOnErrorsPlugin(),
-    new EnvironmentPlugin({
-      NODE_ENV: 'production',
-      BUILD_TARGET: 'client',
-      DEBUG: false,
+    new DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
     }),
+    new NoEmitOnErrorsPlugin(),
     new ExtractTextPlugin({
       filename: 'static/css/[name].[hash:8].css',
       allChunks: true,
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json',
-    }),
-    new HtmlWebpackPlugin({
-      inject: true,
-      template: `!!${require.resolve('html-loader')}!${resolve('src/templates/index.hbs')}`,
-      filename: resolve('dist/templates/index.hbs'),
-      favicon: resolve('src/assets/favicon.ico'),
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeRedundantAttributes: true,
-        useShortDoctype: true,
-        removeEmptyAttributes: true,
-        removeStyleLinkTypeAttributes: true,
-        keepClosingSlash: true,
-        minifyJS: true,
-        minifyCSS: true,
-        minifyURLs: true,
-      },
     }),
   ],
   optimization: {
