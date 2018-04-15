@@ -2,16 +2,18 @@
 .*
 
 # Exceptions
-!.gitkeep
-!.gitignore
-!.gitattributes
-!.travis.yml
 !.babelrc*
+!.env.example
 !.eslintrc
 !.eslintignore
 !.editorconfig
+!.gitattributes
+!.gitignore
+!.gitkeep
 !.npmignore
-!.env.example
+!.prettierignore
+!.prettierrc
+!.travis.yml
 
 # Generated directories
 build

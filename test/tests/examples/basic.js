@@ -1,5 +1,7 @@
 // Dependencies
 const MemoryFileSystem = require('memory-fs');
+const semver = require('semver');
+const pkg = require('../../../package.json');
 const { build } = require('../../../index');
 const { hasFile, getFiles, resolver } = require('../../fixtures/utils');
 
@@ -10,6 +12,10 @@ const resolve = resolver(__dirname, '../../../examples/basic');
 // Tests
 describe('examples', () => {
   describe('basic', () => {
+    it('should use a semver compatible version of varan', () => {
+      const examplePkg = require(resolve('package.json'));
+      expect(semver.satisfies(pkg.version, examplePkg.dependencies.varan)).toBe(true);
+    });
     describe('build', () => {
       it('should work with default values', async done => {
         jest.setTimeout(slowTimeout);

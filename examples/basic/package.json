@@ -27,7 +27,7 @@
     "bail": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.js"
+      "src/**/*.js?(x)"
     ],
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
@@ -38,14 +38,14 @@
         "statements": 60
       }
     },
-    "testMatch": [
-      "**/test/tests/**/*.js?(x)"
-    ],
     "roots": [
       "<rootDir>/test"
     ],
+    "testMatch": [
+      "**/test/tests/**/*.js?(x)"
+    ],
     "testEnvironment": "node",
-    "silent": false,
+    "silent": true,
     "verbose": true
   }
 }
