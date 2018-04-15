@@ -29,25 +29,13 @@ describe('lib', () => {
     });
     it('should support multiple mixed configs', () => {
       const configPath = resolve('../../fixtures/webpack/mini');
-      const configs = [
-        configPath,
-        () => ({ mode: 'development' }),
-        { mode: 'production' },
-      ];
-      expect(getConfigs(configs)).toEqual([
-        require(configPath),
-        { mode: 'development' },
-        { mode: 'production' },
-      ]);
+      const configs = [configPath, () => ({ mode: 'development' }), { mode: 'production' }];
+      expect(getConfigs(configs)).toEqual([require(configPath), { mode: 'development' }, { mode: 'production' }]);
     });
     it('should pass options to the config function', () => {
       const options = { optionKey: 'optionValue' };
       const configPath = resolve('../../fixtures/webpack/miniFn');
-      const configs = [
-        configPath,
-        opts => ({ mode: 'development', ...opts }),
-        { mode: 'production' },
-      ];
+      const configs = [configPath, opts => ({ mode: 'development', ...opts }), { mode: 'production' }];
       expect(getConfigs(configs, options)).toEqual([
         require(configPath)(options),
         { mode: 'development', optionKey: 'optionValue' },

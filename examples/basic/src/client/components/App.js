@@ -9,7 +9,9 @@ class App extends PureComponent {
       <div className="App">
         <Helmet>
           <html lang="en" />
-          <title itemProp="name" lang="en">Varan basic react example</title>
+          <title itemProp="name" lang="en">
+            Varan basic react example
+          </title>
           <meta charSet="utf-8" />
           <meta charSet="utf-8" />
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />

@@ -1,8 +1,5 @@
 // Dependencies
-const {
-  DefinePlugin,
-  NoEmitOnErrorsPlugin,
-} = require('webpack');
+const { DefinePlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
@@ -22,9 +19,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.mjs', '.json'],
   },
   devtool: 'cheap-module-source-map',
-  entry: [
-    resolve('src/client/index.js'),
-  ],
+  entry: [resolve('src/client/index.js')],
   output: {
     path: resolve('dist/client'),
     filename: 'customFileName.js',
@@ -36,44 +31,52 @@ module.exports = {
   stats: 'errors-only',
   module: {
     strictExportPresence: true,
-    rules: [{
-      oneOf: [
-        {
-          test: /\.(js|jsx|mjs)$/,
-          exclude: /node_modules/,
-          loader: require.resolve('babel-loader'),
-          options: {
-            cacheDirectory: false,
-            compact: true,
-            ...clientBabelConfig,
+    rules: [
+      {
+        oneOf: [
+          {
+            test: /\.(js|jsx|mjs)$/,
+            exclude: /node_modules/,
+            loader: require.resolve('babel-loader'),
+            options: {
+              cacheDirectory: false,
+              compact: true,
+              ...clientBabelConfig,
+            },
           },
-        },
-        {
-          exclude: [/\.html$/, /\.(js|jsx|mjs)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
-          loader: require.resolve('url-loader'),
-          options: {
-            limit: 10000,
-            name: 'static/media/[name].[hash:8].[ext]',
+          {
+            exclude: [/\.html$/, /\.(js|jsx|mjs)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
+            loader: require.resolve('url-loader'),
+            options: {
+              limit: 10000,
+              name: 'static/media/[name].[hash:8].[ext]',
+            },
           },
-        },
-        {
-          test: /\.(css|scss)$/,
-          use: ExtractTextPlugin.extract({
-            fallback: require.resolve('style-loader'),
-            use: [
-              { loader: require.resolve('css-loader'), options: { importLoaders: 1, minimize: true } },
-              { loader: require.resolve('resolve-url-loader') },
-              { loader: require.resolve('sass-loader'), options: { sourceMap: true, precision: 10 } },
-            ],
-          }),
-        },
-        {
-          exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-          loader: require.resolve('file-loader'),
-          options: { name: 'static/media/[name].[hash:8].[ext]' },
-        },
-      ],
-    }],
+          {
+            test: /\.(css|scss)$/,
+            use: ExtractTextPlugin.extract({
+              fallback: require.resolve('style-loader'),
+              use: [
+                {
+                  loader: require.resolve('css-loader'),
+                  options: { importLoaders: 1, minimize: true },
+                },
+                { loader: require.resolve('resolve-url-loader') },
+                {
+                  loader: require.resolve('sass-loader'),
+                  options: { sourceMap: true, precision: 10 },
+                },
+              ],
+            }),
+          },
+          {
+            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+            loader: require.resolve('file-loader'),
+            options: { name: 'static/media/[name].[hash:8].[ext]' },
+          },
+        ],
+      },
+    ],
   },
   plugins: [
     new DefinePlugin({

@@ -1,9 +1,5 @@
 // Dependencies
-const {
-  DefinePlugin,
-  EnvironmentPlugin,
-  HotModuleReplacementPlugin,
-} = require('webpack');
+const { DefinePlugin, EnvironmentPlugin, HotModuleReplacementPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const defaults = require('lodash.defaults');
@@ -14,7 +10,7 @@ const serverBabelConfig = require('../babel/server');
 
 // Init
 const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;
-const getOpts = (options) => {
+const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
@@ -26,11 +22,11 @@ const getOpts = (options) => {
     sourceDir: paths.server.sourceDir,
     entry: paths.server.entry,
     clientTargetDir: paths.client.targetDir,
-  })
+  });
 };
 
 // Exports
-module.exports = (options) => {
+module.exports = options => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const outputPath = path.resolve(opts.targetDir, path.dirname(opts.entry));
@@ -38,10 +34,7 @@ module.exports = (options) => {
     target: 'node',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'source-map',
-    entry: [
-      isDev && HotReloadEntry,
-      require.resolve(path.resolve(opts.sourceDir, opts.entry)),
-    ].filter(Boolean),
+    entry: [isDev && HotReloadEntry, require.resolve(path.resolve(opts.sourceDir, opts.entry))].filter(Boolean),
     output: {
       path: outputPath,
       filename: path.basename(opts.entry),
@@ -60,15 +53,17 @@ module.exports = (options) => {
       }),
     ],
     module: {
-      rules: [{
-        test: /\.(js|jsx|mjs)$/,
-        exclude: /node_modules/,
-        loader: require.resolve('babel-loader'),
-        options: {
-          cacheDirectory: isDev,
-          ...serverBabelConfig,
+      rules: [
+        {
+          test: /\.(js|jsx|mjs)$/,
+          exclude: /node_modules/,
+          loader: require.resolve('babel-loader'),
+          options: {
+            cacheDirectory: isDev,
+            ...serverBabelConfig,
+          },
         },
-      }],
+      ],
     },
     plugins: [
       isDev && new HotModuleReplacementPlugin(),

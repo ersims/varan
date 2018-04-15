@@ -1,8 +1,5 @@
 // Dependencies
-const {
-  DefinePlugin,
-  EnvironmentPlugin,
-} = require('webpack');
+const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
@@ -20,7 +17,7 @@ const getPaths = require('../src/lib/getPaths');
 const clientBabelConfig = require('../babel/client');
 
 // Init
-const getOpts = (options) => {
+const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
@@ -34,11 +31,11 @@ const getOpts = (options) => {
     favicon: paths.client.favicon,
     devServerPort: process.env.DEV_PORT || 3000,
     serverPort: process.env.PORT || 3001,
-  })
+  });
 };
 
 // Exports
-module.exports = (options) => {
+module.exports = options => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).substr(2)}`;
@@ -47,7 +44,8 @@ module.exports = (options) => {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'none',
-    serve: { // webpack-serve config - stripped before sending to webpack if it exists
+    serve: {
+      // webpack-serve config - stripped before sending to webpack if it exists
       content: opts.targetDir,
       clipboard: false,
       logTime: true,
@@ -78,9 +76,7 @@ module.exports = (options) => {
       },
     },
     performance: false,
-    entry: [
-      require.resolve(path.resolve(opts.sourceDir, opts.entry)),
-    ].filter(Boolean),
+    entry: [require.resolve(path.resolve(opts.sourceDir, opts.entry))].filter(Boolean),
     output: {
       path: outputPath,
       filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[chunkhash:8].js',
@@ -90,16 +86,18 @@ module.exports = (options) => {
       libraryTarget: 'var',
     },
     module: {
-      rules: [{
-        test: /\.(js|jsx|mjs)$/,
-        exclude: /node_modules/,
-        loader: require.resolve('babel-loader'),
-        options: {
-          cacheDirectory: isDev,
-          compact: !isDev,
-          ...clientBabelConfig,
+      rules: [
+        {
+          test: /\.(js|jsx|mjs)$/,
+          exclude: /node_modules/,
+          loader: require.resolve('babel-loader'),
+          options: {
+            cacheDirectory: isDev,
+            compact: !isDev,
+            ...clientBabelConfig,
+          },
         },
-      }],
+      ],
     },
     plugins: [
       new DefinePlugin({
@@ -122,30 +120,30 @@ module.exports = (options) => {
     optimization: isDev
       ? {}
       : {
-        minimizer: [
-          new UglifyJSPlugin({
-            cache: true,
-            parallel: true,
-            uglifyOptions: {
-              compress: true,
-              output: {
-                comments: false,
-                ascii_only: true,
+          minimizer: [
+            new UglifyJSPlugin({
+              cache: true,
+              parallel: true,
+              uglifyOptions: {
+                compress: true,
+                output: {
+                  comments: false,
+                  ascii_only: true,
+                },
               },
-            },
-            sourceMap: true,
-          }),
-        ],
-        splitChunks: {
-          cacheGroups: {
-            commons: {
-              test: /[\\/]node_modules[\\/]/,
-              name: 'vendor',
-              chunks: 'all',
+              sourceMap: true,
+            }),
+          ],
+          splitChunks: {
+            cacheGroups: {
+              commons: {
+                test: /[\\/]node_modules[\\/]/,
+                name: 'vendor',
+                chunks: 'all',
+              },
             },
           },
         },
-      },
     node: {
       dgram: 'empty',
       fs: 'empty',

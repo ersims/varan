@@ -1,7 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
+// Init
 const path = './dummy';
 const dummy = require(path);
+
 const render = () => {
   ReactDOM.hydrate(
     <div className="App">

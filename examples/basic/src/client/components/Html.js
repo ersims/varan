@@ -50,12 +50,20 @@ class Html extends PureComponent {
           {script}
           {noscript}
           {base}
-          {bundleCss.map((css, i) => <link key={i} href={css} rel="stylesheet"/>)}
+          {bundleCss.map((css, i) => <link key={i} href={css} rel="stylesheet" />)}
         </head>
         <body {...bodyAttributes}>
-          <div id="root" dangerouslySetInnerHTML={{ __html: body }}/>
+          <div id="root" dangerouslySetInnerHTML={{ __html: body }} />
           {bundleJs.map((js, i) => <script key={i} type="text/javascript" src={js} />)}
-          {initialState && <script id="initial-state" type="text/javascript" dangerouslySetInnerHTML={{ __html: `window.__INITIAL_REDUX_STATE__ = ${serialize(initialState, { isJSON: true })}` }}/>}
+          {initialState && (
+            <script
+              id="initial-state"
+              type="text/javascript"
+              dangerouslySetInnerHTML={{
+                __html: `window.__INITIAL_REDUX_STATE__ = ${serialize(initialState, { isJSON: true })}`,
+              }}
+            />
+          )}
         </body>
       </html>
     );

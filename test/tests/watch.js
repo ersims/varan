@@ -10,9 +10,11 @@ const slowTimeout = 20000;
 // Tests
 describe('watch', () => {
   it('should give meaningful error message if no config files were provided', () => {
-    return expect(watch({ clientConfigFile: null, serverConfigFile: null })).rejects.toThrow('Must specify at least one config');
+    return expect(watch({ clientConfigFile: null, serverConfigFile: null })).rejects.toThrow(
+      'Must specify at least one config',
+    );
   });
-  it('should work with default values', async (done) => {
+  it('should work with default values', async done => {
     jest.setTimeout(slowTimeout);
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/basic');
@@ -46,7 +48,7 @@ describe('watch', () => {
     servers.forEach(s => s && s.close());
     done();
   });
-  it('should support custom webpack config', async (done) => {
+  it('should support custom webpack config', async done => {
     jest.setTimeout(slowTimeout);
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/basic');

@@ -21,5 +21,5 @@ module.exports = (cwd = process.cwd()) => {
       entry: 'bin/web.js',
       targetDir: resolve('dist/server'),
     },
-  }
+  };
 };

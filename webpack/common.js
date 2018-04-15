@@ -1,8 +1,5 @@
 // Dependencies
-const {
-  NamedModulesPlugin,
-  NoEmitOnErrorsPlugin,
-} = require('webpack');
+const { NamedModulesPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const defaults = require('lodash.defaults');
@@ -10,16 +7,16 @@ const path = require('path');
 const getPaths = require('../src/lib/getPaths');
 
 // Init
-const getOpts = (options) => {
+const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
     appDir: paths.appDir,
-  })
+  });
 };
 
 // Exports
-module.exports = (options) => {
+module.exports = options => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   return {
@@ -28,6 +25,9 @@ module.exports = (options) => {
     context: opts.appDir,
     resolve: {
       extensions: ['.js', '.jsx', '.mjs', '.json'],
+      alias: {
+        'webpack-hot-client/client': require.resolve('webpack-hot-client/client'),
+      },
     },
     output: {
       // Point sourcemap entries to original disk location (format as URL on Windows)
@@ -37,34 +37,42 @@ module.exports = (options) => {
     stats: 'errors-only',
     module: {
       strictExportPresence: true,
-      rules: [{
-        oneOf: [
-          {
-            exclude: [/\.html$/, /\.(js|jsx|mjs)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
-            loader: require.resolve('url-loader'),
-            options: {
-              limit: 10000,
-              name: 'static/media/[name].[hash:8].[ext]',
+      rules: [
+        {
+          oneOf: [
+            {
+              exclude: [/\.html$/, /\.(js|jsx|mjs)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
+              loader: require.resolve('url-loader'),
+              options: {
+                limit: 10000,
+                name: 'static/media/[name].[hash:8].[ext]',
+              },
             },
-          },
-          {
-            test: /\.(css|scss)$/,
-            use: ExtractTextPlugin.extract({
-              fallback: require.resolve('style-loader'),
-              use: [
-                { loader: require.resolve('css-loader'), options: { importLoaders: 1, minimize: !isDev } },
-                { loader: require.resolve('resolve-url-loader') },
-                { loader: require.resolve('sass-loader'), options: { sourceMap: true, precision: 10 } },
-              ],
-            }),
-          },
-          {
-            exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
-            loader: require.resolve('file-loader'),
-            options: { name: 'static/media/[name].[hash:8].[ext]' },
-          },
-        ],
-      }],
+            {
+              test: /\.(css|scss)$/,
+              use: ExtractTextPlugin.extract({
+                fallback: require.resolve('style-loader'),
+                use: [
+                  {
+                    loader: require.resolve('css-loader'),
+                    options: { importLoaders: 1, minimize: !isDev },
+                  },
+                  { loader: require.resolve('resolve-url-loader') },
+                  {
+                    loader: require.resolve('sass-loader'),
+                    options: { sourceMap: true, precision: 10 },
+                  },
+                ],
+              }),
+            },
+            {
+              exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+              loader: require.resolve('file-loader'),
+              options: { name: 'static/media/[name].[hash:8].[ext]' },
+            },
+          ],
+        },
+      ],
     },
     plugins: [
       isDev && new NamedModulesPlugin(),

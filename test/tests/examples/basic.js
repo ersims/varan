@@ -11,18 +11,20 @@ const resolve = resolver(__dirname, '../../../examples/basic');
 describe('examples', () => {
   describe('basic', () => {
     describe('build', () => {
-      it('should work with default values', async (done) => {
+      it('should work with default values', async done => {
         jest.setTimeout(slowTimeout);
         const mfs = new MemoryFileSystem();
 
         /**
          * Assertions
          */
-        await expect(build({
-          cwd: resolve(),
-          outputFileSystem: mfs,
-          silent: true,
-        })).resolves.toEqual(expect.objectContaining({}));
+        await expect(
+          build({
+            cwd: resolve(),
+            outputFileSystem: mfs,
+            silent: true,
+          }),
+        ).resolves.toEqual(expect.objectContaining({}));
 
         // Client
         expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);

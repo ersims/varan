@@ -9,7 +9,7 @@ const slowTimeout = 20000;
 
 // Tests
 describe('build', () => {
-  it('should reject a broken build and give meaningful error message', async (done) => {
+  it('should reject a broken build and give meaningful error message', async done => {
     jest.setTimeout(slowTimeout);
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/with-error');
@@ -20,14 +20,14 @@ describe('build', () => {
     /**
      * Assertions
      */
-    await expect(build({
-      cwd: resolve(),
-      configs: [
-        '../fixtures/webpack/customClientExtends.js'
-      ].map(p => path.resolve(__dirname, p)),
-      outputFileSystem: mfs,
-      silent: true,
-    })).rejects.toThrow('Build failed');
+    await expect(
+      build({
+        cwd: resolve(),
+        configs: ['../fixtures/webpack/customClientExtends.js'].map(p => path.resolve(__dirname, p)),
+        outputFileSystem: mfs,
+        silent: true,
+      }),
+    ).rejects.toThrow('Build failed');
 
     // Check logging
     expect(console.error).toHaveBeenCalled();
@@ -35,13 +35,13 @@ describe('build', () => {
       expect.arrayContaining([
         expect.stringContaining('(index.js) ./src/client/index.js'),
         expect.stringContaining('Module build failed: SyntaxError'),
-      ])
+      ]),
     );
 
     // Done
     done();
   });
-  it('should display webpack warnings', async (done) => {
+  it('should display webpack warnings', async done => {
     jest.setTimeout(slowTimeout);
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/with-warning');
@@ -54,9 +54,7 @@ describe('build', () => {
      */
     await build({
       cwd: resolve(),
-      configs: [
-        '../fixtures/webpack/customClientExtends.js'
-      ].map(p => path.resolve(__dirname, p)),
+      configs: ['../fixtures/webpack/customClientExtends.js'].map(p => path.resolve(__dirname, p)),
       outputFileSystem: mfs,
       warnBundleSize: 1,
       silent: true,
@@ -66,12 +64,14 @@ describe('build', () => {
     const output = console.warn.mock.calls[0][0][0];
     expect(console.warn).toHaveBeenCalled();
     expect(output).toEqual(expect.stringContaining('(index.js) ./src/client/index.js'));
-    expect(output).toEqual(expect.stringContaining('Critical dependency: the request of a dependency is an expression'));
+    expect(output).toEqual(
+      expect.stringContaining('Critical dependency: the request of a dependency is an expression'),
+    );
 
     // Done
     done();
   });
-  it('should work with default values', async (done) => {
+  it('should work with default values', async done => {
     jest.setTimeout(slowTimeout);
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/basic');
@@ -79,11 +79,13 @@ describe('build', () => {
     /**
      * Assertions
      */
-    await expect(build({
-      cwd: resolve(),
-      outputFileSystem: mfs,
-      silent: true,
-    })).resolves.toEqual(expect.objectContaining({}));
+    await expect(
+      build({
+        cwd: resolve(),
+        outputFileSystem: mfs,
+        silent: true,
+      }),
+    ).resolves.toEqual(expect.objectContaining({}));
 
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
@@ -114,7 +116,7 @@ describe('build', () => {
     // Done
     done();
   });
-  it('should support custom webpack config', async (done) => {
+  it('should support custom webpack config', async done => {
     jest.setTimeout(slowTimeout);
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/basic');
@@ -125,14 +127,14 @@ describe('build', () => {
     /**
      * Assertions
      */
-    await expect(build({
-      cwd: resolve(),
-      outputFileSystem: mfs,
-      silent: true,
-      configs: [
-        '../fixtures/webpack/customClient.js'
-      ].map(p => path.resolve(__dirname, p)),
-    })).resolves.toEqual(expect.objectContaining({}));
+    await expect(
+      build({
+        cwd: resolve(),
+        outputFileSystem: mfs,
+        silent: true,
+        configs: ['../fixtures/webpack/customClient.js'].map(p => path.resolve(__dirname, p)),
+      }),
+    ).resolves.toEqual(expect.objectContaining({}));
 
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
@@ -147,7 +149,9 @@ describe('build', () => {
 
     // JS
     expect(hasFile(mfs, resolve('dist/client/static/js'))).toBe(false);
-    const js = getFiles(mfs, resolve('dist/client')).filter(f => f.isFile() && (f.name.endsWith('.js') || f.name.endsWith('.js.map')));
+    const js = getFiles(mfs, resolve('dist/client')).filter(
+      f => f.isFile() && (f.name.endsWith('.js') || f.name.endsWith('.js.map')),
+    );
     expect(js.length).toBe(4);
     expect(js[0].name).toMatch('customFileName.js');
     expect(js[1].name).toMatch('customFileName.js.map');

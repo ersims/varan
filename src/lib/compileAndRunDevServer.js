@@ -1,9 +1,6 @@
 // Dependencies
 const webpack = require('webpack');
-const {
-  createCompiler,
-  prepareUrls,
-} = require('react-dev-utils/WebpackDevServerUtils');
+const { createCompiler, prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
 const omit = require('lodash.omit');
 const serve = require('webpack-serve');
 const pkg = require('../../package.json');
@@ -24,6 +21,13 @@ module.exports = log => async (config, host, port, opts) => {
         port,
         compiler,
         ...config.serve,
+        dev: {
+          ...config.serve.dev,
+          writeToDisk:
+            compiler.outputFileSystem.constructor.name !== 'NodeOutputFileSystem'
+              ? false
+              : config.serve.dev.writeToDisk,
+        },
         hot: {
           host,
           port: opts.devServerWSPort,
@@ -39,22 +43,24 @@ module.exports = log => async (config, host, port, opts) => {
     });
   } else {
     compiler.hooks.done.tap(pkg.name, () => log(`✅  Build complete for ${name}`));
-    return new Promise((resolve, reject) => compiler.run((err, stats) => {
-      if (err) {
-        console.error(err.stack || err);
-        if (err.details) console.error(err.details);
-        return reject(err);
-      }
+    return new Promise((resolve, reject) =>
+      compiler.run((err, stats) => {
+        if (err) {
+          console.error(err.stack || err);
+          if (err.details) console.error(err.details);
+          return reject(err);
+        }
 
-      const info = stats.toJson();
-      if (stats.hasErrors()) {
-        console.error(info.errors.map(e => e.split('\n')));
-        const error = new Error(`Build failed for ${name}`);
-        error.details = info.errors;
-        return reject(error);
-      }
-      if (stats.hasWarnings()) console.warn(info.warnings);
-      resolve();
-    }));
+        const info = stats.toJson();
+        if (stats.hasErrors()) {
+          console.error(info.errors.map(e => e.split('\n')));
+          const error = new Error(`Build failed for ${name}`);
+          error.details = info.errors;
+          return reject(error);
+        }
+        if (stats.hasWarnings()) console.warn(info.warnings);
+        resolve();
+      }),
+    );
   }
 };

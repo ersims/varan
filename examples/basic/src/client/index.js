@@ -7,10 +7,7 @@ import './sass/index.scss';
 
 // Init
 const render = () => {
-  ReactDOM.hydrate(
-    <App />,
-    document.getElementById('root'),
-  );
+  ReactDOM.hydrate(<App />, document.getElementById('root'));
 };
 
 // Render app and perform necessary housekeeping
