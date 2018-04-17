@@ -32,9 +32,9 @@
   "scripts": {
     "apply:format": "prettier --config .prettierrc --write \"{babel,examples,src,test,webpack}/**/*.js?(x)\"",
     "check:format": "prettier --config .prettierrc --list-different \"{babel,examples,src,test,webpack}/**/*.js?(x)\"",
-    "check:all": "npm run check:format",
-    "clean": "del-cli ./.tmp_test_artifacts ./.coverage",
-    "pretest": "npm run check:all",
+    "check": "npm-run-all check:*",
+    "clean": "del-cli ./.coverage",
+    "pretest": "npm run check",
     "test": "jest"
   },
   "dependencies": {
@@ -76,16 +76,20 @@
     "webpack-stats-plugin": "^0.2.1"
   },
   "devDependencies": {
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^22.4.3",
     "del-cli": "^1.1.0",
     "express": "^4.16.3",
     "jest": "^22.4.3",
     "memory-fs": "^0.4.1",
     "normalize.css": "^8.0.0",
+    "npm-run-all": "^4.1.2",
     "prettier": "^1.12.0",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.0.0",
+    "react-test-renderer": "^16.3.2",
     "semver": "^5.5.0"
   },
   "jest": {
@@ -94,32 +98,31 @@
     "collectCoverageFrom": [
       "src/**/*.js?(x)",
       "webpack/**/*.js?(x)",
-      "index.js",
-      "cli.js",
-      "examples/**/src/**/*.js?(x)",
-      "examples/**/webpack/**/*.js?(x)"
+      "*.js"
     ],
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 60,
-        "functions": 60,
-        "lines": 60,
-        "statements": 60
+        "branches": 50,
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
       }
     },
     "testMatch": [
-      "**/test/tests/**/*.js?(x)"
+      "<rootDir>/test/__tests__/**/*.js?(x)",
+      "<rootDir>/examples/**/test/__tests__/**/*.js?(x)"
     ],
-    "roots": [
-      "<rootDir>/test"
-    ],
-    "moduleNameMapper": {
-      "./clearConsole": "<rootDir>/test/__mocks__/react-dev-utils/clearConsole.js"
+    "transform": {
+      "^.+\\.jsx?$": "<rootDir>/test/fixtures/jestPreprocessor.js"
     },
-    "projects": [
-      "<rootDir>",
-      "<rootDir>/examples/*"
+    "moduleNameMapper": {
+      "./clearConsole": "<rootDir>/test/__mocks__/react-dev-utils/clearConsole.js",
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+    },
+    "modulePathIgnorePatterns": [
+      "<rootDir>/examples/(.*)/test/__mocks__"
     ],
     "testEnvironment": "node",
     "silent": true,

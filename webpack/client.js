@@ -14,7 +14,7 @@ const proxy = require('http-proxy-middleware');
 const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
-const clientBabelConfig = require('../babel/client');
+const clientBabelPreset = require('../babel/client');
 
 // Init
 const getOpts = options => {
@@ -94,7 +94,7 @@ module.exports = options => {
           options: {
             cacheDirectory: isDev,
             compact: !isDev,
-            ...clientBabelConfig,
+            presets: [clientBabelPreset],
           },
         },
       ],

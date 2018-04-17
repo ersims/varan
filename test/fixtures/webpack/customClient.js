@@ -41,7 +41,7 @@ module.exports = {
             options: {
               cacheDirectory: false,
               compact: true,
-              ...clientBabelConfig,
+              presets: [clientBabelConfig],
             },
           },
           {

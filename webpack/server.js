@@ -6,7 +6,7 @@ const defaults = require('lodash.defaults');
 const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
-const serverBabelConfig = require('../babel/server');
+const serverBabelPreset = require('../babel/server');
 
 // Init
 const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;
@@ -60,7 +60,7 @@ module.exports = options => {
           loader: require.resolve('babel-loader'),
           options: {
             cacheDirectory: isDev,
-            ...serverBabelConfig,
+            presets: [serverBabelPreset],
           },
         },
       ],
@@ -71,7 +71,7 @@ module.exports = options => {
         BUILD_TARGET: JSON.stringify('server'),
         'process.env.BABEL_ENV': JSON.stringify(opts.env),
         'process.env.VARAN_CLIENT_ROOT': JSON.stringify(opts.clientTargetDir),
-        'process.env.VARAN_STATS_MANIFEST': JSON.stringify('stats-manifest.json'),
+        'process.env.VARAN_STATS_MANIFEST': JSON.stringify(path.resolve(opts.clientTargetDir, 'stats-manifest.json')),
       }),
       new EnvironmentPlugin({
         DEBUG: false,

@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "express": "^4.16.3",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.0.0",
     "serialize-javascript": "^1.4.0",
@@ -19,15 +19,20 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@babel/core": "^7.0.0-beta.44",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-jest": "^22.4.3",
     "del-cli": "^1.1.0",
     "jest": "^22.4.3",
-    "normalize.css": "^8.0.0"
+    "normalize.css": "^8.0.0",
+    "react-test-renderer": "^16.3.2"
   },
   "jest": {
     "bail": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.js?(x)"
+      "src/**/*.js?(x)",
+      "*.js"
     ],
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
@@ -38,12 +43,16 @@
         "statements": 60
       }
     },
-    "roots": [
-      "<rootDir>/test"
-    ],
     "testMatch": [
-      "**/test/tests/**/*.js?(x)"
+      "<rootDir>/test/__tests__/**/*.js?(x)"
     ],
+    "transform": {
+      "^.+\\.jsx?$": "<rootDir>/test/fixtures/jestPreprocessor.js"
+    },
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
+      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+    },
     "testEnvironment": "node",
     "silent": true,
     "verbose": true

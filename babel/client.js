@@ -1,5 +1,4 @@
-module.exports = {
-  extends: require.resolve('./common'),
+module.exports = api => ({
   presets: [
     [
       require.resolve('@babel/preset-env'),
@@ -7,9 +6,10 @@ module.exports = {
         targets: {
           browsers: ['>1%', 'last 2 versions', 'ie >= 11'],
         },
-        modules: false,
+        modules: api.env() === 'test' ? 'commonjs' : false,
         shippedProposals: true,
       },
     ],
+    require.resolve('./common'),
   ],
-};
+});
