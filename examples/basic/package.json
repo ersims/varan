@@ -4,6 +4,7 @@
   "scripts": {
     "build": "varan build",
     "clean": "del-cli ./dist",
+    "heroku-postbuild": "npm install --only=dev && npm run build && npm prune --production",
     "start": "node dist/server/bin/web.js",
     "test": "jest",
     "watch": "varan watch -- --inspect"
