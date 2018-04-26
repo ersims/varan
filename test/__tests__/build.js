@@ -5,7 +5,7 @@ const { build } = require('../../index');
 const { hasFile, getFiles, resolver } = require('../fixtures/utils');
 
 // Init
-const slowTimeout = 20000;
+const slowTimeout = 40000;
 
 // Tests
 describe('build', () => {

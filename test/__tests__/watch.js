@@ -5,7 +5,7 @@ const { watch } = require('../../index');
 const { hasFile, resolver } = require('../fixtures/utils');
 
 // Init
-const slowTimeout = 20000;
+const slowTimeout = 40000;
 
 // Tests
 describe('watch', () => {
