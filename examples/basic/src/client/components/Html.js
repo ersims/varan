@@ -23,7 +23,6 @@ class Html extends PureComponent {
     bodyAttributes: {},
     body: '',
   };
-
   render() {
     const {
       htmlAttributes,
@@ -54,7 +53,6 @@ class Html extends PureComponent {
         </head>
         <body {...bodyAttributes}>
           <div id="root" dangerouslySetInnerHTML={{ __html: body }} />
-          {bundleJs.map((js, i) => <script key={i} type="text/javascript" src={js} />)}
           {initialState && (
             <script
               id="initial-state"
@@ -64,6 +62,7 @@ class Html extends PureComponent {
               }}
             />
           )}
+          {bundleJs.map((js, i) => <script key={i} type="text/javascript" src={js} defer />)}
         </body>
       </html>
     );
