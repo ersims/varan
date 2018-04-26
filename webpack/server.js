@@ -70,8 +70,10 @@ module.exports = options => {
       new DefinePlugin({
         BUILD_TARGET: JSON.stringify('server'),
         'process.env.BABEL_ENV': JSON.stringify(opts.env),
-        'process.env.VARAN_CLIENT_ROOT': JSON.stringify(opts.clientTargetDir),
-        'process.env.VARAN_STATS_MANIFEST': JSON.stringify(path.resolve(opts.clientTargetDir, 'stats-manifest.json')),
+        'process.env.VARAN_CLIENT_ROOT': JSON.stringify(path.relative(outputPath, opts.clientTargetDir)),
+        'process.env.VARAN_STATS_MANIFEST': JSON.stringify(
+          path.relative(outputPath, path.resolve(opts.clientTargetDir, 'stats-manifest.json')),
+        ),
       }),
       new EnvironmentPlugin({
         DEBUG: false,
