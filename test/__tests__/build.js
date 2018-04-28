@@ -61,12 +61,9 @@ describe('build', () => {
     });
 
     // Check logging
-    const output = console.warn.mock.calls[0][0][0];
     expect(console.warn).toHaveBeenCalled();
-    expect(output).toEqual(expect.stringContaining('(index.js) ./src/client/index.js'));
-    expect(output).toEqual(
-      expect.stringContaining('Critical dependency: the request of a dependency is an expression'),
-    );
+    expect(console.warn.mock.calls[0][0]).toBe('⚠ Build has warnings:');
+    expect(console.warn.mock.calls[1][0]).toEqual(expect.stringContaining('(index.js) ./src/client/index.js'));
 
     // Done
     done();

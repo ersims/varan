@@ -2,14 +2,17 @@
 const { NamedModulesPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
+const postcssPresetEnv = require('postcss-preset-env');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const getPaths = require('../src/lib/getPaths');
+const { browsers } = require('../index');
 
 // Init
 const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
+    browsers,
     env: process.env.NODE_ENV,
     appDir: paths.appDir,
   });
@@ -55,7 +58,14 @@ module.exports = options => {
                 use: [
                   {
                     loader: require.resolve('css-loader'),
-                    options: { importLoaders: 1, minimize: !isDev },
+                    options: { modules: true, importLoaders: 1, minimize: !isDev },
+                  },
+                  {
+                    loader: require.resolve('postcss-loader'),
+                    options: {
+                      ident: 'postcss',
+                      plugins: () => [postcssPresetEnv({ browsers: opts.browsers })],
+                    },
                   },
                   { loader: require.resolve('resolve-url-loader') },
                   {

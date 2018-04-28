@@ -15,11 +15,13 @@ const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
 const clientBabelPreset = require('../babel/client');
+const { browsers } = require('../index');
 
 // Init
 const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
+    browsers,
     env: process.env.NODE_ENV,
     name: undefined,
     appDir: paths.appDir,
@@ -86,6 +88,7 @@ module.exports = options => {
       libraryTarget: 'var',
     },
     module: {
+      strictExportPresence: true,
       rules: [
         {
           test: /\.(js|jsx|mjs)$/,
@@ -94,7 +97,7 @@ module.exports = options => {
           options: {
             cacheDirectory: isDev,
             compact: !isDev,
-            presets: [clientBabelPreset],
+            presets: [[clientBabelPreset, { browsers: opts.browsers }]],
           },
         },
       ],

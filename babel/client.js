@@ -1,10 +1,14 @@
-module.exports = api => ({
+// Dependencies
+const { browsers } = require('../index');
+
+// Exports
+module.exports = (api, options = {}) => ({
   presets: [
     [
       require.resolve('@babel/preset-env'),
       {
         targets: {
-          browsers: ['>1%', 'last 2 versions', 'ie >= 11'],
+          browsers: options.browsers || browsers,
         },
         modules: api.env() === 'test' ? 'commonjs' : false,
         shippedProposals: true,

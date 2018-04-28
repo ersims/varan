@@ -53,6 +53,7 @@ module.exports = options => {
       }),
     ],
     module: {
+      strictExportPresence: true,
       rules: [
         {
           test: /\.(js|jsx|mjs)$/,

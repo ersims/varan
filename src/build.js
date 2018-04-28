@@ -58,7 +58,10 @@ module.exports = async options => {
             error.details = info.errors;
             return reject(error);
           }
-          if (stats.hasWarnings()) console.warn(info.warnings);
+          if (stats.hasWarnings() && info.warnings.length > 0) {
+            console.warn('⚠ Build has warnings:');
+            info.warnings.forEach(warning => console.warn(warning));
+          }
 
           log('Potential file sizes after gzip:\n');
           compiler.compilers.forEach((c, i) => {
