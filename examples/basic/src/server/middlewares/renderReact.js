@@ -9,9 +9,9 @@ import Html from '../../client/components/Html';
 if (module.hot) module.hot.accept('../../client/components/App');
 
 // Exports
-export default assets => {
-  // Load asset list
-  const { bundleJs, bundleCss } = Object.values(assets.assetsByChunkName).reduce(
+export default (stats, assets) => {
+  // Load bundles list
+  const { bundleJs, bundleCss } = Object.values(stats.assetsByChunkName).reduce(
     (acc, cur) => {
       (Array.isArray(cur) ? cur : [cur]).forEach(f => {
         if (f.endsWith('.js')) acc.bundleJs.push(f);
@@ -21,6 +21,9 @@ export default assets => {
     },
     { bundleJs: [], bundleCss: [] },
   );
+
+  // Find manifest
+  const manifest = Object.keys(assets).find(asset => /^manifest\.[a-f0-9]+\.json/.test(asset));
 
   // Return react rendering middleware
   return function renderReact(req, res) {
@@ -40,6 +43,7 @@ export default assets => {
         body={body}
         bundleJs={bundleJs}
         bundleCss={bundleCss}
+        manifest={manifest}
       />,
     );
 

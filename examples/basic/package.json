@@ -7,6 +7,7 @@
     "heroku-postbuild": "npm install --only=dev && npm run build && npm prune --production",
     "start": "node dist/server/bin/web.js",
     "test": "jest",
+    "prewatch": "npm run clean",
     "watch": "varan watch -- --inspect"
   },
   "dependencies": {
@@ -16,7 +17,7 @@
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.0.0",
     "serialize-javascript": "^1.4.0",
-    "varan": "^0.1.0"
+    "varan": "^0.2.1"
   },
   "license": "MIT",
   "devDependencies": {

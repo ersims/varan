@@ -13,7 +13,8 @@ const app = new Express();
 const ENV = process.env.NODE_ENV || 'production';
 const HOST = process.env.HOST;
 const PORT = parseInt(process.env.PORT, 10) || 3000;
-const assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_STATS_MANIFEST)));
+const stats = JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_STATS_MANIFEST)));
+const assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_ASSETS_MANIFEST)));
 
 // Templates
 app.set('env', ENV);
@@ -22,7 +23,7 @@ app.set('port', PORT);
 app.use(Express.static(path.resolve(__dirname, '../../client')));
 
 // Render react server side
-app.get('*', renderReact(assets));
+app.get('*', renderReact(stats, assets));
 
 // Export app
 export default app.listen(app.get('port'), app.get('host'), () => {

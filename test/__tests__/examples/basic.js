@@ -1,7 +1,5 @@
 // Dependencies
 const MemoryFileSystem = require('memory-fs');
-const semver = require('semver');
-const pkg = require('../../../package.json');
 const { build } = require('../../../index');
 const { hasFile, getFiles, resolver } = require('../../fixtures/utils');
 
@@ -12,10 +10,6 @@ const resolve = resolver(__dirname, '../../../examples/basic');
 // Tests
 describe('examples', () => {
   describe('basic', () => {
-    it('should use a semver compatible version of varan', () => {
-      const examplePkg = require(resolve('package.json'));
-      expect(semver.satisfies(pkg.version, examplePkg.dependencies.varan)).toBe(true);
-    });
     describe('build', () => {
       it('should work with default values', async done => {
         jest.setTimeout(slowTimeout);
@@ -45,13 +39,16 @@ describe('examples', () => {
 
         // JS
         const js = getFiles(mfs, resolve('dist/client/static/js'));
-        expect(js.length).toBe(2);
+        expect(js.length).toBe(3);
         expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.js/);
         expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js/);
+        expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js\.gz/);
         expect(js[0].size).toBeGreaterThan(0);
         expect(js[0].size).toBeLessThan(10 * 1024);
         expect(js[1].size).toBeGreaterThan(0);
         expect(js[1].size).toBeLessThan(130 * 1024);
+        expect(js[2].size).toBeGreaterThan(0);
+        expect(js[2].size).toBeLessThan(40 * 1024);
 
         // Media
         const media = getFiles(mfs, resolve('dist/client/static/media'));

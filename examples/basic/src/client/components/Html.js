@@ -15,6 +15,7 @@ class Html extends PureComponent {
     bodyAttributes: PropTypes.object,
     bundleJs: PropTypes.arrayOf(PropTypes.string.isRequired),
     bundleCss: PropTypes.arrayOf(PropTypes.string.isRequired),
+    manifest: PropTypes.string,
     body: PropTypes.string,
     initialState: PropTypes.object,
   };
@@ -22,6 +23,7 @@ class Html extends PureComponent {
     htmlAttributes: {},
     bodyAttributes: {},
     body: '',
+    pwaManifests: [],
   };
   render() {
     const {
@@ -38,6 +40,7 @@ class Html extends PureComponent {
       bundleJs,
       bundleCss,
       initialState,
+      manifest,
     } = this.props;
     return (
       <html {...htmlAttributes}>
@@ -50,6 +53,7 @@ class Html extends PureComponent {
           {noscript}
           {base}
           {bundleCss.map((css, i) => <link key={i} href={css} rel="stylesheet" />)}
+          {manifest && <link rel="manifest" href={manifest} />}
         </head>
         <body {...bodyAttributes}>
           <div id="root" dangerouslySetInnerHTML={{ __html: body }} />

@@ -75,6 +75,9 @@ module.exports = options => {
         'process.env.VARAN_STATS_MANIFEST': JSON.stringify(
           path.relative(outputPath, path.resolve(opts.clientTargetDir, 'stats-manifest.json')),
         ),
+        'process.env.VARAN_ASSETS_MANIFEST': JSON.stringify(
+          path.relative(outputPath, path.resolve(opts.clientTargetDir, 'asset-manifest.json')),
+        ),
       }),
       new EnvironmentPlugin({
         DEBUG: false,

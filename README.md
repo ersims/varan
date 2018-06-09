@@ -75,7 +75,62 @@ To create a minified and bundled production build, run
 ```bash
 npm run build
 ```
+## Custom webpack config
 
+Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`. 
+It is recommended to create your own `webpack` directory with your client and server files, and specifying these when using `varan build` and `varan watch`.
+
+### Example
+
+Create the following directory structure in the root of your project
+```bash
+my-project
+\--- webpack
+     +--- client.js - client customizations
+     \--- server.js - server customizations
+```
+
+Make sure the `client.js` and `server.js` files exports a function that returns the webpack configuration object. 
+
+`server.js` with no modifications:
+```javascript
+module.exports = require('varan/webpack/server');
+```
+
+`client.js` with a Progressive Web App manifest while still using the default config in `varan`:
+```javascript
+// Dependencies
+const path = require('path');
+const client = require('varan/webpack/client');
+const pwaManifest = {
+  name: 'Varan Progressive Web App!!!',
+  short_name: 'VaranPWA',
+  description: 'My awesome Progressive Web App using Varan!',
+  background_color: '#ffffff',
+  icons: [
+    {
+      src: path.resolve(__dirname, '../src/assets/favicon.ico'),
+      sizes: [96],
+    },
+  ],
+};
+
+// Exports
+module.exports = options => client({ ...options, pwaManifest });
+```
+
+
+To use your new files in development mode, run:
+```bash
+varan watch --client ./webpack/client --server ./webpack/server
+```
+
+For production build you can just specify a list of config files to build like so:
+```bash
+varan build ./webpack/client ./webpack/server
+```
+
+Remember to update your npm scripts to use the new config files.
 
 ### License
 

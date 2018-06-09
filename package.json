@@ -49,6 +49,7 @@
     "@babel/preset-react": "^7.0.0-beta.44",
     "babel-loader": "^8.0.0-beta.3",
     "commander": "^2.15.0",
+    "compression-webpack-plugin": "^1.1.11",
     "connect-history-api-fallback": "^1.5.0",
     "css-loader": "^0.28.11",
     "detect-port-alt": "^1.1.6",
@@ -66,6 +67,7 @@
     "sass-loader": "^7.0.3",
     "shelljs": "^0.8.2",
     "style-loader": "^0.21.0",
+    "sw-precache-webpack-plugin": "^0.11.5",
     "uglifyjs-webpack-plugin": "^1.2.5",
     "url-loader": "^1.0.1",
     "validate-npm-package-name": "^3.0.0",
@@ -74,6 +76,7 @@
     "webpack-manifest-plugin": "^2.0.3",
     "webpack-merge": "^4.1.2",
     "webpack-node-externals": "^1.7.2",
+    "webpack-pwa-manifest": "^3.6.2",
     "webpack-serve": "^1.0.4",
     "webpack-stats-plugin": "^0.2.1"
   },
@@ -91,8 +94,7 @@
     "react-dom": "^16.4.0",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.3.1",
-    "react-test-renderer": "^16.4.0",
-    "semver": "^5.5.0"
+    "react-test-renderer": "^16.4.0"
   },
   "jest": {
     "bail": true,

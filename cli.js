@@ -34,7 +34,7 @@ program
   .command('build [files...]')
   .option('--env <environment>', 'Environment to use. Defaults to production')
   .action((files, opts) => build({
-    configFiles: (files.length > 0 && files.map(resolve)) || undefined,
+    configs: (files.length > 0 && files.map(resolve)) || undefined,
     env: opts && opts.env,
   }).catch(err => console.error(err)));
 

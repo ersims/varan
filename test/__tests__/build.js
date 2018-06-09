@@ -98,13 +98,16 @@ describe('build', () => {
 
     // JS
     const js = getFiles(mfs, resolve('dist/client/static/js'));
-    expect(js.length).toBe(2);
+    expect(js.length).toBe(3);
     expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.js/);
     expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js/);
+    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js\.gz/);
     expect(js[0].size).toBeGreaterThan(0);
     expect(js[0].size).toBeLessThan(3 * 1024);
     expect(js[1].size).toBeGreaterThan(0);
     expect(js[1].size).toBeLessThan(130 * 1024);
+    expect(js[2].size).toBeGreaterThan(0);
+    expect(js[2].size).toBeLessThan(35 * 1024);
 
     // Server
     expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
