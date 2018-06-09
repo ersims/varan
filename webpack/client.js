@@ -46,8 +46,8 @@ module.exports = options => {
     target: 'web',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'none',
+    // webpack-serve config - stripped before sending to webpack if it exists
     serve: {
-      // webpack-serve config - stripped before sending to webpack if it exists
       content: opts.targetDir,
       clipboard: false,
       logTime: true,
@@ -55,6 +55,8 @@ module.exports = options => {
       hot: {
         logTime: true,
         logLevel: 'silent',
+        reload: true,
+        hmr: true,
       },
       dev: {
         watchOptions: {

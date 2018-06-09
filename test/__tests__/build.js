@@ -34,7 +34,8 @@ describe('build', () => {
     expect(console.error.mock.calls[0][0][0]).toEqual(
       expect.arrayContaining([
         expect.stringContaining('(index.js) ./src/client/index.js'),
-        expect.stringContaining('Module build failed: SyntaxError'),
+        expect.stringContaining('Module build failed'),
+        expect.stringMatching(/^SyntaxError(.+)index.js: Unexpected token \(7:26\)$/),
       ]),
     );
 
@@ -101,7 +102,7 @@ describe('build', () => {
     expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.js/);
     expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js/);
     expect(js[0].size).toBeGreaterThan(0);
-    expect(js[0].size).toBeLessThan(2 * 1024);
+    expect(js[0].size).toBeLessThan(3 * 1024);
     expect(js[1].size).toBeGreaterThan(0);
     expect(js[1].size).toBeLessThan(130 * 1024);
 
@@ -155,7 +156,7 @@ describe('build', () => {
     expect(js[2].name).toMatch(/customFileName\.vendor\.([a-z0-9]{8})\.chunk\.js/);
     expect(js[3].name).toMatch(/customFileName\.vendor\.([a-z0-9]{8})\.chunk\.js\.map/);
     expect(js[0].size).toBeGreaterThan(0);
-    expect(js[0].size).toBeLessThan(2 * 1024);
+    expect(js[0].size).toBeLessThan(3 * 1024);
     expect(js[2].size).toBeGreaterThan(0);
     expect(js[2].size).toBeLessThan(130 * 1024);
 
