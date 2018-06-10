@@ -2,7 +2,7 @@ module.exports = api => {
   const isDev = api.env() === 'development';
   const isProd = api.env() === 'production';
   return {
-    presets: [require.resolve('@babel/preset-react')],
+    presets: [require.resolve('@babel/preset-typescript'), require.resolve('@babel/preset-react')],
     plugins: [
       require.resolve('@babel/plugin-proposal-class-properties'),
       require.resolve('@babel/plugin-syntax-dynamic-import'),

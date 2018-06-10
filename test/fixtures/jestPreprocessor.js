@@ -4,5 +4,6 @@ const preset = require('../../babel/server');
 
 // Exports
 module.exports = {
-  process: src => babel.transform(src, { presets: [preset], babelrc: false, envName: 'test' }).code,
+  process: (src, path) =>
+    babel.transform(src, { presets: [preset], babelrc: false, envName: 'test', filename: path }).code,
 };

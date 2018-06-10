@@ -1,15 +1,26 @@
 // Dependencies
-import React from 'react';
+import * as React from 'react';
+import { RequestHandler } from 'express';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import Helmet from 'react-helmet';
 import App from '../../client/components/App';
 import Html from '../../client/components/Html';
 
+// Types
+interface ApplicationStats {
+  assetsByChunkName: {
+    [bundle: string]: string | string[];
+  };
+}
+interface ApplicationAssets {
+  [file: string]: string;
+}
+
 // Add hot reloading
-if (module.hot) module.hot.accept('../../client/components/App');
+if (module.hot) module.hot.accept('../../client/components/App', () => {});
 
 // Exports
-export default (stats, assets) => {
+export default (stats: ApplicationStats, assets: ApplicationAssets): RequestHandler => {
   // Load bundles list
   const { bundleJs, bundleCss } = Object.values(stats.assetsByChunkName).reduce(
     (acc, cur) => {
@@ -19,7 +30,7 @@ export default (stats, assets) => {
       });
       return acc;
     },
-    { bundleJs: [], bundleCss: [] },
+    { bundleJs: [], bundleCss: [] } as { bundleJs: string[]; bundleCss: string[] },
   );
 
   // Find manifest

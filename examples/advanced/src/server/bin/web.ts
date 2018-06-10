@@ -6,7 +6,7 @@ import path from 'path';
 import renderReact from '../middlewares/renderReact';
 
 // Hot reloading
-if (module.hot) module.hot.accept('../middlewares/renderReact');
+if (module.hot) module.hot.accept('../middlewares/renderReact', () => {});
 
 // Init
 const app = express();
@@ -19,6 +19,7 @@ const stats =
 const assets =
   process.env.VARAN_ASSETS_MANIFEST &&
   JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_ASSETS_MANIFEST)).toString());
+
 // Templates
 app.set('env', ENV);
 app.set('host', HOST);
@@ -31,5 +32,6 @@ app.get('*', renderReact(stats, assets));
 // Export app
 export default app.listen(app.get('port'), app.get('host'), () => {
   // if (process.send) process.send('ready'); // TODO: Re-enable https://github.com/facebook/jest/issues/5891
+  /* tslint:disable-next-line no-console */
   console.log(`Server listening on ${app.get('port')} in ${app.get('env')} mode`);
 });

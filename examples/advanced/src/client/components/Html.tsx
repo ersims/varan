@@ -1,30 +1,31 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import serialize from 'serialize-javascript';
 
-class Html extends PureComponent {
-  static propTypes = {
-    title: PropTypes.node,
-    meta: PropTypes.node,
-    link: PropTypes.node,
-    style: PropTypes.node,
-    script: PropTypes.node,
-    noscript: PropTypes.node,
-    base: PropTypes.node,
-    htmlAttributes: PropTypes.object,
-    bodyAttributes: PropTypes.object,
-    bundleJs: PropTypes.arrayOf(PropTypes.string.isRequired),
-    bundleCss: PropTypes.arrayOf(PropTypes.string.isRequired),
-    manifest: PropTypes.string,
-    body: PropTypes.string,
-    initialState: PropTypes.object,
-  };
-  static defaultProps = {
+// Interface
+interface HtmlProps {
+  title: React.ReactNode;
+  meta: React.ReactNode;
+  link: React.ReactNode;
+  style: React.ReactNode;
+  script: React.ReactNode;
+  noscript: React.ReactNode;
+  base: React.ReactNode;
+  htmlAttributes: object;
+  bodyAttributes: object;
+  bundleJs: string[];
+  bundleCss: string[];
+  body: string;
+  initialState?: object;
+  manifest?: string;
+}
+
+class Html extends React.PureComponent<HtmlProps, never> {
+  public static defaultProps = {
     htmlAttributes: {},
     bodyAttributes: {},
     body: '',
   };
-  render() {
+  public render() {
     const {
       htmlAttributes,
       bodyAttributes,
