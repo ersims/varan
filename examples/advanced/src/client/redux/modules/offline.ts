@@ -1,5 +1,4 @@
 // Imports
-import { Action } from 'redux';
 import { createReducer } from 'reduxsauce';
 
 // Types
@@ -14,10 +13,6 @@ interface IState {
   isOnline: boolean;
   lastError: Error | null;
 }
-interface IErrorAction extends Action<any> {
-  type: Actions.OFFLINE_SERVICE_WORKER_ERROR;
-  error: Error;
-}
 
 // Initial state
 export const initialState: IState = {
@@ -28,7 +23,7 @@ export const initialState: IState = {
 };
 
 // Reducers
-export default createReducer<IState>(initialState, {
+export const reducers = createReducer<IState>( initialState, {
   [Actions.OFFLINE_CACHE_LOADED]: (state = initialState) => ({
     ...state,
     isCached: true,
@@ -39,13 +34,13 @@ export default createReducer<IState>(initialState, {
   }),
   [Actions.OFFLINE_SERVICE_WORKER_ERROR]: (state = initialState, action) => ({
     ...state,
-    lastError: action.error,
+    lastError: action.payload,
   }),
 });
 
 // Actions
-export const offlineActions = {
+export const actions = {
   cacheLoaded: () => ({ type: Actions.OFFLINE_CACHE_LOADED }),
   cacheUpdated: () => ({ type: Actions.OFFLINE_CACHE_UPDATED }),
-  serviceWorkerError: (err: Error): IErrorAction => ({ type: Actions.OFFLINE_SERVICE_WORKER_ERROR, error: err }),
+  serviceWorkerError: (err: Error) => ({ type: Actions.OFFLINE_SERVICE_WORKER_ERROR, payload: err, error: true }),
 };

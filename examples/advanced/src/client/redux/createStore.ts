@@ -6,13 +6,12 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import { epics, reducers } from './index';
 
 // Init
-const epicMiddleware = createEpicMiddleware(
-  combineEpics(...Object.values(epics).reduce((acc, cur) => acc.concat(cur), [])),
-);
+const rootEpic = combineEpics(...Object.values(epics).reduce((acc, cur) => acc.concat(cur), []));
+const epicMiddleware = createEpicMiddleware();
 const loggerMiddleware =
   typeof window !== 'undefined' &&
   createLogger({
-    collapsed: (getState, action, logEntry) => (!logEntry || !logEntry.error) && !action.error && !action.isError,
+    collapsed: (getState, action, logEntry) => (!logEntry || !logEntry.error) && !action.error && !action.isError && !(action.payload instanceof Error),
     predicate: () => '__DEV__' in window || (process && process.env && process.env.NODE_ENV === 'development'),
   });
 const composeEnhancers = composeWithDevTools({ serialize: true });
@@ -28,5 +27,7 @@ export default (initialState = {}) => {
   const enhancer = composeEnhancers(
     applyMiddleware(...([epicMiddleware, loggerMiddleware].filter(Boolean) as Middleware[])),
   );
-  return createStore(combineReducers(reducers), initialState, enhancer);
+  const store = createStore(combineReducers(reducers), initialState, enhancer);
+  epicMiddleware.run(rootEpic);
+  return store;
 };
