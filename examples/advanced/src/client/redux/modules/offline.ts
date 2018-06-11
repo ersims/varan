@@ -1,5 +1,6 @@
 // Imports
 import { createReducer } from 'reduxsauce';
+import { ActionType, createStandardAction, getType } from 'typesafe-actions';
 
 // Types
 export enum Actions {
@@ -22,25 +23,25 @@ export const initialState: IState = {
   lastError: null,
 };
 
+// Actions
+export const actions = {
+  cacheLoaded: createStandardAction(Actions.OFFLINE_CACHE_LOADED)(),
+  cacheUpdated: createStandardAction(Actions.OFFLINE_CACHE_UPDATED)(),
+  serviceWorkerError: createStandardAction(Actions.OFFLINE_SERVICE_WORKER_ERROR)<Error>(),
+};
+
 // Reducers
-export const reducers = createReducer<IState>( initialState, {
-  [Actions.OFFLINE_CACHE_LOADED]: (state = initialState) => ({
+export default createReducer(initialState, {
+  [getType(actions.cacheLoaded)]: (state = initialState) => ({
     ...state,
     isCached: true,
   }),
-  [Actions.OFFLINE_CACHE_UPDATED]: (state = initialState) => ({
+  [getType(actions.cacheUpdated)]: (state = initialState) => ({
     ...state,
     isOutdated: true,
   }),
-  [Actions.OFFLINE_SERVICE_WORKER_ERROR]: (state = initialState, action) => ({
+  [getType(actions.serviceWorkerError)]: (state = initialState, action: ActionType<typeof actions.serviceWorkerError>) => ({
     ...state,
-    lastError: action.payload,
+    lastErrors: action.payload,
   }),
 });
-
-// Actions
-export const actions = {
-  cacheLoaded: () => ({ type: Actions.OFFLINE_CACHE_LOADED }),
-  cacheUpdated: () => ({ type: Actions.OFFLINE_CACHE_UPDATED }),
-  serviceWorkerError: (err: Error) => ({ type: Actions.OFFLINE_SERVICE_WORKER_ERROR, payload: err, error: true }),
-};

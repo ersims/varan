@@ -1,11 +1,11 @@
 // Dependencies
-import { actions as offlineActions, reducers as offlineReducers } from './modules/offline';
+import offline, { actions as offlineActions } from './modules/offline';
 
 // Exports
 export const actionCreators = Object.assign({}, {
   offlineActions,
 });
 export const reducers = Object.assign({}, {
-  offlineReducers,
+  offline,
 });
 export const epics = Object.assign({}, {});
