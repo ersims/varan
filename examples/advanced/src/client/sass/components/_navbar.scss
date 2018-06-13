@@ -19,7 +19,7 @@
   // Title
   &__title {
     height: $local__height - $local__padding;
-    background: url('../../../assets/images/stock/logo-2078018.svg') center/contain no-repeat;
+    background: $color__black;
     display: block;
     float: left;
     margin: $local__padding/2;
