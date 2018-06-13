@@ -79,14 +79,20 @@
     }
   }
 
-  // Men
+  // Menu
+  &__list-container {
+    width: 100%;
+    // Large screen version
+    @include local__large-screen {
+      height: auto !important;
+      width: auto;
+    }
+  }
   &__list {
     padding: 0;
     margin: 0;
-    display: none;
     &--open {
       float: left;
-      display: block;
       width: 100%;
       background-color: lighten($local__background-color, 10%);
     }

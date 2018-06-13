@@ -36,7 +36,7 @@
     "rxjs": "^6.2.1",
     "serialize-javascript": "^1.4.0",
     "typesafe-actions": "^2.0.4",
-    "varan": "^0.2.2"
+    "varan": "^0.2.4"
   },
   "license": "MIT",
   "devDependencies": {
