@@ -23,7 +23,6 @@ class Html extends PureComponent {
     htmlAttributes: {},
     bodyAttributes: {},
     body: '',
-    pwaManifests: [],
   };
   render() {
     const {

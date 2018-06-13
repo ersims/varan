@@ -12,13 +12,13 @@ module.exports = (cwd = process.cwd()) => {
     appTargetDir: resolve('dist'),
     client: {
       sourceDir: resolve('src/client'),
-      entry: 'index.js',
+      entry: 'index',
       favicon: resolve('src/assets/favicon.ico'),
       targetDir: resolve('dist/client'),
     },
     server: {
       sourceDir: resolve('src/server'),
-      entry: 'bin/web.js',
+      entry: 'bin/web',
       targetDir: resolve('dist/server'),
     },
   };

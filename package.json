@@ -30,23 +30,24 @@
     "varan": "./cli.js"
   },
   "scripts": {
-    "apply:format": "prettier --config .prettierrc --write \"{babel,examples,src,test,webpack}/**/*.js?(x)\"",
-    "check:format": "prettier --config .prettierrc --list-different \"{babel,examples,src,test,webpack}/**/*.js?(x)\"",
+    "apply:format": "prettier --config .prettierrc --write \"{babel,examples,src,test,webpack}/**/*.{ts,js}?(x)\"",
+    "check:format": "prettier --config .prettierrc --list-different \"{babel,examples,src,test,webpack}/**/*.{ts,js}?(x)\"",
     "check": "npm-run-all check:*",
     "clean": "del-cli ./.coverage",
     "pretest": "npm run check",
     "test": "jest"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0-beta.44",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.44",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.44",
-    "@babel/plugin-transform-react-constant-elements": "^7.0.0-beta.44",
-    "@babel/plugin-transform-react-inline-elements": "^7.0.0-beta.44",
-    "@babel/plugin-transform-react-jsx-self": "^7.0.0-beta.44",
-    "@babel/plugin-transform-react-jsx-source": "^7.0.0-beta.44",
-    "@babel/preset-env": "^7.0.0-beta.44",
-    "@babel/preset-react": "^7.0.0-beta.44",
+    "@babel/core": "^7.0.0-beta.49",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.49",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0-beta.49",
+    "@babel/plugin-transform-react-constant-elements": "^7.0.0-beta.49",
+    "@babel/plugin-transform-react-inline-elements": "^7.0.0-beta.49",
+    "@babel/plugin-transform-react-jsx-self": "^7.0.0-beta.49",
+    "@babel/plugin-transform-react-jsx-source": "^7.0.0-beta.49",
+    "@babel/preset-env": "^7.0.0-beta.49",
+    "@babel/preset-react": "^7.0.0-beta.49",
+    "@babel/preset-typescript": "^7.0.0-beta.49",
     "babel-loader": "^8.0.0-beta.3",
     "commander": "^2.15.0",
     "compression-webpack-plugin": "^1.1.11",
@@ -100,8 +101,8 @@
     "bail": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.js?(x)",
-      "webpack/**/*.js?(x)",
+      "src/**/*.{ts,js}?(x)",
+      "webpack/**/*.{ts,js}?(x)",
       "*.js"
     ],
     "coverageDirectory": ".coverage",
@@ -113,22 +114,22 @@
         "statements": 50
       }
     },
-    "testMatch": [
-      "<rootDir>/test/__tests__/**/*.js?(x)",
-      "<rootDir>/examples/**/test/__tests__/**/*.js?(x)"
-    ],
-    "transform": {
-      "^.+\\.jsx?$": "<rootDir>/test/fixtures/jestPreprocessor.js"
-    },
     "moduleNameMapper": {
       "./clearConsole": "<rootDir>/test/__mocks__/react-dev-utils/clearConsole.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "modulePathIgnorePatterns": [
       "<rootDir>/examples/(.*)/test/__mocks__"
     ],
     "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/test/__tests__/**/*.{ts,js}?(x)",
+      "<rootDir>/examples/**/test/__tests__/**/*.{ts,js}?(x)"
+    ],
+    "transform": {
+      "^.+\\.(jsx?|tsx?)$": "<rootDir>/test/fixtures/jestPreprocessor.js"
+    },
     "silent": true,
     "verbose": true
   }

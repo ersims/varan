@@ -1,0 +1,21 @@
+@import url('~normalize.css');
+@import 'variables';
+@import 'fonts';
+@import 'mixins';
+
+html {
+  @include open-sans();
+  background-color: #49aa6a;
+  font-size: $font__size;
+  line-height: 1.5;
+  ul, li {
+    list-style-type: none;
+  }
+  a {
+    text-decoration: none;
+  }
+}
+.App {
+  // Load components
+  @import 'components';
+}

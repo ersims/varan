@@ -12,12 +12,13 @@
   },
   "dependencies": {
     "express": "^4.16.3",
+    "prop-types": "^15.6.1",
     "react": "^16.3.2",
     "react-dom": "^16.3.2",
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.0.0",
     "serialize-javascript": "^1.4.0",
-    "varan": "^0.2.1"
+    "varan": "^0.2.2"
   },
   "license": "MIT",
   "devDependencies": {
@@ -33,7 +34,7 @@
     "bail": true,
     "collectCoverage": true,
     "collectCoverageFrom": [
-      "src/**/*.js?(x)",
+      "src/**/*.{ts,js}?(x)",
       "*.js"
     ],
     "coverageDirectory": ".coverage",
@@ -45,17 +46,17 @@
         "statements": 60
       }
     },
-    "testMatch": [
-      "<rootDir>/test/__tests__/**/*.js?(x)"
-    ],
-    "transform": {
-      "^.+\\.jsx?$": "<rootDir>/test/fixtures/jestPreprocessor.js"
-    },
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/test/__tests__/**/*.{ts,js}?(x)"
+    ],
+    "transform": {
+      "^.+\\.(jsx?|tsx?)$": "<rootDir>/test/fixtures/jestPreprocessor.js"
+    },
     "silent": true,
     "verbose": true
   }

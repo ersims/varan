@@ -1,7 +1,7 @@
 # Varan
 A webpack starter-kit for server side rendered react applications.
 
-Note that `varan` is in very early pre-alpha stage and customizations are not yet supported.
+Note that `varan` is in very early pre-alpha stage and breaking changes may occur.
 
 Disclaimer: There will be breaking changes and outdated documentation during the pre-v1.0.0 cycles.
 

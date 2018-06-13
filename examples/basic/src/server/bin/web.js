@@ -1,26 +1,29 @@
 // Dependencies
 import 'source-map-support/register';
-import Express from 'express';
+import express from 'express';
 import fs from 'fs';
 import path from 'path';
 import renderReact from '../middlewares/renderReact';
 
 // Hot reloading
-if (module.hot) module.hot.accept('../middlewares/renderReact.js');
+if (module.hot) module.hot.accept('../middlewares/renderReact');
 
 // Init
-const app = new Express();
+const app = express();
 const ENV = process.env.NODE_ENV || 'production';
 const HOST = process.env.HOST;
-const PORT = parseInt(process.env.PORT, 10) || 3000;
-const stats = JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_STATS_MANIFEST)));
-const assets = JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_ASSETS_MANIFEST)));
-
+const PORT = (process.env.PORT && parseInt(process.env.PORT, 10)) || 3000;
+const stats =
+  process.env.VARAN_STATS_MANIFEST &&
+  JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_STATS_MANIFEST)).toString());
+const assets =
+  process.env.VARAN_ASSETS_MANIFEST &&
+  JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_ASSETS_MANIFEST)).toString());
 // Templates
 app.set('env', ENV);
 app.set('host', HOST);
 app.set('port', PORT);
-app.use(Express.static(path.resolve(__dirname, '../../client')));
+app.use(express.static(path.resolve(__dirname, '../../client')));
 
 // Render react server side
 app.get('*', renderReact(stats, assets));

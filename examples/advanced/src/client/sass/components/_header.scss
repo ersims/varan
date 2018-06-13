@@ -1,0 +1,10 @@
+.header {
+  min-height: 16rem;
+  overflow: hidden;
+  text-align: center;
+  color: $color__white--off;
+  text-shadow: 0 0.2em 2.5em $color__black;
+  &--main {
+    background: $color__blue;
+  }
+}

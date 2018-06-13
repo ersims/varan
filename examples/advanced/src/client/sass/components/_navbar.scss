@@ -1,0 +1,133 @@
+.navbar {
+  $local__background-color: $color__grey--dark;
+  $local__background-color--hover: $color__blue;
+  $local__color: $color__white--off;
+  $local__height: 4rem;
+  $local__padding: $local__height / 4;
+  $local__animation-duration: 0.25s;
+  @mixin local__large-screen {
+    @include tablet-landscape-up {
+      @content;
+    }
+  }
+  z-index: 10;
+  background-color: $local__background-color;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 0 1rem 0.2rem rgba($color__black, 0.75);
+
+  // Title
+  &__title {
+    height: $local__height - $local__padding;
+    background: url('../../../assets/images/stock/logo-2078018.svg') center/contain no-repeat;
+    display: block;
+    float: left;
+    margin: $local__padding/2;
+    padding: 0;
+  }
+
+  // Hamburger
+  &__hamburger {
+    float: right;
+    padding: $local__padding;
+    height: $local__height;
+    width: $local__height;
+    display: flex;
+    justify-content: space-around;
+    flex-direction: column;
+    align-items: stretch;
+    background: none;
+    border: none;
+    cursor: pointer;
+    &:hover:not(:active) {
+      background-color: $local__background-color--hover;
+    }
+
+    // Large screen version
+    @include local__large-screen {
+      display: none;
+    }
+  }
+  &__hamburger-line {
+    $local__hamburger-offset: ($local__height - (2 * $local__padding)) / 3;
+    $local__hamburger-height: 3px;
+    height: $local__hamburger-height;
+    border-radius: $local__hamburger-height;
+    background-color: $local__color;
+    transition: background-color $local__animation-duration ease-in-out;
+    display: block;
+
+    // Animate opening and closing
+    &:first-child, &:last-child {
+      transform: rotate(0deg) translateY(0) translateX(0);
+      transition: transform $local__animation-duration ease-in-out;
+    }
+    &:not(:first-child):not(:last-child) {
+      transform: rotateY(0deg);
+      transition: transform $local__animation-duration ease-in-out;
+    }
+    &--open {
+      &:first-child {
+        transform: rotate(45deg) translateY(calc(#{$local__hamburger-offset} - #{$local__hamburger-height})) translateX(calc(#{$local__hamburger-offset} - #{$local__hamburger-height}));
+      }
+      &:not(:first-child):not(:last-child) {
+        transform: rotateY(90deg);
+      }
+      &:last-child {
+        transform: rotate(-45deg) translateY(calc(-#{$local__hamburger-offset} + #{$local__hamburger-height})) translateX(calc(#{$local__hamburger-offset} - #{$local__hamburger-height}));
+      }
+    }
+  }
+
+  // Men
+  &__list {
+    padding: 0;
+    margin: 0;
+    display: none;
+    &--open {
+      float: left;
+      display: block;
+      width: 100%;
+      background-color: lighten($local__background-color, 10%);
+    }
+
+    // Large screen version
+    @include local__large-screen {
+      float: left;
+      display: block;
+      width: auto;
+      line-height: $local__height;
+    }
+  }
+  &__item {
+    @include local__large-screen {
+      display: inline-block;
+    }
+  }
+
+  // Links
+  &__title-text {
+    @include open-sans(600);
+    visibility: hidden;
+    color: $local__color;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+  }
+  &__link {
+    @include open-sans(600);
+    color: $local__color;
+    display: inline-block;
+    padding: $local__padding;
+    width: 100%;
+    &.is-active, &:hover:not(:active) {
+      background-color: $local__background-color--hover;
+    }
+
+    // Desktop version
+    @include local__large-screen {
+      width: auto;
+      padding: 0 $local__padding;
+    }
+  }
+}

@@ -34,10 +34,10 @@ module.exports = options => {
     target: 'node',
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'source-map',
-    entry: [isDev && HotReloadEntry, require.resolve(path.resolve(opts.sourceDir, opts.entry))].filter(Boolean),
+    entry: [isDev && HotReloadEntry, path.resolve(opts.sourceDir, opts.entry)].filter(Boolean),
     output: {
       path: outputPath,
-      filename: path.basename(opts.entry),
+      filename: `${path.basename(opts.entry, path.extname(opts.entry))}.js`,
       chunkFilename: 'chunks/[name].[chunkhash:8].chunk.js',
       pathinfo: isDev,
       libraryTarget: 'commonjs2',
@@ -53,10 +53,9 @@ module.exports = options => {
       }),
     ],
     module: {
-      strictExportPresence: true,
       rules: [
         {
-          test: /\.(js|jsx|mjs)$/,
+          test: /\.(jsx?|mjs|tsx?)$/,
           exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {

@@ -1,6 +1,6 @@
 // Dependencies
 import React from 'react';
-import { renderToString, renderToStaticMarkup } from 'react-dom/server';
+import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import Helmet from 'react-helmet';
 import App from '../../client/components/App';
 import Html from '../../client/components/Html';

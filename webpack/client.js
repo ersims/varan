@@ -105,7 +105,7 @@ module.exports = options => {
       },
     },
     performance: false,
-    entry: [require.resolve(path.resolve(opts.sourceDir, opts.entry))].filter(Boolean),
+    entry: [path.resolve(opts.sourceDir, opts.entry)].filter(Boolean),
     output: {
       path: outputPath,
       filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[chunkhash:8].js',
@@ -115,10 +115,9 @@ module.exports = options => {
       libraryTarget: 'var',
     },
     module: {
-      strictExportPresence: true,
       rules: [
         {
-          test: /\.(js|jsx|mjs)$/,
+          test: /\.(jsx?|mjs|tsx?)$/,
           exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {

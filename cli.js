@@ -53,15 +53,18 @@ program
   .option('--server-port <port number>', 'Specify server port to listen on', port => parseInt(port, 10))
   .option('--env <development|production>', 'Environment to use')
   .allowUnknownOption()
-  .action(opts => watch({
-    serverConfigFile: opts && opts.server && (opts.server !== true ? opts.server : path.resolve(__dirname, './webpack/server')),
-    clientConfigFile: opts && opts.client && (opts.client !== true ? opts.client : path.resolve(__dirname, './webpack/client')),
-    devServerHost: opts && opts.host,
-    devServerPort: opts && opts.clientPort,
-    serverHost: opts && opts.host,
-    serverPort: opts && opts.serverPort,
-    env: opts && opts.env,
-  }).catch(err => console.error(err)));
+  .action((extra, opts) => {
+    if (!opts) opts = extra;
+    return watch({
+      serverConfigFile: opts && opts.server && (opts.server !== true ? resolve(opts.server) : path.resolve(__dirname, './webpack/server')),
+      clientConfigFile: opts && opts.client && (opts.client !== true ? resolve(opts.client) : path.resolve(__dirname, './webpack/client')),
+      devServerHost: opts && opts.host,
+      devServerPort: opts && opts.clientPort,
+      serverHost: opts && opts.host,
+      serverPort: opts && opts.serverPort,
+      env: opts && opts.env,
+    }).catch(err => console.error(err));
+  });
 
 // Run
 if (!process.argv.slice(2).length) program.outputHelp();

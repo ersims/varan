@@ -27,7 +27,7 @@ module.exports = options => {
     bail: !isDev,
     context: opts.appDir,
     resolve: {
-      extensions: ['.js', '.jsx', '.mjs', '.json'],
+      extensions: ['.js', '.jsx', '.mjs', '.json', '.ts', '.tsx'],
       alias: {
         'webpack-hot-client/client': require.resolve('webpack-hot-client/client'),
       },
@@ -44,7 +44,7 @@ module.exports = options => {
         {
           oneOf: [
             {
-              exclude: [/\.html$/, /\.(js|jsx|mjs)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
+              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
@@ -58,7 +58,7 @@ module.exports = options => {
                 use: [
                   {
                     loader: require.resolve('css-loader'),
-                    options: { modules: true, importLoaders: 1, minimize: !isDev },
+                    options: { modules: false, importLoaders: 1, minimize: !isDev },
                   },
                   {
                     loader: require.resolve('postcss-loader'),
@@ -76,7 +76,7 @@ module.exports = options => {
               }),
             },
             {
-              exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
+              exclude: [/\.(jsx?|mjs|tsx?)$/, /\.html$/, /\.json$/],
               loader: require.resolve('file-loader'),
               options: { name: 'static/media/[name].[hash:8].[ext]' },
             },
