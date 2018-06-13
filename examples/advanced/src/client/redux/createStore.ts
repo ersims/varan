@@ -1,17 +1,19 @@
 // Dependencies
-import { applyMiddleware, combineReducers, createStore, Middleware } from 'redux';
+import { applyMiddleware, createStore, Middleware } from 'redux';
+import { connectRouter, routerMiddleware } from 'connected-react-router';
 import { combineEpics, createEpicMiddleware } from 'redux-observable';
 import { createLogger } from 'redux-logger';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import { epics, reducers } from './index';
+import createRouterHistory from '../lib/createRouterHistory';
+import { epics, rootReducer } from './index';
 
 // Init
 const rootEpic = combineEpics(...Object.values(epics).reduce((acc, cur) => acc.concat(cur), []));
-const epicMiddleware = createEpicMiddleware();
 const loggerMiddleware =
   typeof window !== 'undefined' &&
   createLogger({
-    collapsed: (getState, action, logEntry) => (!logEntry || !logEntry.error) && !action.error && !action.isError && !(action.payload instanceof Error),
+    collapsed: (getState, action, logEntry) =>
+      (!logEntry || !logEntry.error) && !action.error && !action.isError && !(action.payload instanceof Error),
     predicate: () => '__DEV__' in window || (process && process.env && process.env.NODE_ENV === 'development'),
   });
 const composeEnhancers = composeWithDevTools({ serialize: true });
@@ -20,14 +22,16 @@ const composeEnhancers = composeWithDevTools({ serialize: true });
 /**
  * Create redux store with initial state
  *
- * @param {object} initialState
- * @returns {Store<any> & {dispatch: any}}
+ * @param {{}} initialState
+ * @returns {{store: *; history: History}}
  */
 export default (initialState = {}) => {
+  const history = createRouterHistory();
+  const epicMiddleware = createEpicMiddleware();
   const enhancer = composeEnhancers(
-    applyMiddleware(...([epicMiddleware, loggerMiddleware].filter(Boolean) as Middleware[])),
+    applyMiddleware(...([routerMiddleware(history), epicMiddleware, loggerMiddleware].filter(Boolean) as Middleware[])),
   );
-  const store = createStore(combineReducers(reducers), initialState, enhancer);
+  const store = createStore(connectRouter(history)(rootReducer), initialState, enhancer);
   epicMiddleware.run(rootEpic);
-  return store;
+  return { store, history };
 };

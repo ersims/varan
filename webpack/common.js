@@ -58,7 +58,7 @@ module.exports = options => {
                 use: [
                   {
                     loader: require.resolve('css-loader'),
-                    options: { modules: true, importLoaders: 1, minimize: !isDev },
+                    options: { modules: false, importLoaders: 1, minimize: !isDev },
                   },
                   {
                     loader: require.resolve('postcss-loader'),

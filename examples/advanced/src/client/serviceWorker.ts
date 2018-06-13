@@ -9,19 +9,26 @@ export const register = (): Promise<ServiceWorkerRegistration | null> => {
 
     // Make sure service worker is app-specific for localhost
     if (isLocalhost) {
-      return fetch(swUrl)
-          .then((response): Promise<ServiceWorkerRegistration | null> => {
-            // Invalid service worker?
-            if (response.status === 404 || (response.headers.get('content-type') || '').indexOf('javascript') === -1) {
-              // Unregister service worker and reload
-              return navigator.serviceWorker.ready.then(registration =>
-                registration.unregister().then(() => window.location.reload()),
-              ).then(() => null);
-            }
-            return navigator.serviceWorker.register(swUrl);
-          })
+      return (
+        fetch(swUrl)
+          .then(
+            (response): Promise<ServiceWorkerRegistration | null> => {
+              // Invalid service worker?
+              if (
+                response.status === 404 ||
+                (response.headers.get('content-type') || '').indexOf('javascript') === -1
+              ) {
+                // Unregister service worker and reload
+                return navigator.serviceWorker.ready
+                  .then(registration => registration.unregister().then(() => window.location.reload()))
+                  .then(() => null);
+              }
+              return navigator.serviceWorker.register(swUrl);
+            },
+          )
           // Swallow error if app is offline
-          .catch(() => null);
+          .catch(() => null)
+      );
     }
     if (publicUrl.origin === window.location.origin) return navigator.serviceWorker.register(swUrl); // Only register service worker for same-origin
   }

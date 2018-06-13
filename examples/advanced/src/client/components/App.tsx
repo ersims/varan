@@ -1,16 +1,23 @@
 import * as React from 'react';
 import { hot } from 'react-hot-loader';
 import Helmet from 'react-helmet';
+import { Route, Switch } from 'react-router';
 import favicon from '../../assets/favicon.ico';
+import NavBar from './NavBar';
 
-class App extends React.PureComponent {
+// Pages
+import Home from '../pages/Home';
+import About from '../pages/About';
+import NotFound from '../pages/errors/NotFound';
+
+class App extends React.Component {
   public render() {
     return (
       <div className="App">
         <Helmet>
           <html lang="en" />
           <title itemProp="name" lang="en">
-            Varan basic react example
+            Varan advanced react example
           </title>
           <meta charSet="utf-8" />
           <meta charSet="utf-8" />
@@ -20,12 +27,14 @@ class App extends React.PureComponent {
           <meta name="og:type" content="website" />
           <link rel="icon" href={favicon} />
         </Helmet>
-        <header className="App-header">
-          <h1 className="App-title">Welcome to React that works awesomely with typescript</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+        <div className="AppContainer">
+          <NavBar />
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route path="/about" component={About} />
+            <Route component={NotFound} />
+          </Switch>
+        </div>
       </div>
     );
   }

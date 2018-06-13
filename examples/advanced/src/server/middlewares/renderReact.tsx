@@ -3,6 +3,10 @@ import * as React from 'react';
 import { RequestHandler } from 'express';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import Helmet from 'react-helmet';
+import { StaticRouter } from 'react-router';
+import { Provider } from 'react-redux';
+import { createLocation } from 'history';
+import createStore from '../../client/redux/createStore';
 import App from '../../client/components/App';
 import Html from '../../client/components/Html';
 
@@ -38,7 +42,27 @@ export default (stats: ApplicationStats, assets: ApplicationAssets): RequestHand
 
   // Return react rendering middleware
   return function renderReact(req, res) {
-    const body = renderToString(<App />);
+    // Prepare
+    const { store } = createStore({ router: { location: createLocation(req.originalUrl) } });
+    // TODO: Improve hot reload integration
+    if (process.env.NODE_ENV === 'development' && module.hot) {
+      const reloadStore = () => store.replaceReducer(require('../../client/redux/index').rootReducer);
+      module.hot.accept('../../client/redux/createStore', reloadStore);
+      module.hot.accept('../../client/redux/index', reloadStore);
+    }
+
+    // Render
+    const context: {
+      url?: string;
+      statusCode?: number;
+    } = {};
+    const body = renderToString(
+      <Provider store={store}>
+        <StaticRouter location={req.url} context={context}>
+          <App />
+        </StaticRouter>
+      </Provider>,
+    );
     const helmet = Helmet.renderStatic();
     const html = renderToStaticMarkup(
       <Html
@@ -58,6 +82,13 @@ export default (stats: ApplicationStats, assets: ApplicationAssets): RequestHand
       />,
     );
 
+    if (context.url) {
+      if (context.statusCode !== undefined) res.status(context.statusCode);
+      res.redirect(context.url);
+      res.send('Redirecting.. Please wait..');
+      return;
+    }
+    if (context.statusCode) res.status(context.statusCode);
     return res.send(html);
   };
 };

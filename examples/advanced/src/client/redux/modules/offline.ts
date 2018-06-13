@@ -40,7 +40,10 @@ export default createReducer(initialState, {
     ...state,
     isOutdated: true,
   }),
-  [getType(actions.serviceWorkerError)]: (state = initialState, action: ActionType<typeof actions.serviceWorkerError>) => ({
+  [getType(actions.serviceWorkerError)]: (
+    state = initialState,
+    action: ActionType<typeof actions.serviceWorkerError>,
+  ) => ({
     ...state,
     lastErrors: action.payload,
   }),

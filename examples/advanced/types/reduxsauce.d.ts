@@ -1,5 +1,5 @@
 declare module 'reduxsauce' {
-  import {Action, AnyAction, Reducer} from 'redux';
+  import { Action, AnyAction, Reducer } from 'redux';
 
   export interface Actions {
     [action: string]: string[] | null;
