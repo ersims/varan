@@ -12,6 +12,7 @@ module.exports = (api, options = {}) => ({
         },
         modules: api.env() === 'test' ? 'commonjs' : false,
         shippedProposals: true,
+        useBuiltIns: 'usage',
       },
     ],
     require.resolve('./common'),

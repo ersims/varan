@@ -107,7 +107,7 @@ describe('build', () => {
     expect(js[1].size).toBeGreaterThan(0);
     expect(js[1].size).toBeLessThan(130 * 1024);
     expect(js[2].size).toBeGreaterThan(0);
-    expect(js[2].size).toBeLessThan(35 * 1024);
+    expect(js[2].size).toBeLessThan(40 * 1024);
 
     // Server
     expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);

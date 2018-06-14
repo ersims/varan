@@ -46,9 +46,9 @@ describe('examples', () => {
         expect(js[0].size).toBeGreaterThan(0);
         expect(js[0].size).toBeLessThan(10 * 1024);
         expect(js[1].size).toBeGreaterThan(0);
-        expect(js[1].size).toBeLessThan(130 * 1024);
+        expect(js[1].size).toBeLessThan(150 * 1024);
         expect(js[2].size).toBeGreaterThan(0);
-        expect(js[2].size).toBeLessThan(40 * 1024);
+        expect(js[2].size).toBeLessThan(50 * 1024);
 
         // Media
         const media = getFiles(mfs, resolve('dist/client/static/media'));
