@@ -155,7 +155,7 @@ module.exports = options => {
         new CompressionPlugin({
           asset: '[path].gz[query]',
           algorithm: 'gzip',
-          test: /\.js$|\.html|\.css|\.svg|\.eot$/,
+          test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
           threshold: 10240,
           minRatio: 0.8,
         }),
@@ -164,7 +164,7 @@ module.exports = options => {
           cacheId: name,
           dontCacheBustUrlsMatching: /\.\w{8}\./,
           filename: 'service-worker.js',
-          minify: true,
+          minify: !isDev,
           mergeStaticsConfig: true,
           navigateFallback: publicPath,
           navigateFallbackWhitelist: [/^(?!\/__).*/],

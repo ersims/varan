@@ -24,7 +24,7 @@ interface ApplicationAssets {
 if (module.hot) module.hot.accept('../../client/components/App', () => {});
 
 // Exports
-export default (stats: ApplicationStats, assets: ApplicationAssets): RequestHandler => {
+export default (stats: ApplicationStats, assets: ApplicationAssets, preload: string[] = []): RequestHandler => {
   // Load bundles list
   const { bundleJs, bundleCss } = Object.values(stats.assetsByChunkName).reduce(
     (acc, cur) => {
@@ -79,6 +79,7 @@ export default (stats: ApplicationStats, assets: ApplicationAssets): RequestHand
         bundleJs={bundleJs}
         bundleCss={bundleCss}
         manifest={manifest}
+        preload={preload.map(f => assets[f])}
       />,
     );
 

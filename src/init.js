@@ -3,6 +3,7 @@ const defaults = require('lodash.defaults');
 const validateProjectName = require('validate-npm-package-name');
 const shell = require('shelljs');
 const path = require('path');
+const fs = require('fs');
 const spawn = require('react-dev-utils/crossSpawn');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 const logger = require('./lib/logger');
@@ -58,13 +59,19 @@ module.exports = async options => {
   log('  2. Changing working directory');
   process.chdir(appPath);
 
-  log('  3. Installing project dependencies');
+  log('  3. Creating useful project files');
+  const prefix = 'v-keep-';
+  fs.readdirSync('./')
+    .filter(f => f.startsWith('v-keep-'))
+    .forEach(f => fs.renameSync(f, f.substr(prefix.length)));
+
+  log('  4. Installing project dependencies');
   const procDeps = spawn.sync('npm', ['install', '--silent'], {
     stdio: 'inherit',
   });
   if (procDeps.status !== 0) printErrors(`Failed to install project dependencies`);
 
-  log(`  4. Success! Project ${appName} is now created at ${appPath}`);
+  log(`  5. Success! Project ${appName} is now created at ${appPath}`);
   log(`     The following commands can be used inside your newly created project`);
   log(`       npm run watch`);
   log(`         Starts the development version of the project. Hot reloading is automatically enabled`);

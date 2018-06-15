@@ -17,6 +17,7 @@ interface HtmlProps {
   body: string;
   initialState?: object;
   manifest?: string;
+  preload: string[];
 }
 
 class Html extends React.PureComponent<HtmlProps, never> {
@@ -24,6 +25,7 @@ class Html extends React.PureComponent<HtmlProps, never> {
     htmlAttributes: {},
     bodyAttributes: {},
     body: '',
+    preload: [],
   };
   public render() {
     const {
@@ -41,6 +43,7 @@ class Html extends React.PureComponent<HtmlProps, never> {
       bundleCss,
       initialState,
       manifest,
+      preload,
     } = this.props;
     return (
       <html {...htmlAttributes}>
@@ -54,6 +57,15 @@ class Html extends React.PureComponent<HtmlProps, never> {
           {base}
           {bundleCss.map((css, i) => <link key={i} href={css} rel="stylesheet" />)}
           {manifest && <link rel="manifest" href={manifest} />}
+          {preload.map((file, i) => {
+            if (/\.js$/.test(file)) return <link key={i} href={file} rel="preload" as="script" />;
+            if (/\.css$/.test(file)) return <link key={i} href={file} rel="preload" as="stylesheet" />;
+            if (/(\.woff|\.woff2|\.eot|\.ttf)$/.test(file))
+              return <link key={i} href={file} rel="preload" as="font" crossOrigin="anonymous" />;
+            if (/(\.png|\.jpe?g|\.gif)$/.test(file))
+              return <link key={i} href={file} rel="preload" as="image" crossOrigin="anonymous" />;
+            return null;
+          })}
         </head>
         <body {...bodyAttributes}>
           <div id="root" dangerouslySetInnerHTML={{ __html: body }} />
