@@ -16,15 +16,14 @@ class App extends React.Component {
       <div className="App">
         <Helmet>
           <html lang="en" />
-          <title itemProp="name" lang="en">
-            Varan advanced react example
-          </title>
+          <title itemProp="name" lang="en">Varan</title>
           <meta charSet="utf-8" />
           <meta charSet="utf-8" />
           <meta httpEquiv="x-ua-compatible" content="ie=edge" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
           <meta name="description" content="A varan react starter app" />
           <meta name="og:type" content="website" />
+          <meta name="theme-color" content="#49aa6a" />
           <link rel="icon" href={favicon} />
         </Helmet>
         <div className="AppContainer">

@@ -26,7 +26,7 @@ class Nav extends PureComponent<NavProps, NavState> {
     const { isOpen } = this.state;
     return (
       <nav className="navbar">
-        <NavLink className="navbar__title" to="/">
+        <NavLink className="navbar__title" to="/" aria-label="Home">
           <h1 className="navbar__title-text">Varan</h1>
         </NavLink>
         <button

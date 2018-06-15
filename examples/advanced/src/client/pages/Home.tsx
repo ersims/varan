@@ -12,7 +12,7 @@ class Home extends React.PureComponent {
         </Helmet>
         <header className="header header--main">
           <h1>Varan advanced react example with typescript</h1>
-          <small>It's awesome!</small>
+          <small  className="header--small">It's awesome!</small>
         </header>
         <main role="main">
           <h1>Home</h1>
