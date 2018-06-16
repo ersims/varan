@@ -29,6 +29,11 @@
   "bin": {
     "varan": "./cli.js"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm test"
+    }
+  },
   "scripts": {
     "apply:format": "prettier --config .prettierrc --write \"{babel,examples,src,test,webpack}/**/*.{ts,js}?(x)\"",
     "check:format": "prettier --config .prettierrc --list-different \"{babel,examples,src,test,webpack}/**/*.{ts,js}?(x)\"",
@@ -86,6 +91,7 @@
     "babel-jest": "^23.0.1",
     "del-cli": "^1.1.0",
     "express": "^4.16.3",
+    "husky": "^1.0.0-rc.9",
     "jest": "^23.1.0",
     "memory-fs": "^0.4.1",
     "normalize.css": "^8.0.0",
