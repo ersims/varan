@@ -78,7 +78,7 @@ npm run build
 ```
 ## Custom webpack config
 
-Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`. 
+Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
 It is recommended to create your own `webpack` directory with your client and server files, and specifying these when using `varan build` and `varan watch`.
 
 ### Example
@@ -91,7 +91,7 @@ my-project
      \--- server.js - server customizations
 ```
 
-Make sure the `client.js` and `server.js` files exports a function that returns the webpack configuration object. 
+Make sure the `client.js` and `server.js` files exports a function that returns the webpack configuration object.
 
 `server.js` with no modifications:
 ```javascript
@@ -108,10 +108,11 @@ const pwaManifest = {
   short_name: 'VaranPWA',
   description: 'My awesome Progressive Web App using Varan!',
   background_color: '#ffffff',
+  theme_color: '#ffffff',
   icons: [
     {
       src: path.resolve(__dirname, '../src/assets/favicon.ico'),
-      sizes: [96],
+      sizes: [96, 192, 512],
     },
   ],
 };
