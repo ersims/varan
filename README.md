@@ -134,6 +134,12 @@ varan build ./webpack/client ./webpack/server
 
 Remember to update your npm scripts to use the new config files.
 
-### License
+## Contributing
+
+### Release
+
+Run `npm run release` to publish a new release and `npm run release --tag=next` to publish a pre-release.
+
+## License
 
   [MIT](LICENSE.md)
