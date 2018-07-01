@@ -78,6 +78,7 @@
     "style-loader": "^0.21.0",
     "sw-precache-webpack-plugin": "^0.11.5",
     "uglifyjs-webpack-plugin": "^1.2.6",
+    "update-notifier": "^2.5.0",
     "url-loader": "^1.0.1",
     "validate-npm-package-name": "^3.0.0",
     "webpack": "^4.12.0",
