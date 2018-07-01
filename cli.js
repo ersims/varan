@@ -3,6 +3,7 @@
 // Dependencies
 const program = require('commander');
 const path = require('path');
+const updateNotifier = require('update-notifier');
 const pkg = require('./package.json');
 const { init } = require('./index');
 const { build } = require('./index');
@@ -11,6 +12,9 @@ const { watch } = require('./index');
 // Init
 process.on('unhandledRejection', (err) => { throw err; });
 const resolve = file => file && path.resolve(process.cwd(), file);
+
+// Check for updates
+updateNotifier({ pkg }).notify();
 
 // Setup program
 program
