@@ -16,6 +16,7 @@ const getOpts = options => {
     browsers,
     env: process.env.NODE_ENV,
     appDir: paths.appDir,
+    cssModulesIdent: '[local]',
   });
 };
 
@@ -59,7 +60,7 @@ module.exports = options => {
                 use: [
                   {
                     loader: require.resolve('css-loader'),
-                    options: { modules: false, importLoaders: 1 },
+                    options: { modules: true, localIdentName: opts.cssModulesIdent, importLoaders: 3 },
                   },
                   {
                     loader: require.resolve('postcss-loader'),
