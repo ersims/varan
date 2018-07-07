@@ -11,6 +11,7 @@
     "watch": "varan watch -- --inspect"
   },
   "dependencies": {
+    "core-js": "^2.5.7",
     "express": "^4.16.3",
     "prop-types": "^15.6.1",
     "react": "^16.3.2",
@@ -25,7 +26,6 @@
     "@babel/core": "^7.0.0-beta.51",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.0.1",
-    "core-js": "^2.5.7",
     "del-cli": "^1.1.0",
     "jest": "^23.1.0",
     "normalize.css": "^8.0.0",
