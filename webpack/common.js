@@ -3,6 +3,7 @@ const { NamedModulesPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
+const cssNano = require('cssnano');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const getPaths = require('../src/lib/getPaths');
@@ -58,13 +59,16 @@ module.exports = options => {
                 use: [
                   {
                     loader: require.resolve('css-loader'),
-                    options: { modules: false, importLoaders: 1, minimize: !isDev },
+                    options: { modules: false, importLoaders: 1 },
                   },
                   {
                     loader: require.resolve('postcss-loader'),
                     options: {
                       ident: 'postcss',
-                      plugins: () => [postcssPresetEnv({ browsers: opts.browsers })],
+                      plugins: [
+                        postcssPresetEnv({ browsers: opts.browsers }),
+                        !isDev && cssNano({ preset: 'default' }),
+                      ].filter(Boolean),
                     },
                   },
                   { loader: require.resolve('resolve-url-loader') },
