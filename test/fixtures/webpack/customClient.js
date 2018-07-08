@@ -1,6 +1,6 @@
 // Dependencies
 const { DefinePlugin, NoEmitOnErrorsPlugin } = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
@@ -53,21 +53,14 @@ module.exports = {
             },
           },
           {
-            test: /\.(css|scss)$/,
-            use: ExtractTextPlugin.extract({
-              fallback: require.resolve('style-loader'),
-              use: [
-                {
-                  loader: require.resolve('css-loader'),
-                  options: { importLoaders: 1, minimize: true },
-                },
-                { loader: require.resolve('resolve-url-loader') },
-                {
-                  loader: require.resolve('sass-loader'),
-                  options: { sourceMap: true, precision: 10 },
-                },
-              ],
-            }),
+            test: /\.(sa|sc|c)ss$/,
+            use: [
+              { loader: MiniCssExtractPlugin.loader },
+              {
+                loader: require.resolve('css-loader'),
+                options: { modules: false },
+              },
+            ],
           },
           {
             exclude: [/\.(js|jsx|mjs)$/, /\.html$/, /\.json$/],
@@ -83,9 +76,9 @@ module.exports = {
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
     new NoEmitOnErrorsPlugin(),
-    new ExtractTextPlugin({
+    new MiniCssExtractPlugin({
       filename: 'static/css/[name].[hash:8].css',
-      allChunks: true,
+      chunkFilename: 'static/css/[name].[hash:8].chunk.css',
     }),
     new ManifestPlugin({
       fileName: 'asset-manifest.json',

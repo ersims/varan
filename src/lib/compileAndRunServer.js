@@ -2,6 +2,7 @@
 const webpack = require('webpack');
 const path = require('path');
 const spawn = require('react-dev-utils/crossSpawn');
+const getCompilationStats = require('./getCompilationStats');
 const pkg = require('../../package.json');
 
 // Init
@@ -47,7 +48,9 @@ module.exports = log => async (config, opts, waitForResolved) =>
     const serverOutputEntry = path.resolve(compiler.options.output.path, compiler.options.output.filename);
     let runner;
     compiler.hooks.done.tap(pkg.name, async stats => {
+      const buildStats = getCompilationStats(stats);
       if (!runner) {
+        log(`✅  Server compiled in ${buildStats.timings.duration}ms`);
         // Pass in arguments to child
         const launchArgs = args.includes('--') ? args.slice(args.indexOf('--') + 1) : [];
         const debugArgs = [
@@ -78,6 +81,6 @@ module.exports = log => async (config, opts, waitForResolved) =>
           runner = null;
           if (code === 1) log('❌  Server stopped - waiting for changes to try again');
         });
-      } else log('🔁  Assets recompiled');
+      } else log(`🔁  Server recompiled in ${buildStats.timings.duration}ms`);
     });
   });

@@ -14,6 +14,7 @@ const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
+    target: 'node',
     name: undefined,
     appDir: paths.appDir,
     appSourceDir: paths.appSourceDir,
@@ -30,8 +31,7 @@ module.exports = options => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const outputPath = path.resolve(opts.targetDir, path.dirname(opts.entry));
-  return merge.smart(common(options), {
-    target: 'node',
+  return merge.smart(common(opts), {
     name: opts.name || path.basename(opts.entry),
     devtool: isDev ? 'cheap-module-source-map' : 'source-map',
     entry: [isDev && HotReloadEntry, path.resolve(opts.sourceDir, opts.entry)].filter(Boolean),

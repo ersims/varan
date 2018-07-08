@@ -1,6 +1,6 @@
 // Dependencies
 const { NamedModulesPlugin, NoEmitOnErrorsPlugin } = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const cssNano = require('cssnano');
@@ -15,6 +15,7 @@ const getOpts = options => {
   return defaults({}, options, {
     browsers,
     env: process.env.NODE_ENV,
+    target: 'web',
     appDir: paths.appDir,
     cssModulesIdent: '[local]',
   });
@@ -24,7 +25,9 @@ const getOpts = options => {
 module.exports = options => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
+  const isNode = opts.target === 'node';
   return {
+    target: opts.target,
     mode: isDev ? 'development' : 'production',
     bail: !isDev,
     context: opts.appDir,
@@ -46,7 +49,7 @@ module.exports = options => {
         {
           oneOf: [
             {
-              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.css$/, /\.scss$/, /\.json$/, /\.ico$/],
+              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/, /\.ico$/],
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
@@ -54,34 +57,32 @@ module.exports = options => {
               },
             },
             {
-              test: /\.(css|scss)$/,
-              use: ExtractTextPlugin.extract({
-                fallback: require.resolve('style-loader'),
-                use: [
-                  {
-                    loader: require.resolve('css-loader'),
-                    options: { modules: true, localIdentName: opts.cssModulesIdent, importLoaders: 3 },
+              test: /\.(sa|sc|c)ss$/,
+              use: [
+                !isNode && { loader: isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader },
+                {
+                  loader: isNode ? require.resolve('css-loader/locals') : require.resolve('css-loader'),
+                  options: { modules: true, localIdentName: opts.cssModulesIdent, importLoaders: 3 },
+                },
+                {
+                  loader: require.resolve('postcss-loader'),
+                  options: {
+                    ident: 'postcss',
+                    plugins: [
+                      postcssPresetEnv({ browsers: opts.browsers }),
+                      !isNode && !isDev && cssNano({ preset: 'default' }),
+                    ].filter(Boolean),
                   },
-                  {
-                    loader: require.resolve('postcss-loader'),
-                    options: {
-                      ident: 'postcss',
-                      plugins: [
-                        postcssPresetEnv({ browsers: opts.browsers }),
-                        !isDev && cssNano({ preset: 'default' }),
-                      ].filter(Boolean),
-                    },
-                  },
-                  { loader: require.resolve('resolve-url-loader') },
-                  {
-                    loader: require.resolve('sass-loader'),
-                    options: { sourceMap: true, precision: 10 },
-                  },
-                ],
-              }),
+                },
+                { loader: require.resolve('resolve-url-loader') },
+                {
+                  loader: require.resolve('sass-loader'),
+                  options: { sourceMap: true, precision: 10 },
+                },
+              ].filter(Boolean),
             },
             {
-              exclude: [/\.(jsx?|mjs|tsx?)$/, /\.html$/, /\.json$/],
+              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/],
               loader: require.resolve('file-loader'),
               options: { name: 'static/media/[name].[hash:8].[ext]' },
             },
@@ -91,6 +92,12 @@ module.exports = options => {
     },
     plugins: [
       isDev && new NamedModulesPlugin(),
+      !isNode &&
+        !isDev &&
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].[hash:8].css',
+          chunkFilename: 'static/css/[name].[hash:8].chunk.css',
+        }),
       new NoEmitOnErrorsPlugin(),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',

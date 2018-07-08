@@ -1,7 +1,7 @@
 // Dependencies
 const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
@@ -26,6 +26,7 @@ const getOpts = options => {
   return defaults({}, options, {
     browsers,
     env: process.env.NODE_ENV,
+    target: 'web',
     name: undefined,
     // See https://github.com/arthurbergmz/webpack-pwa-manifest for more information on how to specify manifest
     // pwaManifest: {
@@ -57,7 +58,6 @@ module.exports = options => {
   const name = opts.name || path.basename(opts.entry);
   return merge.smart(common(opts), {
     name,
-    target: 'web',
     devtool: isDev ? 'cheap-module-source-map' : 'none',
     // webpack-serve config - stripped before sending to webpack if it exists
     serve: {
@@ -136,11 +136,6 @@ module.exports = options => {
       }),
       new EnvironmentPlugin({
         DEBUG: false,
-      }),
-      new ExtractTextPlugin({
-        disable: isDev,
-        filename: 'static/css/[name].[hash:8].css',
-        allChunks: true,
       }),
       new ManifestPlugin({
         fileName: 'asset-manifest.json',

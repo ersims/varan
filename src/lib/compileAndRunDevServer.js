@@ -1,6 +1,7 @@
 // Dependencies
 const webpack = require('webpack');
 const { createCompiler, prepareUrls } = require('react-dev-utils/WebpackDevServerUtils');
+const getCompilationStats = require('./getCompilationStats');
 const omit = require('lodash.omit');
 const serve = require('webpack-serve');
 const pkg = require('../../package.json');
@@ -34,15 +35,21 @@ module.exports = log => async (config, host, port, opts) => {
           ...config.serve.hot,
         },
       });
-      compiler.hooks.done.tap(pkg.name, () => {
+      compiler.hooks.done.tap(pkg.name, stats => {
+        const buildStats = getCompilationStats(stats);
         if (initialBuild) {
+          log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
           initialBuild = false;
           return devServer.then(resolve).catch(reject);
         }
+        log(`🔁  Client recompiled in ${buildStats.timings.duration}ms`);
       });
     });
   } else {
-    compiler.hooks.done.tap(pkg.name, () => log(`✅  Build complete for ${name}`));
+    compiler.hooks.done.tap(pkg.name, stats => {
+      const buildStats = getCompilationStats(stats);
+      log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
+    });
     return new Promise((resolve, reject) =>
       compiler.run((err, stats) => {
         if (err) {
