@@ -6,6 +6,7 @@ const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react
 const omit = require('lodash.omit');
 const logger = require('./lib/logger');
 const getConfigs = require('./lib/getConfigs');
+const getCompilationStats = require('./lib/getCompilationStats');
 const pkg = require('../package.json');
 
 // Init
@@ -35,7 +36,10 @@ module.exports = async options => {
   if (opts.outputFileSystem) compiler.outputFileSystem = opts.outputFileSystem;
 
   // Add event handlers
-  compiler.hooks.done.tap(pkg.name, () => log('✅  Build complete'));
+  compiler.hooks.done.tap(pkg.name, output => {
+    const stats = getCompilationStats(output.stats);
+    log(`✅  Build completed in ${stats.timings.duration}ms for ${stats.numberOfConfigs} configs`);
+  });
 
   /**
    * Begin compile
@@ -45,6 +49,7 @@ module.exports = async options => {
     previousFileSizes =>
       new Promise((resolve, reject) => {
         compiler.run((err, stats) => {
+          const buildStats = getCompilationStats(stats.stats);
           if (err) {
             console.error(err.stack || err);
             if (err.details) console.error(err.details);
@@ -62,13 +67,13 @@ module.exports = async options => {
             console.warn('⚠ Build has warnings:');
             info.warnings.forEach(warning => console.warn(warning));
           }
-
           log('Potential file sizes after gzip:\n');
           compiler.compilers.forEach((c, i) => {
             const config = c.options;
             log(`
-Input config (${i}):  ${path.resolve(typeof opts.configs[i] === 'string' ? opts.configs[i] : config.name || i)}
+Input config (${i}):     ${path.resolve(typeof opts.configs[i] === 'string' ? opts.configs[i] : config.name || i)}
 Output path:          ${path.dirname(config.output.path)}
+Duration:             ${buildStats.timings.duration}ms
       `);
             if (!opts.silent)
               printFileSizesAfterBuild(

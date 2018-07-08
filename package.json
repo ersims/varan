@@ -63,12 +63,13 @@
     "css-loader": "^1.0.0",
     "cssnano": "^4.0.0",
     "detect-port-alt": "^1.1.6",
-    "extract-text-webpack-plugin": "^4.0.0-beta.0",
     "file-loader": "^1.1.11",
     "http-proxy-middleware": "^0.18.0",
     "koa-connect": "^2.0.1",
+    "lodash.castarray": "^4.4.0",
     "lodash.defaults": "^4.2.0",
     "lodash.omit": "^4.5.0",
+    "mini-css-extract-plugin": "^0.4.1",
     "node-sass": "^4.9.0",
     "postcss-loader": "^2.1.5",
     "postcss-preset-env": "^5.1.0",
@@ -131,7 +132,7 @@
     "moduleNameMapper": {
       "./clearConsole": "<rootDir>/test/__mocks__/react-dev-utils/clearConsole.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "modulePathIgnorePatterns": [
       "<rootDir>/examples/(.*)/test/__mocks__"
