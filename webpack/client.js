@@ -166,6 +166,12 @@ module.exports = options => {
           filename: 'service-worker.js',
           minify: !isDev,
           mergeStaticsConfig: true,
+          skipWaiting: true,
+          clientsClaim: true,
+          directoryIndex: false,
+          dynamicUrlToDependencies: {
+            [publicPath]: publicPath.substr(1)
+          },
           navigateFallback: publicPath,
           navigateFallbackWhitelist: [/^(?!\/__).*/],
           staticFileGlobsIgnorePatterns: [/\.map$/, /asset-manifest\.json$/, /stats-manifest\.json$/, /\.gz$/],
