@@ -65,13 +65,13 @@ module.exports = options => {
       clipboard: false,
       logTime: true,
       logLevel: 'silent',
-      hot: {
+      hotClient: {
         logTime: true,
         logLevel: 'silent',
         reload: true,
         hmr: true,
       },
-      dev: {
+      devMiddleware: {
         watchOptions: {
           ignored: ignoredFiles(opts.sourceDir),
         },
