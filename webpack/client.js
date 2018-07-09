@@ -108,8 +108,8 @@ module.exports = options => {
     entry: [path.resolve(opts.sourceDir, opts.entry)].filter(Boolean),
     output: {
       path: outputPath,
-      filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[chunkhash:8].js',
-      chunkFilename: 'static/js/[name].[chunkhash:8].chunk.js',
+      filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[contenthash:8].js',
+      chunkFilename: 'static/js/[name].[contenthash:8].chunk.js',
       pathinfo: isDev,
       publicPath,
       libraryTarget: 'var',
@@ -154,6 +154,11 @@ module.exports = options => {
           threshold: 10240,
           minRatio: 0.8,
         }),
+      !isDev &&
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash:8].css',
+        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+      }),
       !isDev &&
         new SWPrecacheWebpackPlugin({
           cacheId: name,

@@ -8,3 +8,5 @@ script:
 after_script:
   - npm install codecov
   - ./node_modules/.bin/codecov
+notifications:
+  email: false

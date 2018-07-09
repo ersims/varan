@@ -92,12 +92,6 @@ module.exports = options => {
     },
     plugins: [
       isDev && new NamedModulesPlugin(),
-      !isNode &&
-        !isDev &&
-        new MiniCssExtractPlugin({
-          filename: 'static/css/[name].[hash:8].css',
-          chunkFilename: 'static/css/[name].[hash:8].chunk.css',
-        }),
       new NoEmitOnErrorsPlugin(),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',
