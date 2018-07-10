@@ -49,7 +49,6 @@ module.exports = async options => {
     previousFileSizes =>
       new Promise((resolve, reject) => {
         compiler.run((err, stats) => {
-          const buildStats = getCompilationStats(stats.stats);
           if (err) {
             console.error(err.stack || err);
             if (err.details) console.error(err.details);
@@ -67,6 +66,7 @@ module.exports = async options => {
             console.warn('⚠ Build has warnings:');
             info.warnings.forEach(warning => console.warn(warning));
           }
+          const buildStats = getCompilationStats(stats.stats);
           log('Potential file sizes after gzip:\n');
           compiler.compilers.forEach((c, i) => {
             const config = c.options;

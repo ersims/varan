@@ -38,7 +38,7 @@ module.exports = options => {
     output: {
       path: outputPath,
       filename: `${path.basename(opts.entry, path.extname(opts.entry))}.js`,
-      chunkFilename: 'chunks/[name].[chunkhash:8].chunk.js',
+      chunkFilename: 'chunks/[name].[contenthash:8].chunk.js',
       pathinfo: isDev,
       libraryTarget: 'commonjs2',
     },

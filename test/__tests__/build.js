@@ -1,6 +1,7 @@
 // Dependencies
 const path = require('path');
 const MemoryFileSystem = require('memory-fs');
+const fs = require('fs');
 const { build } = require('../../index');
 const { hasFile, getFiles, resolver } = require('../fixtures/utils');
 
@@ -74,6 +75,24 @@ describe('build', () => {
     const mfs = new MemoryFileSystem();
     const resolve = resolver(__dirname, '../fixtures/projects/basic');
 
+    // Mock fs calls to stats-manifest.json as these are used by sw-precache-plugin
+    // to generate the service worker and will fail if not mocked
+    const orgStatSync = fs.statSync;
+    const orgReadFileSync = fs.readFileSync;
+    fs.statSync = path => {
+      if (/stats-manifest\.json/.test(path)) {
+        return {
+          ...mfs.statSync(path),
+          size: mfs.meta(path).byteLength,
+        };
+      }
+      return orgStatSync(path);
+    };
+    fs.readFileSync = (path, options) => {
+      if (/stats-manifest\.json/.test(path)) return mfs.readFileSync(path, options);
+      return orgReadFileSync(path, options);
+    };
+
     /**
      * Assertions
      */
@@ -85,9 +104,14 @@ describe('build', () => {
       }),
     ).resolves.toEqual(expect.objectContaining({}));
 
+    // Unmock
+    fs.statSync = orgStatSync;
+    fs.readFileSync = orgReadFileSync;
+
     // Client
     expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
     expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
+    expect(hasFile(mfs, resolve('dist/client/service-worker.js'))).toBe(true);
 
     // CSS
     const css = getFiles(mfs, resolve('dist/client/static/css'));
