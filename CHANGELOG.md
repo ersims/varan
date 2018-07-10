@@ -1,3 +1,25 @@
+<a name="0.3.0-0"></a>
+# [0.3.0-0](https://github.com/ersims/varan/compare/v0.2.7...v0.3.0-0) (2018-07-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency css-loader to v1 ([a74902d](https://github.com/ersims/varan/commit/a74902d))
+* **deps:** update dependency webpack-serve to v2 ([d3e7c9f](https://github.com/ersims/varan/commit/d3e7c9f))
+* add better offline support ([#20](https://github.com/ersims/varan/issues/20)) ([7640fec](https://github.com/ersims/varan/commit/7640fec))
+* update css-loader and use cssnano for minification ([5da2126](https://github.com/ersims/varan/commit/5da2126))
+
+
+### Features
+
+* add basic support for css modules ([4933438](https://github.com/ersims/varan/commit/4933438))
+* add cli notification if a newer version is available ([03a3e82](https://github.com/ersims/varan/commit/03a3e82))
+* update advanced example ([0c97a03](https://github.com/ersims/varan/commit/0c97a03))
+* update webpack-serve ([c577424](https://github.com/ersims/varan/commit/c577424))
+* upgrade to mini-css-extract-plugin instead of extract-text-webpack-plugin ([9501dfc](https://github.com/ersims/varan/commit/9501dfc))
+
+
+
 <a name="0.2.7"></a>
 ## [0.2.7](https://github.com/ersims/varan/compare/v0.2.6...v0.2.7) (2018-06-24)
 
