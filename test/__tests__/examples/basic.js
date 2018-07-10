@@ -52,6 +52,7 @@ describe('examples', () => {
         // Client
         expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
         expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
+        expect(hasFile(mfs, resolve('dist/client/service-worker.js'))).toBe(true);
 
         // CSS
         const css = getFiles(mfs, resolve('dist/client/static/css'));
