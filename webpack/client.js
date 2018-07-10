@@ -155,14 +155,14 @@ module.exports = options => {
           minRatio: 0.8,
         }),
       !isDev &&
-      new MiniCssExtractPlugin({
-        filename: 'static/css/[name].[contenthash:8].css',
-        chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
-      }),
+        new MiniCssExtractPlugin({
+          filename: 'static/css/[name].[contenthash:8].css',
+          chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+        }),
       !isDev &&
         new SWPrecacheWebpackPlugin({
           cacheId: name,
-          dontCacheBustUrlsMatching: /\.\w{8}\./,
+          dontCacheBustUrlsMatching: /(\.\w{8}\.)|(\/)/,
           filename: 'service-worker.js',
           minify: !isDev,
           mergeStaticsConfig: true,
@@ -170,7 +170,7 @@ module.exports = options => {
           clientsClaim: true,
           directoryIndex: false,
           dynamicUrlToDependencies: {
-            [publicPath]: publicPath.substr(1)
+            [publicPath]: publicPath.substr(1),
           },
           navigateFallback: publicPath,
           navigateFallbackWhitelist: [/^(?!\/__).*/],
