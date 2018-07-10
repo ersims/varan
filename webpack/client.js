@@ -162,7 +162,7 @@ module.exports = options => {
       !isDev &&
         new SWPrecacheWebpackPlugin({
           cacheId: name,
-          dontCacheBustUrlsMatching: /(\.\w{8}\.)|(\/)/,
+          dontCacheBustUrlsMatching: /(\.\w{8}\.)/,
           filename: 'service-worker.js',
           minify: !isDev,
           mergeStaticsConfig: true,
@@ -170,7 +170,7 @@ module.exports = options => {
           clientsClaim: true,
           directoryIndex: false,
           dynamicUrlToDependencies: {
-            [publicPath]: publicPath.substr(1),
+            [publicPath]: [`${outputPath}/stats-manifest.json`],
           },
           navigateFallback: publicPath,
           navigateFallbackWhitelist: [/^(?!\/__).*/],
