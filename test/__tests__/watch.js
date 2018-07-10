@@ -45,7 +45,7 @@ describe('watch', () => {
     expect(hasFile(mfs, resolve('dist/server/bin/stats-manifest.json'))).toBe(true);
 
     // Done
-    servers.forEach(s => s && s.close());
+    servers.forEach(s => s && s.stop());
     done();
   });
   it('should support custom webpack config', async done => {

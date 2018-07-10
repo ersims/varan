@@ -19,6 +19,9 @@ class Manager {
       }),
     );
   }
+  stop() {
+    this.close();
+  }
   close() {
     if (this.watcher) this.watcher.close();
     if (this.runner) this.runner.kill();

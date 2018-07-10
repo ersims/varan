@@ -17,30 +17,33 @@ module.exports = log => async (config, host, port, opts) => {
   if (config.serve) {
     return new Promise((resolve, reject) => {
       let initialBuild = true;
-      const devServer = serve({
-        host,
-        port,
-        compiler,
-        ...config.serve,
-        dev: {
-          ...config.serve.dev,
-          writeToDisk:
-            compiler.outputFileSystem.constructor.name !== 'NodeOutputFileSystem'
-              ? false
-              : config.serve.dev.writeToDisk,
-        },
-        hot: {
+      const devServer = serve(
+        {},
+        {
           host,
-          port: opts.devServerWSPort,
-          ...config.serve.hot,
+          port,
+          compiler,
+          ...config.serve,
+          devMiddleware: {
+            ...config.serve.devMiddleware,
+            writeToDisk:
+              compiler.outputFileSystem.constructor.name !== 'NodeOutputFileSystem'
+                ? false
+                : config.serve.devMiddleware.writeToDisk,
+          },
+          hotClient: {
+            host,
+            port: opts.devServerWSPort,
+            ...config.serve.hotClient,
+          },
         },
-      });
+      );
       compiler.hooks.done.tap(pkg.name, stats => {
         const buildStats = getCompilationStats(stats);
         if (initialBuild) {
           log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
           initialBuild = false;
-          return devServer.then(resolve).catch(reject);
+          return devServer.then(res => resolve(res.app)).catch(reject);
         }
         log(`🔁  Client recompiled in ${buildStats.timings.duration}ms`);
       });
