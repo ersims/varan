@@ -81,7 +81,8 @@ module.exports = options => {
         headers: {
           'Access-Control-Allow-Origin': '*',
         },
-        writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
+        writeToDisk: true,
+        // TODO: Enable this again (after webpack-serve >v2.0.2) and verify HMR is working correctly => writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
       add: (app, middleware, options) => {
         // Monkeypatch res.send
