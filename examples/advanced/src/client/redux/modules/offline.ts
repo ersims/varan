@@ -1,50 +1,69 @@
 // Imports
 import { createReducer } from 'reduxsauce';
-import { ActionType, createStandardAction, getType } from 'typesafe-actions';
+import { createStandardAction, getType } from 'typesafe-actions';
+import { Epic } from 'redux-observable';
 
 // Types
 export enum Actions {
-  OFFLINE_CACHE_LOADED = 'varan/offline/CACHE_LOADED',
+  OFFLINE_ENABLED = 'varan/offline/ENABLED',
+  OFFLINE_DISABLED = 'varan/offline/DISABLED',
+  OFFLINE_CACHE_ENABLE = 'varan/offline/CACHE_ENABLE',
+  OFFLINE_CACHE_ENABLED = 'varan/offline/CACHE_ENABLED',
+  OFFLINE_CACHE_CHECK = 'varan/offline/CACHE_CHECK',
   OFFLINE_CACHE_UPDATED = 'varan/offline/CACHE_UPDATED',
-  OFFLINE_SERVICE_WORKER_ERROR = 'varan/offline/SERVICE_WORKER_ERROR',
+  OFFLINE_CACHE_DISABLE = 'varan/offline/CACHE_DISABLE',
+  OFFLINE_CACHE_DISABLED = 'varan/offline/CACHE_DISABLED',
 }
 interface IState {
-  isCached: boolean;
-  isOutdated: boolean;
-  isOnline: boolean;
+  isEnabled: boolean;
+  isUpdated: boolean;
+  isOffline: boolean;
   lastError: Error | null;
 }
 
 // Initial state
 export const initialState: IState = {
-  isCached: false, // Has assets been cached and app ready for offline-mode?
-  isOutdated: false, // Has assets been updated in the background and reload is necessary?
-  isOnline: true, // TODO: Is the app online or offline?
+  isEnabled: false, // Is service worker enabled?
+  isUpdated: false, // Has assets been updated in the background and reload is necessary?
+  isOffline: true,
   lastError: null,
 };
 
 // Actions
 export const actions = {
-  cacheLoaded: createStandardAction(Actions.OFFLINE_CACHE_LOADED)(),
+  setOffline: createStandardAction(Actions.OFFLINE_ENABLED)(),
+  setOnline: createStandardAction(Actions.OFFLINE_DISABLED)(),
+  cacheEnable: createStandardAction(Actions.OFFLINE_CACHE_ENABLE)(),
+  cacheEnabled: createStandardAction(Actions.OFFLINE_CACHE_ENABLED)(),
+  cacheCheck: createStandardAction(Actions.OFFLINE_CACHE_CHECK)(),
   cacheUpdated: createStandardAction(Actions.OFFLINE_CACHE_UPDATED)(),
-  serviceWorkerError: createStandardAction(Actions.OFFLINE_SERVICE_WORKER_ERROR)<Error>(),
+  cacheDisable: createStandardAction(Actions.OFFLINE_CACHE_DISABLE)(),
+  cacheDisabled: createStandardAction(Actions.OFFLINE_CACHE_DISABLED)(),
 };
 
 // Reducers
 export default createReducer(initialState, {
-  [getType(actions.cacheLoaded)]: (state = initialState) => ({
+  [getType(actions.setOffline)]: (state = initialState) => ({
     ...state,
-    isCached: true,
+    isOffline: true,
+  }),
+  [getType(actions.setOnline)]: (state = initialState) => ({
+    ...state,
+    isOffline: false,
+  }),
+  [getType(actions.cacheEnabled)]: (state = initialState) => ({
+    ...state,
+    isEnabled: true,
   }),
   [getType(actions.cacheUpdated)]: (state = initialState) => ({
     ...state,
-    isOutdated: true,
+    isUpdated: true,
   }),
-  [getType(actions.serviceWorkerError)]: (
-    state = initialState,
-    action: ActionType<typeof actions.serviceWorkerError>,
-  ) => ({
+  [getType(actions.cacheDisabled)]: (state = initialState) => ({
     ...state,
-    lastErrors: action.payload,
+    isEnabled: false,
   }),
 });
+
+// Epics
+export const epics: Epic[] = [];

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { NavLink } from 'react-router-dom';
@@ -9,11 +9,13 @@ import AnimatedExpandable from '../AnimatedExpandable';
 // Types
 interface NavProps {
   location: string;
+  isOffline: boolean;
+  isUpdated: boolean;
 }
 interface NavState {
   isOpen: boolean;
 }
-class Nav extends PureComponent<NavProps, NavState> {
+class Nav extends React.PureComponent<NavProps, NavState> {
   public state = {
     isOpen: false,
   };
@@ -24,8 +26,9 @@ class Nav extends PureComponent<NavProps, NavState> {
   }
   public render() {
     const { isOpen } = this.state;
+    const { isOffline, isUpdated } = this.props;
     return (
-      <nav className="navbar">
+      <nav className={classNames('navbar', { 'navbar--offline': isOffline, 'navbar--updated': isUpdated })}>
         <NavLink className="navbar__title" to="/" aria-label="Home">
           <h1 className="navbar__title-text">Varan</h1>
         </NavLink>
@@ -57,4 +60,8 @@ class Nav extends PureComponent<NavProps, NavState> {
   }
 }
 
-export default connect((state: RootState) => ({ location: state.router.location.pathname }))(Nav);
+export default connect((state: RootState) => ({
+  location: state.router.location.pathname,
+  isOffline: state.offline.isOffline,
+  isUpdated: state.offline.isUpdated,
+}))(Nav);

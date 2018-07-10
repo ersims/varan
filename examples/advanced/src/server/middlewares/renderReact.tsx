@@ -43,7 +43,8 @@ export default (stats: ApplicationStats, assets: ApplicationAssets, preload: str
   // Return react rendering middleware
   return function renderReact(req, res) {
     // Prepare
-    const { store } = createStore({ router: { location: createLocation(req.originalUrl) } });
+    const initialState = { offline: { isOffline: false } };
+    const { store } = createStore({ ...initialState, router: { location: createLocation(req.originalUrl) } });
     // TODO: Improve hot reload integration
     if (process.env.NODE_ENV === 'development' && module.hot) {
       const reloadStore = () => store.replaceReducer(require('../../client/redux/index').rootReducer);
@@ -80,6 +81,7 @@ export default (stats: ApplicationStats, assets: ApplicationAssets, preload: str
         bundleCss={bundleCss}
         manifest={manifest}
         preload={preload.map(f => assets[f])}
+        initialState={initialState}
       />,
     );
 
