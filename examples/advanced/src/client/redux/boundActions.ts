@@ -1,7 +1,7 @@
 /* tslint:disable prefer-array-literal */
 // Dependencies
-import { Dispatch, MapDispatchToPropsParam } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { MapDispatchToPropsParam } from 'react-redux';
+import { bindActionCreators, Dispatch } from 'redux';
 import pick from 'lodash/pick';
 import { actionCreators } from './index';
 

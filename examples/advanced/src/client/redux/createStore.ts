@@ -14,7 +14,7 @@ const loggerMiddleware =
   createLogger({
     collapsed: (getState, action, logEntry) =>
       (!logEntry || !logEntry.error) && !action.error && !action.isError && !(action.payload instanceof Error),
-    predicate: () => '__DEV__' in window || (process && process.env && process.env.NODE_ENV === 'development'),
+    predicate: () => true || '__DEV__' in window || (process && process.env && process.env.NODE_ENV === 'development'),
   });
 const composeEnhancers = composeWithDevTools({ serialize: true });
 

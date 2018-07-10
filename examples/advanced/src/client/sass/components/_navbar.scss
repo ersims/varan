@@ -15,6 +15,12 @@
   overflow: hidden;
   position: relative;
   box-shadow: 0 0 1rem 0.2rem rgba($color__black, 0.75);
+  &--offline {
+    background-color: $color__red;
+  }
+  &--updated {
+    background-color: $color__green;
+  }
 
   // Title
   &__title {
@@ -91,10 +97,10 @@
   &__list {
     padding: 0;
     margin: 0;
+    background-color: lighten($local__background-color, 10%);
     &--open {
       float: left;
       width: 100%;
-      background-color: lighten($local__background-color, 10%);
     }
 
     // Large screen version
@@ -103,6 +109,7 @@
       display: block;
       width: auto;
       line-height: $local__height;
+      background-color: inherit;
     }
   }
   &__item {

@@ -18,9 +18,9 @@ const PRELOAD_FILES = [
 
 // Init
 const app = express();
-const ENV = process.env.NODE_ENV || 'production';
-const HOST = process.env.HOST;
-const PORT = (process.env.PORT && parseInt(process.env.PORT, 10)) || 3000;
+app.set('env', process.env.NODE_ENV || 'production');
+app.set('host', process.env.HOST);
+app.set('port', (process.env.PORT && parseInt(process.env.PORT, 10)) || 3000);
 const CLIENT_FILES = path.resolve(__dirname, '../../client');
 const CLIENT_FILES_CACHE_AGE = app.get('env') === 'production' ? 86400000 : undefined;
 const stats =
@@ -30,12 +30,12 @@ const assets =
   process.env.VARAN_ASSETS_MANIFEST &&
   JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_ASSETS_MANIFEST)).toString());
 
-// Templates
-app.set('env', ENV);
-app.set('host', HOST);
-app.set('port', PORT);
-
 // Serve static files and attempt to serve .gz files if found
+app.use((req, res, next) => {
+  if (req.url === '/service-worker.js')
+    res.setHeader('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate');
+  return next();
+});
 app.use(gzipStatic(CLIENT_FILES, { maxAge: CLIENT_FILES_CACHE_AGE }));
 
 // Render react server side
