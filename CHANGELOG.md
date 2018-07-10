@@ -1,3 +1,8 @@
+<a name="0.3.1"></a>
+## [0.3.1](https://github.com/ersims/varan/compare/v0.3.0-1...v0.3.1) (2018-07-10)
+
+
+
 <a name="0.3.0-1"></a>
 # [0.3.0-1](https://github.com/ersims/varan/compare/v0.3.0-0...v0.3.0-1) (2018-07-10)
 
