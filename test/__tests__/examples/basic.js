@@ -1,5 +1,6 @@
 // Dependencies
 const MemoryFileSystem = require('memory-fs');
+const fs = require('fs');
 const { build } = require('../../../index');
 const { hasFile, getFiles, resolver } = require('../../fixtures/utils');
 
@@ -15,6 +16,24 @@ describe('examples', () => {
         jest.setTimeout(slowTimeout);
         const mfs = new MemoryFileSystem();
 
+        // Mock fs calls to stats-manifest.json as these are used by sw-precache-plugin
+        // to generate the service worker and will fail if not mocked
+        const orgStatSync = fs.statSync;
+        const orgReadFileSync = fs.readFileSync;
+        fs.statSync = path => {
+          if (/stats-manifest\.json/.test(path)) {
+            return {
+              ...mfs.statSync(path),
+              size: mfs.meta(path).byteLength,
+            };
+          }
+          return orgStatSync(path);
+        };
+        fs.readFileSync = (path, options) => {
+          if (/stats-manifest\.json/.test(path)) return mfs.readFileSync(path, options);
+          return orgReadFileSync(path, options);
+        };
+
         /**
          * Assertions
          */
@@ -25,6 +44,10 @@ describe('examples', () => {
             silent: true,
           }),
         ).resolves.toEqual(expect.objectContaining({}));
+
+        // Unmock
+        fs.statSync = orgStatSync;
+        fs.readFileSync = orgReadFileSync;
 
         // Client
         expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
