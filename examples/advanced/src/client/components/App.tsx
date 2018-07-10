@@ -33,7 +33,6 @@ class App extends React.Component {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/about" component={About} />
-            <Route path="/shell" component={() => null} />
             <Route component={NotFound} />
           </Switch>
         </div>

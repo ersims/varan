@@ -8,6 +8,7 @@
   ],
   "jsRules": {
     "no-empty": false,
+    "variable-name": false,
     "class-name": true,
     "curly": false,
     "import-name": false,
@@ -25,6 +26,7 @@
     "no-namespace": false,
     "no-empty-interface": false,
     "interface-name": false,
+    "variable-name": false,
     "class-name": true,
     "curly": false,
     "import-name": false,

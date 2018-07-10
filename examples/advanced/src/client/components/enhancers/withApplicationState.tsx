@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import boundActions from '../../redux/boundActions';
+import { actionCreators } from '../../redux';
 
-/* tslint:disable-next-line variable-name */
 export default () => <P extends object>(WrappedComponent: React.ComponentType<P>) => {
-  class WithApplicationState extends React.Component<P & actionCreators['applicationActions']> {
-    public componentWillMount() {
+  class WithApplicationState extends React.Component<P & Pick<typeof actionCreators, 'applicationActions'>> {
+    public componentDidMount() {
       this.props.applicationActions.init();
     }
     public render() {
@@ -13,7 +13,7 @@ export default () => <P extends object>(WrappedComponent: React.ComponentType<P>
     }
   }
   return connect(
-    undefined,
+    null,
     boundActions<any, any>('applicationActions'),
   )(WithApplicationState);
 };

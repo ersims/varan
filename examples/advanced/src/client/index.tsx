@@ -10,13 +10,15 @@ import withOffline from './components/enhancers/withOffline';
 
 // Styles
 import './sass/index.scss';
+import { withRouter } from 'react-router';
 
 // Init
-/* tslint:disable-next-line variable-name */
-const EnhancedApp = compose(
-  withApplicationState(),
-  withOffline(),
-)(App);
+const EnhancedApp = withRouter<typeof App>(
+  compose(
+    withOffline(),
+    withApplicationState(),
+  )(App),
+);
 
 // Render app and perform necessary housekeeping
 const render = () => {

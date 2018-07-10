@@ -4,11 +4,10 @@ import boundActions from '../../redux/boundActions';
 import { actionCreators } from '../../redux';
 import VaranServiceWorker, { VaranServiceWorkerEvents } from '../../services/VaranServiceWorker';
 
-/* tslint:disable-next-line variable-name */
 export default (autoEnable = true, updateCheckInterval = 60 * 1000) => <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ) => {
-  class WithOffline extends React.Component<P & actionCreators['offlineActions']> {
+  class WithOffline extends React.Component<P & Pick<typeof actionCreators, 'offlineActions'>> {
     protected serviceWorker: VaranServiceWorker = new VaranServiceWorker();
     protected timer: ReturnType<typeof setTimeout> | null = null;
 
@@ -32,7 +31,7 @@ export default (autoEnable = true, updateCheckInterval = 60 * 1000) => <P extend
         this.createCheckForUpdatesTimer(waitInterval);
       }, waitInterval);
     };
-    public componentWillMount() {
+    public componentDidMount() {
       // Add event listeners
       window.addEventListener('offline', this.handleOffline);
       window.addEventListener('online', this.handleOnline);
@@ -48,10 +47,10 @@ export default (autoEnable = true, updateCheckInterval = 60 * 1000) => <P extend
       if (autoEnable) {
         this.props.offlineActions.cacheEnable();
         this.serviceWorker.register();
-      }
 
-      // Add update timer?
-      if (updateCheckInterval) this.createCheckForUpdatesTimer(updateCheckInterval);
+        // Add update timer?
+        if (updateCheckInterval) this.createCheckForUpdatesTimer(updateCheckInterval);
+      }
     }
     public componentWillUnmount() {
       if (this.timer) clearTimeout(this.timer);
@@ -66,7 +65,7 @@ export default (autoEnable = true, updateCheckInterval = 60 * 1000) => <P extend
     }
   }
   return connect(
-    undefined,
-    boundActions<actionCreators, any>('offlineActions'),
+    null,
+    boundActions<any, any>('offlineActions'),
   )(WithOffline);
 };
