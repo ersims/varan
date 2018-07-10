@@ -1,3 +1,18 @@
+<a name="0.3.0-1"></a>
+# [0.3.0-1](https://github.com/ersims/varan/compare/v0.3.0-0...v0.3.0-1) (2018-07-10)
+
+
+### Bug Fixes
+
+* broken hmr after webpack-serve upgrade ([39d938f](https://github.com/ersims/varan/commit/39d938f))
+
+
+### Features
+
+* improve advanced example ([0fb23e0](https://github.com/ersims/varan/commit/0fb23e0))
+
+
+
 <a name="0.3.0-0"></a>
 # [0.3.0-0](https://github.com/ersims/varan/compare/v0.2.7...v0.3.0-0) (2018-07-10)
 
