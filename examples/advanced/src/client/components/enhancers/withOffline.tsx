@@ -4,7 +4,7 @@ import boundActions from '../../redux/boundActions';
 import { actionCreators } from '../../redux';
 import VaranServiceWorker, { VaranServiceWorkerEvents } from '../../services/VaranServiceWorker';
 
-export default (autoEnable = true, updateCheckInterval = 60 * 1000) => <P extends object>(
+export default (autoEnable = true, updateCheckInterval = 60 * 60 * 1000) => <P extends object>(
   WrappedComponent: React.ComponentType<P>,
 ) => {
   class WithOffline extends React.Component<P & Pick<typeof actionCreators, 'offlineActions'>> {
