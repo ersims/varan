@@ -2,5 +2,11 @@
   "extends": [
     "config:base"
   ],
-  "semanticCommits": true
+  "pinVersions": false,
+  "rebaseStalePrs": true,
+  "semanticCommits": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "extends": "schedule:weekly"
+  }
 }

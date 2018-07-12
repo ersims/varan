@@ -14,6 +14,7 @@
 !.prettierignore
 !.prettierrc
 !.travis.yml
+!.circleci
 
 # Generated directories
 build
@@ -28,3 +29,7 @@ node_modules
 *.tmp
 *.log
 npm-debug.log*
+yarn.lock
+
+# Template package-lock
+template/package-lock.json
