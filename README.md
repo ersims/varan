@@ -6,7 +6,7 @@ Note that `varan` is in very early pre-alpha stage and breaking changes may occu
 Disclaimer: There will be breaking changes and outdated documentation during the pre-v1.0.0 cycles.
 
 [![npm](https://img.shields.io/npm/v/varan.svg)](https://npmjs.org/package/varan)
-[![Travis](https://img.shields.io/travis/ersims/varan/master.svg)](https://travis-ci.org/ersims/varan)
+[![CircleCI](https://img.shields.io/circleci/project/github/ersims/varan.svg)](https://circleci.com/gh/ersims/varan)
 [![Codecov branch](https://img.shields.io/codecov/c/github/ersims/varan/master.svg)](https://codecov.io/gh/ersims/varan)
 [![Known Vulnerabilities](https://snyk.io/test/github/ersims/varan/badge.svg)](https://snyk.io/test/github/ersims/varan)
 [![David](https://img.shields.io/david/ersims/varan.svg)](https://github.com/ersims/varan)

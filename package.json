@@ -135,7 +135,7 @@
       "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "modulePathIgnorePatterns": [
-      "<rootDir>/template/(.*)/test/__mocks__"
+      "<rootDir>/template/test/__mocks__"
     ],
     "testEnvironment": "node",
     "testMatch": [
