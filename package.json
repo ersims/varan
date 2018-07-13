@@ -35,15 +35,15 @@
     }
   },
   "scripts": {
-    "apply:format": "prettier --config .prettierrc --write \"{babel,examples,src,test,webpack}/**/*.{ts,js}?(x)\"",
+    "apply:format": "prettier --config .prettierrc --write \"{babel,template,src,test,webpack}/**/*.{ts,js}?(x)\"",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "check:format": "prettier --config .prettierrc --list-different \"{babel,examples,src,test,webpack}/**/*.{ts,js}?(x)\"",
+    "check:format": "prettier --config .prettierrc --list-different \"{babel,template,src,test,webpack}/**/*.{ts,js}?(x)\"",
     "check": "npm-run-all check:*",
     "clean": "del-cli ./.coverage",
     "release": "echo Recommended semver version bump: && conventional-recommended-bump -p angular && np",
     "pretest": "npm run check",
     "test": "jest",
-    "version": "npm run changelog && git add CHANGELOG.md"
+    "version": "node scripts/bumpTemplateVersion && npm run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
     "@babel/core": "^7.0.0-beta.51",
@@ -64,6 +64,7 @@
     "cssnano": "^4.0.0",
     "detect-port-alt": "^1.1.6",
     "file-loader": "^1.1.11",
+    "fs-extra": "^6.0.1",
     "http-proxy-middleware": "^0.18.0",
     "koa-connect": "^2.0.1",
     "lodash.castarray": "^4.4.0",
@@ -76,7 +77,6 @@
     "react-dev-utils": "^5.0.1",
     "resolve-url-loader": "^2.3.0",
     "sass-loader": "^7.0.3",
-    "shelljs": "^0.8.2",
     "style-loader": "^0.21.0",
     "sw-precache-webpack-plugin": "^0.11.5",
     "uglifyjs-webpack-plugin": "^1.2.6",
@@ -135,12 +135,12 @@
       "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
     "modulePathIgnorePatterns": [
-      "<rootDir>/examples/(.*)/test/__mocks__"
+      "<rootDir>/template/(.*)/test/__mocks__"
     ],
     "testEnvironment": "node",
     "testMatch": [
       "<rootDir>/test/__tests__/**/*.{ts,js}?(x)",
-      "<rootDir>/examples/**/test/__tests__/**/*.{ts,js}?(x)"
+      "<rootDir>/template/test/__tests__/**/*.{ts,js}?(x)"
     ],
     "transform": {
       "^.+\\.(jsx?|tsx?)$": "<rootDir>/test/fixtures/jestPreprocessor.js"

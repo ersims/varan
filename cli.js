@@ -27,8 +27,8 @@ program
 program
   .command('init')
   .arguments('<name>')
-  .option('--template <project template>', 'Specify project template - see examples directory for the different templates')
-  .action((name, opts) => init({ name, template: opts.template }).catch(err => console.error(err)));
+  .option('-a, --advanced', 'Use advanced boilerplate from https://github.com/ersims/varan-boilerplate? Requires git!')
+  .action((name, opts) => init({ name, fromGitRepo: opts.advanced && 'https://github.com/ersims/varan-boilerplate' }).catch(err => console.error(err)));
 
 
 /**

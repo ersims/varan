@@ -1,9 +1,8 @@
 // Dependencies
 const defaults = require('lodash.defaults');
 const validateProjectName = require('validate-npm-package-name');
-const shell = require('shelljs');
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
 const spawn = require('react-dev-utils/crossSpawn');
 const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
 const logger = require('./lib/logger');
@@ -13,7 +12,7 @@ const pkg = require('../package.json');
 const getOpts = options =>
   defaults({}, options, {
     name: undefined,
-    template: 'basic',
+    fromGitRepo: null,
     silent: false,
     cwd: process.cwd(),
   });
@@ -24,7 +23,7 @@ module.exports = async options => {
   const log = logger(opts);
   const appName = opts.name;
   const appPath = path.resolve(opts.cwd, opts.name);
-  const templatePath = path.resolve(__dirname, '../examples', opts.template);
+  const templatePath = path.resolve(__dirname, '..', 'template');
   const printErrors = (...errorMsgs) => {
     console.error();
     console.error(`Could not create project with name "${appName}":`);
@@ -40,11 +39,7 @@ module.exports = async options => {
     printErrors((projectNameValidation.errors || []).concat(projectNameValidation.warnings));
 
   // Check if directory name is available
-  if (shell.test('-e', appPath)) printErrors(`Something already exists at "${appPath}"`);
-
-  // Validate template
-  if (!/^([a-z0-9-_])+$/i.test(opts.template) || !shell.test('-d', templatePath))
-    printErrors(`Unknown project template "${opts.template}"`);
+  if (fs.existsSync(appPath)) printErrors(`Something already exists at "${appPath}"`);
 
   /**
    * Create project
@@ -53,25 +48,43 @@ module.exports = async options => {
   log(`Creating ${pkg.name} project ${appName} at ${appPath}`);
   log();
 
-  log('  1. Creating project directory');
-  shell.cp('-R', templatePath, appPath);
+  // Use advanced boilerplate?
+  if (opts.fromGitRepo) {
+    log(` 🛴 1. Cloning existing boilerplate from ${opts.fromGitRepo}`);
+    const procGit = spawn.sync(
+      'git',
+      ['clone', '--quiet', '--depth=1', '--origin=upstream', opts.fromGitRepo, appPath],
+      {
+        stdio: 'inherit',
+      },
+    );
+    if (procGit.status !== 0)
+      printErrors(
+        `Failed to clone from git repo ${
+          opts.fromGitRepo
+        }. Make sure you have git (https://git-scm.com/) installed, the remote repository exists, you have the necessary permissions and internet connectivity.`,
+      );
+  } else {
+    log(' 🛴 1. Creating project directory');
+    fs.copySync(templatePath, appPath);
+  }
 
-  log('  2. Changing working directory');
+  log(' 🚲 2. Changing working directory');
   process.chdir(appPath);
 
-  log('  3. Creating useful project files');
+  log(' 🚜 3. Creating useful project files');
   const prefix = 'v-keep-';
   fs.readdirSync('./')
     .filter(f => f.startsWith('v-keep-'))
     .forEach(f => fs.renameSync(f, f.substr(prefix.length)));
 
-  log('  4. Installing project dependencies');
-  const procDeps = spawn.sync('npm', ['install', '--silent'], {
+  log(' 🚗 4. Installing project dependencies');
+  const procDeps = spawn.sync('npm', ['install', '--silent', '--quiet', '--loglevel=silent'], {
     stdio: 'inherit',
   });
   if (procDeps.status !== 0) printErrors(`Failed to install project dependencies`);
 
-  log(`  5. Success! Project ${appName} is now created at ${appPath}`);
+  log(` 🚀 5. Success! Project ${appName} is now created at ${appPath}`);
   log(`     The following commands can be used inside your newly created project`);
   log(`       npm run watch`);
   log(`         Starts the development version of the project. Hot reloading is automatically enabled`);
