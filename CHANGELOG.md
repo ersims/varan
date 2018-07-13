@@ -1,3 +1,18 @@
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/ersims/varan/compare/v0.3.1...v0.4.0) (2018-07-13)
+
+
+### Bug Fixes
+
+* change default service worker update check to hourly ([3ea4d4b](https://github.com/ersims/varan/commit/3ea4d4b))
+
+
+### Features
+
+* move advanced example to separate github repo ([3d31316](https://github.com/ersims/varan/commit/3d31316))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/ersims/varan/compare/v0.3.0-1...v0.3.1) (2018-07-10)
 
