@@ -9,7 +9,9 @@
     "start": "node dist/server/bin/web.js",
     "test": "jest",
     "prewatch": "npm run clean",
-    "watch": "varan watch -- --inspect"
+    "watch": "varan watch -- --inspect",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
     "core-js": "^2.5.7",
@@ -20,7 +22,8 @@
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.3.2",
     "serialize-javascript": "^1.4.0",
-    "varan": "^0.4.0"
+    "varan": "^0.4.0",
+    "snyk": "^1.88.2"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.51",
@@ -60,5 +63,6 @@
     },
     "silent": true,
     "verbose": true
-  }
+  },
+  "snyk": true
 }
