@@ -56,19 +56,19 @@ describe('template', () => {
       // CSS
       const css = getFiles(mfs, resolve('dist/client/static/css'));
       expect(css.length).toBe(2);
-      expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.css/);
+      expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
       expect(css[0].size).toBeGreaterThan(0);
       expect(css[0].size).toBeLessThan(64);
-      expect(css[1].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.css/);
+      expect(css[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.css/);
       expect(css[1].size).toBeGreaterThan(0);
       expect(css[1].size).toBeLessThan(2 * 1024);
 
       // JS
       const js = getFiles(mfs, resolve('dist/client/static/js'));
       expect(js.length).toBe(3);
-      expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.js/);
-      expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js/);
-      expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.chunk\.js\.gz/);
+      expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
+      expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
+      expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
       expect(js[0].size).toBeGreaterThan(0);
       expect(js[0].size).toBeLessThan(10 * 1024);
       expect(js[1].size).toBeGreaterThan(0);
