@@ -206,11 +206,15 @@ module.exports = options => {
             }),
           ],
           splitChunks: {
+            minSize: 30 * 1024,
+            maxSize: 1024 * 1024,
+            automaticNameDelimiter: '.',
             cacheGroups: {
               commons: {
                 test: /[\\/]node_modules[\\/]/,
                 name: 'vendor',
                 chunks: 'all',
+                priority: -5,
               },
             },
           },
