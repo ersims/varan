@@ -51,7 +51,9 @@ class Html extends PureComponent {
           {script}
           {noscript}
           {base}
-          {bundleCss.map((css, i) => <link key={i} href={css} rel="stylesheet" />)}
+          {bundleCss.map((css, i) => (
+            <link key={i} href={css} rel="stylesheet" />
+          ))}
           {manifest && <link rel="manifest" href={manifest} />}
         </head>
         <body {...bodyAttributes}>
@@ -65,7 +67,9 @@ class Html extends PureComponent {
               }}
             />
           )}
-          {bundleJs.map((js, i) => <script key={i} type="text/javascript" src={js} defer />)}
+          {bundleJs.map((js, i) => (
+            <script key={i} type="text/javascript" src={js} defer />
+          ))}
         </body>
       </html>
     );
