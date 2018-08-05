@@ -1,4 +1,5 @@
 // Dependencies
+const Fiber = require('fibers');
 const { NamedModulesPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
@@ -77,7 +78,11 @@ module.exports = options => {
                 { loader: require.resolve('resolve-url-loader') },
                 {
                   loader: require.resolve('sass-loader'),
-                  options: { sourceMap: true, precision: 10 },
+                  options: {
+                    sourceMap: true,
+                    implementation: require('dart-sass'),
+                    fiber: Fiber,
+                  },
                 },
               ].filter(Boolean),
             },

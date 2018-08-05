@@ -210,8 +210,9 @@ module.exports = options => {
             maxSize: 1024 * 1024,
             automaticNameDelimiter: '.',
             cacheGroups: {
+              // Don't split css in vendor chunks by default due to potential ordering issues
               commons: {
-                test: /[\\/]node_modules[\\/]/,
+                test: /[\\/]node_modules[\\/](.*)\.(?!(css|sass|scss|less)$)([^.]+$)/,
                 name: 'vendor',
                 chunks: 'all',
                 priority: -5,
