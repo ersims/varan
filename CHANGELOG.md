@@ -1,3 +1,20 @@
+<a name="0.5.0"></a>
+# [0.5.0](https://github.com/ersims/varan/compare/v0.4.0...v0.5.0) (2018-08-05)
+
+
+### Bug Fixes
+
+* **deps:** update dependency fs-extra to v7 ([937b874](https://github.com/ersims/varan/commit/937b874))
+* do not split css in vendor chunks to prevent ordering issues ([623248c](https://github.com/ersims/varan/commit/623248c))
+
+
+### Features
+
+* add max chunk size ([e6faf85](https://github.com/ersims/varan/commit/e6faf85))
+* use dart-sass instead of node-sass ([9862dfc](https://github.com/ersims/varan/commit/9862dfc))
+
+
+
 <a name="0.4.0"></a>
 # [0.4.0](https://github.com/ersims/varan/compare/v0.3.1...v0.4.0) (2018-07-13)
 
