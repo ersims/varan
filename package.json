@@ -132,6 +132,7 @@
     },
     "moduleNameMapper": {
       "./clearConsole": "<rootDir>/test/__mocks__/react-dev-utils/clearConsole.js",
+      "^fibers$": "<rootDir>/test/__mocks__/fibers.js",
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
       "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
     },
