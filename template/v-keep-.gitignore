@@ -3,6 +3,7 @@
 
 # Exceptions
 !.babelrc*
+!.browserslistrc
 !.env.example
 !.eslintrc
 !.eslintignore
@@ -14,6 +15,7 @@
 !.prettierignore
 !.prettierrc
 !.travis.yml
+!.circleci
 
 # Generated directories
 build
