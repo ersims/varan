@@ -1,3 +1,19 @@
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/ersims/varan/compare/v0.5.0...v0.6.0) (2018-08-10)
+
+
+### Bug Fixes
+
+* **deps:** update dependency postcss-loader to v3 ([8093fe7](https://github.com/ersims/varan/commit/8093fe7))
+* **deps:** update dependency style-loader to ^0.22.0 ([02c0e2e](https://github.com/ersims/varan/commit/02c0e2e))
+
+
+### Features
+
+* remove browserslist defaults ([ad59f8c](https://github.com/ersims/varan/commit/ad59f8c))
+
+
+
 <a name="0.5.0"></a>
 # [0.5.0](https://github.com/ersims/varan/compare/v0.4.0...v0.5.0) (2018-08-05)
 
