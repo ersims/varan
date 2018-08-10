@@ -18,13 +18,11 @@ const path = require('path');
 const common = require('./common.js');
 const getPaths = require('../src/lib/getPaths');
 const clientBabelPreset = require('../babel/client');
-const { browsers } = require('../index');
 
 // Init
 const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
-    browsers,
     env: process.env.NODE_ENV,
     target: 'web',
     name: undefined,
@@ -124,7 +122,7 @@ module.exports = options => {
           options: {
             cacheDirectory: isDev,
             compact: !isDev,
-            presets: [[clientBabelPreset, { browsers: opts.browsers }]],
+            presets: [[clientBabelPreset]],
           },
         },
       ],

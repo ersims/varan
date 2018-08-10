@@ -8,13 +8,11 @@ const cssNano = require('cssnano');
 const defaults = require('lodash.defaults');
 const path = require('path');
 const getPaths = require('../src/lib/getPaths');
-const { browsers } = require('../index');
 
 // Init
 const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
-    browsers,
     env: process.env.NODE_ENV,
     target: 'web',
     appDir: paths.appDir,
@@ -69,10 +67,7 @@ module.exports = options => {
                   loader: require.resolve('postcss-loader'),
                   options: {
                     ident: 'postcss',
-                    plugins: [
-                      postcssPresetEnv({ browsers: opts.browsers }),
-                      !isNode && !isDev && cssNano({ preset: 'default' }),
-                    ].filter(Boolean),
+                    plugins: [postcssPresetEnv(), !isNode && !isDev && cssNano({ preset: 'default' })].filter(Boolean),
                   },
                 },
                 { loader: require.resolve('resolve-url-loader') },
