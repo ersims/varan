@@ -150,7 +150,7 @@ module.exports = options => {
           asset: '[path].gz[query]',
           algorithm: 'gzip',
           test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
-          threshold: 10240,
+          threshold: 4 * 1024,
           minRatio: 0.8,
         }),
       !isDev &&
