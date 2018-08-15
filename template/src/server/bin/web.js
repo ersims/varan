@@ -1,5 +1,7 @@
-// Dependencies
+// Init environment
 import 'source-map-support/register';
+
+// Dependencies
 import express from 'express';
 import fs from 'fs';
 import path from 'path';
@@ -30,6 +32,6 @@ app.get('*', renderReact(stats, assets));
 
 // Export app
 export default app.listen(app.get('port'), app.get('host'), () => {
-  // if (process.send) process.send('ready'); // TODO: Re-enable https://github.com/facebook/jest/issues/5891
+  if (process.send) process.send('ready');
   console.log(`Server listening on ${app.get('port')} in ${app.get('env')} mode`);
 });

@@ -132,6 +132,7 @@ module.exports = options => {
         BUILD_TARGET: JSON.stringify('client'),
         'process.env.BABEL_ENV': JSON.stringify(opts.env),
         'process.env.NODE_ENV': JSON.stringify(opts.env),
+        'process.env.browser': JSON.stringify(true),
       }),
       new EnvironmentPlugin({
         DEBUG: false,
