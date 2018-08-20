@@ -7,6 +7,7 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
+const webpackServeWaitpage = require('webpack-serve-waitpage');
 const defaults = require('lodash.defaults');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
@@ -83,11 +84,12 @@ module.exports = options => {
         // TODO: Enable this again (after webpack-serve >v2.0.2) and verify HMR is working correctly => writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
       add: (app, middleware, options) => {
-        // Monkeypatch res.send
         app.use(convert(errorOverlayMiddleware()));
+        app.use(webpackServeWaitpage(options, { title: '🔁 Building...', theme: 'dark' }));
         app.use(
           (ctx, next) =>
             new Promise((resolve, reject) => {
+              // Monkeypatch res.send
               ctx.res.send = body => {
                 ctx.body = body;
                 resolve();
