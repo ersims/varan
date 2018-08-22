@@ -1,3 +1,21 @@
+<a name="0.6.1"></a>
+## [0.6.1](https://github.com/ersims/varan/compare/v0.6.0...v0.6.1) (2018-08-22)
+
+
+### Bug Fixes
+
+* add better handling of relative paths for assets ([db27eb2](https://github.com/ersims/varan/commit/db27eb2))
+* reduce gzip threshold to improve lighthouse score ([3a3ba9e](https://github.com/ersims/varan/commit/3a3ba9e))
+* **deps:** update dependency file-loader to v2 ([b9d9c66](https://github.com/ersims/varan/commit/b9d9c66))
+
+
+### Features
+
+* add --analyze option ([64653d7](https://github.com/ersims/varan/commit/64653d7))
+* add progress overlay to devserver ([c835cd4](https://github.com/ersims/varan/commit/c835cd4))
+
+
+
 <a name="0.6.0"></a>
 # [0.6.0](https://github.com/ersims/varan/compare/v0.5.0...v0.6.0) (2018-08-10)
 
