@@ -37,9 +37,11 @@ program
 program
   .command('build [files...]')
   .option('--env <environment>', 'Environment to use. Defaults to production')
+  .option('-a, --analyze', 'Analyze build')
   .action((files, opts) => build({
     configs: (files.length > 0 && files.map(resolve)) || undefined,
     env: opts && opts.env,
+    analyze: opts && opts.analyze,
   }).catch(err => console.error(err)));
 
 /**

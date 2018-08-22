@@ -8,6 +8,7 @@
   ],
   "scripts": {
     "build": "varan build",
+    "build:analyze": "varan build --analyze",
     "clean": "del-cli ./dist",
     "heroku-postbuild": "npm install --only=dev && npm run build && npm prune --production",
     "start": "node dist/server/bin/web.js",

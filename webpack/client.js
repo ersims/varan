@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpackServeWaitpage = require('webpack-serve-waitpage');
@@ -25,6 +26,7 @@ const getOpts = options => {
   const paths = getPaths(options.cwd);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
+    analyze: false,
     target: 'web',
     name: undefined,
     // See https://github.com/arthurbergmz/webpack-pwa-manifest for more information on how to specify manifest
@@ -148,6 +150,7 @@ module.exports = options => {
           fingerprints: !isDev,
           ...opts.pwaManifest,
         }),
+      opts.analyze && new BundleAnalyzerPlugin(),
       !isDev &&
         new CompressionPlugin({
           asset: '[path].gz[query]',
