@@ -1,3 +1,13 @@
+<a name="0.7.1"></a>
+## [0.7.1](https://github.com/ersims/varan/compare/v0.7.0...v0.7.1) (2018-08-28)
+
+
+### Bug Fixes
+
+* show correct total build time ([9a2f2e5](https://github.com/ersims/varan/commit/9a2f2e5))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/ersims/varan/compare/v0.6.1...v0.7.0) (2018-08-28)
 
