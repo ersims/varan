@@ -41,17 +41,17 @@ module.exports = log => async (config, host, port, opts) => {
       compiler.hooks.done.tap(pkg.name, stats => {
         const buildStats = getCompilationStats(stats);
         if (initialBuild) {
-          log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
+          log(`✅  Client compiled in ${buildStats.timings.total.duration}ms`);
           initialBuild = false;
           return devServer.then(res => resolve(res.app)).catch(reject);
         }
-        log(`🔁  Client recompiled in ${buildStats.timings.duration}ms`);
+        log(`🔁  Client recompiled in ${buildStats.timings.total.duration}ms`);
       });
     });
   } else {
     compiler.hooks.done.tap(pkg.name, stats => {
       const buildStats = getCompilationStats(stats);
-      log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
+      log(`✅  Client compiled in ${buildStats.timings.total.duration}ms`);
     });
     return new Promise((resolve, reject) =>
       compiler.run((err, stats) => {
