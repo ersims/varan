@@ -1,3 +1,23 @@
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/ersims/varan/compare/v0.6.1...v0.7.0) (2018-08-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency style-loader to ^0.23.0 ([e9e358c](https://github.com/ersims/varan/commit/e9e358c))
+* show individual compiler timings ([054843b](https://github.com/ersims/varan/commit/054843b))
+* wait for server before attempting to proxy in watch mode ([f12ac97](https://github.com/ersims/varan/commit/f12ac97))
+
+
+### Features
+
+* add support for list of configs ([a0e8edd](https://github.com/ersims/varan/commit/a0e8edd))
+* add support for using [@babel](https://github.com/babel)/runtime-corejs2 for polyfills instead of core-js ([779575c](https://github.com/ersims/varan/commit/779575c))
+* disable service worker caching ([b6e2132](https://github.com/ersims/varan/commit/b6e2132))
+* update dependencies ([2e0ee87](https://github.com/ersims/varan/commit/2e0ee87))
+
+
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://github.com/ersims/varan/compare/v0.6.0...v0.6.1) (2018-08-22)
 
