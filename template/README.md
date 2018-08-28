@@ -21,6 +21,12 @@ Build a production build
 npm run build
 ```
 
+Analyze the production build
+
+```bash
+npm run build:analyze
+```
+
 Start the production server
 
 ```bash

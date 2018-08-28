@@ -9,10 +9,23 @@ const slowTimeout = 40000;
 
 // Tests
 describe('watch', () => {
-  it('should give meaningful error message if no config files were provided', () => {
-    return expect(watch({ clientConfigFile: null, serverConfigFile: null })).rejects.toThrow(
-      'Must specify at least one config',
+  it('should give meaningful error message if no config files are provided', () => {
+    return expect(watch({ configs: [] })).rejects.toThrow('Must specify at least one config');
+  });
+  it('should give meaningful error message if too many config files are provided', () => {
+    return expect(watch({ configs: ['dummy', 'another dummy', 'another dummy again'] })).rejects.toThrow(
+      'Too many config files provided. Maximum two config files are supported in `watch` mode.',
     );
+  });
+  it('should give meaningful error message if invalid config files are provided', async done => {
+    expect.assertions(2);
+    await expect(watch({ configs: [{ target: 'node' }, { target: 'node' }] })).rejects.toThrow(
+      'One or more invalid config files provided. Maximum of one config file per target is supported.',
+    );
+    await expect(watch({ configs: [{ target: 'web' }, { target: 'web' }] })).rejects.toThrow(
+      'One or more invalid config files provided. Maximum of one config file per target is supported.',
+    );
+    done();
   });
   it('should work with default values', async done => {
     jest.setTimeout(slowTimeout);
@@ -26,6 +39,7 @@ describe('watch', () => {
       cwd: resolve(),
       outputFileSystem: mfs,
       silent: true,
+      waitForServer: false,
     });
 
     // Client
@@ -63,8 +77,7 @@ describe('watch', () => {
       cwd: resolve(),
       outputFileSystem: mfs,
       silent: true,
-      clientConfigFile: path.resolve(__dirname, '../fixtures/webpack/customClient.js'),
-      serverConfigFile: null,
+      configs: [path.resolve(__dirname, '../fixtures/webpack/customClient.js')],
     });
 
     // Client

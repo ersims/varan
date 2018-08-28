@@ -73,7 +73,7 @@ module.exports = async options => {
             log(`
 Input config (${i}):     ${path.resolve(typeof opts.configs[i] === 'string' ? opts.configs[i] : config.name || i)}
 Output path:          ${path.dirname(config.output.path)}
-Duration:             ${buildStats.timings.duration}ms
+Duration:             ${buildStats.timings.perCompiler[i].duration}ms
       `);
             if (!opts.silent)
               printFileSizesAfterBuild(

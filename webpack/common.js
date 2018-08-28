@@ -33,6 +33,7 @@ module.exports = options => {
     resolve: {
       extensions: ['.js', '.jsx', '.mjs', '.json', '.ts', '.tsx'],
       alias: {
+        '@babel/runtime': path.resolve(require.resolve('@babel/runtime/package.json'), '..'),
         'webpack-hot-client/client': require.resolve('webpack-hot-client/client'),
       },
     },

@@ -31,7 +31,7 @@ class Manager {
 // Exports
 module.exports = log => async (config, opts, waitForResolved) =>
   new Promise((resolve, reject) => {
-    const args = opts.args;
+    const launchArgs = opts.args;
     const compiler = webpack(config);
     if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
     if (opts.outputFileSystem) compiler.outputFileSystem = opts.outputFileSystem;
@@ -53,9 +53,8 @@ module.exports = log => async (config, opts, waitForResolved) =>
     compiler.hooks.done.tap(pkg.name, async stats => {
       const buildStats = getCompilationStats(stats);
       if (!runner) {
-        log(`✅  Server compiled in ${buildStats.timings.duration}ms`);
+        log(`✅  Server compiled in ${buildStats.timings.total.duration}ms`);
         // Pass in arguments to child
-        const launchArgs = args.includes('--') ? args.slice(args.indexOf('--') + 1) : [];
         const debugArgs = [
           ...new Set(
             launchArgs
@@ -84,6 +83,6 @@ module.exports = log => async (config, opts, waitForResolved) =>
           runner = null;
           if (code === 1) log('❌  Server stopped - waiting for changes to try again');
         });
-      } else log(`🔁  Server recompiled in ${buildStats.timings.duration}ms`);
+      } else log(`🔁  Server recompiled in ${buildStats.timings.total.duration}ms`);
     });
   });

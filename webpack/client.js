@@ -88,6 +88,10 @@ module.exports = options => {
       add: (app, middleware, options) => {
         app.use(convert(errorOverlayMiddleware()));
         app.use(webpackServeWaitpage(options, { title: '🔁 Building...', theme: 'dark' }));
+        app.use((ctx, next) => {
+          if (options.waitForPromise) return options.waitForPromise.then(next);
+          return next();
+        });
         app.use(
           (ctx, next) =>
             new Promise((resolve, reject) => {
@@ -103,7 +107,7 @@ module.exports = options => {
         );
         middleware.webpack();
         middleware.content();
-        app.use(convert(proxy('/', { target: `http://localhost:${opts.serverPort}/` })));
+        options.proxy && app.use(convert(proxy('/', { target: `http://localhost:${opts.serverPort}/` })));
         app.use(convert(history()));
       },
     },
@@ -156,7 +160,7 @@ module.exports = options => {
           asset: '[path].gz[query]',
           algorithm: 'gzip',
           test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
-          threshold: 4 * 1024,
+          threshold: 3 * 1024,
           minRatio: 0.8,
         }),
       !isDev &&

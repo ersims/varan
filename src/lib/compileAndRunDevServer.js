@@ -7,7 +7,7 @@ const serve = require('webpack-serve');
 const pkg = require('../../package.json');
 
 // Exports
-module.exports = log => async (config, host, port, opts) => {
+module.exports = log => async (config, host, port, opts, waitForPromise) => {
   const name = config.name || pkg.name;
   const urls = prepareUrls('http', host, port);
   const compiler = createCompiler(webpack, omit(config, ['serve']), name, urls, false);
@@ -23,6 +23,7 @@ module.exports = log => async (config, host, port, opts) => {
           host,
           port,
           compiler,
+          waitForPromise,
           ...config.serve,
           devMiddleware: {
             ...config.serve.devMiddleware,
@@ -36,22 +37,24 @@ module.exports = log => async (config, host, port, opts) => {
             port: opts.devServerWSPort,
             ...config.serve.hotClient,
           },
+          proxy: opts.devServerProxy,
+          open: opts.openBrowser,
         },
       );
       compiler.hooks.done.tap(pkg.name, stats => {
         const buildStats = getCompilationStats(stats);
         if (initialBuild) {
-          log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
+          log(`✅  Client compiled in ${buildStats.timings.total.duration}ms`);
           initialBuild = false;
           return devServer.then(res => resolve(res.app)).catch(reject);
         }
-        log(`🔁  Client recompiled in ${buildStats.timings.duration}ms`);
+        log(`🔁  Client recompiled in ${buildStats.timings.total.duration}ms`);
       });
     });
   } else {
     compiler.hooks.done.tap(pkg.name, stats => {
       const buildStats = getCompilationStats(stats);
-      log(`✅  Client compiled in ${buildStats.timings.duration}ms`);
+      log(`✅  Client compiled in ${buildStats.timings.total.duration}ms`);
     });
     return new Promise((resolve, reject) =>
       compiler.run((err, stats) => {

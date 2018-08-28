@@ -2,6 +2,7 @@
 const defaults = require('lodash.defaults');
 const path = require('path');
 const detectPort = require('detect-port-alt');
+const waitOn = require('wait-on');
 const compileAndRunDevServerFactory = require('./lib/compileAndRunDevServer');
 const compileAndRunServerFactory = require('./lib/compileAndRunServer');
 const logger = require('./lib/logger');
@@ -10,8 +11,7 @@ const getConfigs = require('./lib/getConfigs');
 // Init
 const getOpts = options =>
   defaults({}, options, {
-    clientConfigFile: path.resolve(__dirname, '../webpack/client'),
-    serverConfigFile: path.resolve(__dirname, '../webpack/server'),
+    configs: [path.resolve(__dirname, '../webpack/client'), path.resolve(__dirname, '../webpack/server')],
     devServerHost: process.env.HOST || 'localhost',
     devServerPort: parseInt(process.env.DEV_PORT, 10) || 3000,
     serverHost: process.env.HOST || 'localhost',
@@ -19,7 +19,9 @@ const getOpts = options =>
     silent: false,
     env: 'development',
     cwd: process.cwd(),
-    args: process.argv,
+    args: process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [],
+    openBrowser: false,
+    waitForServer: true,
   });
 
 // Exports
@@ -38,14 +40,48 @@ module.exports = async options => {
   opts.devServerWSPort = await detectPort(opts.devServerPort + 10, opts.devServerHost);
 
   // Load configs
-  const [clientConfig, serverConfig] = getConfigs([opts.clientConfigFile, opts.serverConfigFile], opts);
+  if (opts.configs.length > 2)
+    throw new Error('Too many config files provided. Maximum two config files are supported in `watch` mode.');
+  const configs = getConfigs(opts.configs, opts);
+  const clientConfig = configs.find(c => !c.target || c.target === 'web');
+  const serverConfig = configs.find(c => c.target === 'node');
+
+  // Check if config is valid
+  if (configs.length >= 2 && (!clientConfig || !serverConfig)) {
+    throw new Error('One or more invalid config files provided. Maximum of one config file per target is supported.');
+  }
+
+  // Set proxy based on server presence
+  opts.devServerProxy = !!serverConfig;
 
   /**
    * Begin watching
    */
+  let setServerReady = () => {};
+  const serverIsReadyPromise = new Promise(resolve => {
+    setServerReady = resolve;
+  });
   const devServerPromise =
-    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts);
-  return Promise.all(
-    [devServerPromise, serverConfig && compileAndRunServer(serverConfig, opts, devServerPromise)].filter(Boolean),
-  );
+    clientConfig &&
+    compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts, serverIsReadyPromise);
+  const serverPromise =
+    (serverConfig &&
+      compileAndRunServer(serverConfig, opts, devServerPromise).then(
+        () =>
+          new Promise((resolve, reject) => {
+            if (opts.waitForServer) {
+              waitOn(
+                {
+                  resources: [`tcp:${opts.serverHost}:${opts.serverPort}`],
+                },
+                err => {
+                  if (err) return reject(err);
+                  resolve();
+                },
+              );
+            } else resolve();
+          }),
+      )) ||
+    Promise.resolve();
+  return Promise.all([devServerPromise, serverPromise.then(setServerReady)].filter(Boolean));
 };
