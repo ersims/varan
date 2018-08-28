@@ -21,10 +21,15 @@ const stats =
 const assets =
   process.env.VARAN_ASSETS_MANIFEST &&
   JSON.parse(fs.readFileSync(path.resolve(__dirname, process.env.VARAN_ASSETS_MANIFEST)).toString());
-// Templates
 app.set('env', ENV);
 app.set('host', HOST);
 app.set('port', PORT);
+
+// Invalidate cache for service worker
+app.use('/service-worker.js', (req, res, next) => {
+  res.setHeader('Cache-Control', 'max-age=0, no-cache, no-store, must-revalidate');
+  return next();
+});
 app.use(express.static(path.resolve(__dirname, '../../client')));
 
 // Render react server side
