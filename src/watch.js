@@ -2,6 +2,7 @@
 const defaults = require('lodash.defaults');
 const path = require('path');
 const detectPort = require('detect-port-alt');
+const waitOn = require('wait-on');
 const compileAndRunDevServerFactory = require('./lib/compileAndRunDevServer');
 const compileAndRunServerFactory = require('./lib/compileAndRunServer');
 const logger = require('./lib/logger');
@@ -56,9 +57,31 @@ module.exports = async options => {
   /**
    * Begin watching
    */
+  let setServerReady = () => {};
+  const serverIsReadyPromise = new Promise(resolve => {
+    setServerReady = resolve;
+  });
   const devServerPromise =
-    clientConfig && compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts);
-  return Promise.all(
-    [devServerPromise, serverConfig && compileAndRunServer(serverConfig, opts, devServerPromise)].filter(Boolean),
-  );
+    clientConfig &&
+    compileAndRunDevServer(clientConfig, opts.devServerHost, opts.devServerPort, opts, serverIsReadyPromise);
+  const serverPromise =
+    (serverConfig &&
+      compileAndRunServer(serverConfig, opts, devServerPromise).then(
+        () =>
+          new Promise((resolve, reject) => {
+            if (opts.waitForServer) {
+              waitOn(
+                {
+                  resources: [`tcp:${opts.serverHost}:${opts.serverPort}`],
+                },
+                err => {
+                  if (err) return reject(err);
+                  resolve();
+                },
+              );
+            } else resolve();
+          }),
+      )) ||
+    Promise.resolve();
+  return Promise.all([devServerPromise, serverPromise.then(setServerReady)].filter(Boolean));
 };

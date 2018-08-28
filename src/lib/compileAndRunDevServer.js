@@ -7,7 +7,7 @@ const serve = require('webpack-serve');
 const pkg = require('../../package.json');
 
 // Exports
-module.exports = log => async (config, host, port, opts) => {
+module.exports = log => async (config, host, port, opts, waitForPromise) => {
   const name = config.name || pkg.name;
   const urls = prepareUrls('http', host, port);
   const compiler = createCompiler(webpack, omit(config, ['serve']), name, urls, false);
@@ -23,6 +23,7 @@ module.exports = log => async (config, host, port, opts) => {
           host,
           port,
           compiler,
+          waitForPromise,
           ...config.serve,
           devMiddleware: {
             ...config.serve.devMiddleware,
@@ -36,6 +37,8 @@ module.exports = log => async (config, host, port, opts) => {
             port: opts.devServerWSPort,
             ...config.serve.hotClient,
           },
+          proxy: opts.devServerProxy,
+          open: opts.openBrowser,
         },
       );
       compiler.hooks.done.tap(pkg.name, stats => {
