@@ -48,27 +48,25 @@ program
  * Development watching mode
  */
 program
-  .command('watch')
-  .usage('[options] -- [server args]')
-  .option('--client [config file]', 'Specify client webpack configuration file', resolve)
-  .option('--server [config file]', 'Specify server webpack configuration file', resolve)
-  .option('--no-client', 'Disable client watching')
-  .option('--no-server', 'Disable server watching')
+  .command('watch [files...]')
+  .usage('[options] [files...] -- --inspect')
   .option('--host <host>', 'Specify host for both client and server to bind on')
   .option('--client-port <port number>', 'Specify client dev server port to listen on', port => parseInt(port, 10))
   .option('--server-port <port number>', 'Specify server port to listen on', port => parseInt(port, 10))
   .option('--env <development|production>', 'Environment to use')
-  .allowUnknownOption()
-  .action((extra, opts) => {
-    if (!opts) opts = extra;
+  .option('--open', 'Open app in browser automatically?')
+  .action((rawFiles, opts = {}) => {
+    opts.args = process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [];
+    const files = rawFiles.filter(f => !opts.args.includes(f));
     return watch({
-      serverConfigFile: opts && opts.server && (opts.server !== true ? resolve(opts.server) : path.resolve(__dirname, './webpack/server')),
-      clientConfigFile: opts && opts.client && (opts.client !== true ? resolve(opts.client) : path.resolve(__dirname, './webpack/client')),
+      configs: (files.length > 0 && files.map(resolve)) || [path.resolve(__dirname, './webpack/server'), path.resolve(__dirname, './webpack/client')],
       devServerHost: opts && opts.host,
       devServerPort: opts && opts.clientPort,
       serverHost: opts && opts.host,
       serverPort: opts && opts.serverPort,
+      args: opts && opts.args,
       env: opts && opts.env,
+      openBrowser: opts && opts.open,
     }).catch(err => console.error(err));
   });
 
