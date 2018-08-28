@@ -38,7 +38,7 @@ module.exports = async options => {
   // Add event handlers
   compiler.hooks.done.tap(pkg.name, output => {
     const stats = getCompilationStats(output.stats);
-    log(`✅  Build completed in ${stats.timings.duration}ms for ${stats.numberOfConfigs} configs`);
+    log(`✅  Build completed in ${stats.timings.total.duration}ms for ${stats.numberOfConfigs} configs`);
   });
 
   /**
