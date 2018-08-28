@@ -18,11 +18,13 @@ class Html extends PureComponent {
     manifest: PropTypes.string,
     body: PropTypes.string,
     initialState: PropTypes.object,
+    preload: PropTypes.arrayOf(PropTypes.string.isRequired),
   };
   static defaultProps = {
     htmlAttributes: {},
     bodyAttributes: {},
     body: '',
+    preload: [],
   };
   render() {
     const {
@@ -40,21 +42,31 @@ class Html extends PureComponent {
       bundleCss,
       initialState,
       manifest,
+      preload,
     } = this.props;
     return (
       <html {...htmlAttributes}>
         <head>
           {title}
           {meta}
-          {link}
-          {style}
-          {script}
           {noscript}
           {base}
+          {manifest && <link rel="manifest" href={manifest} />}
+          {link}
+          {preload.map((file, i) => {
+            if (/\.js$/.test(file)) return <link key={i} href={file} rel="preload" as="script" />;
+            if (/\.css$/.test(file)) return <link key={i} href={file} rel="preload" as="style" />;
+            if (/(\.woff|\.woff2|\.eot|\.ttf)$/.test(file))
+              return <link key={i} href={file} rel="preload" as="font" crossOrigin="anonymous" />;
+            if (/(\.png|\.jpe?g|\.gif)$/.test(file))
+              return <link key={i} href={file} rel="preload" as="image" crossOrigin="anonymous" />;
+            return null;
+          })}
           {bundleCss.map((css, i) => (
             <link key={i} href={css} rel="stylesheet" />
           ))}
-          {manifest && <link rel="manifest" href={manifest} />}
+          {style}
+          {script}
         </head>
         <body {...bodyAttributes}>
           <div id="root" dangerouslySetInnerHTML={{ __html: body }} />
