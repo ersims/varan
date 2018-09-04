@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
-import { register } from './serviceWorker';
+import { unregister } from './serviceWorker';
 
 // Styles
 import './sass/index.scss';
 
 // Init
-window.addEventListener('load', register);
+window.addEventListener('load', unregister);
 
 // Render app and perform necessary housekeeping
 const render = () => {
