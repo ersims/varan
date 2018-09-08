@@ -96,6 +96,7 @@ module.exports = options => {
       new NoEmitOnErrorsPlugin(),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',
+        fields: ['assetsByChunkName', 'assets'],
       }),
     ].filter(Boolean),
   };

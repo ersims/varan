@@ -28,7 +28,12 @@ program
   .command('init')
   .arguments('<name>')
   .option('-a, --advanced', 'Use advanced boilerplate from https://github.com/ersims/varan-boilerplate? Requires git!')
-  .action((name, opts) => init({ name, fromGitRepo: opts.advanced && 'https://github.com/ersims/varan-boilerplate' }).catch(err => console.error(err)));
+  .option('-s, --silent', 'Disable output')
+  .action((name, opts) => init({
+    name,
+    fromGitRepo: opts.advanced && 'https://github.com/ersims/varan-boilerplate',
+    silent: opts && opts.silent,
+  }).catch(err => console.error(err)));
 
 
 /**
@@ -38,10 +43,12 @@ program
   .command('build [files...]')
   .option('--env <environment>', 'Environment to use. Defaults to production')
   .option('-a, --analyze', 'Analyze build')
+  .option('-s, --silent', 'Disable output')
   .action((files, opts) => build({
     configs: (files.length > 0 && files.map(resolve)) || undefined,
     env: opts && opts.env,
     analyze: opts && opts.analyze,
+    silent: opts && opts.silent,
   }).catch(err => console.error(err)));
 
 /**
@@ -50,6 +57,7 @@ program
 program
   .command('watch [files...]')
   .usage('[options] [files...] -- --inspect')
+  .option('-s, --silent', 'Disable output')
   .option('--host <host>', 'Specify host for both client and server to bind on')
   .option('--client-port <port number>', 'Specify client dev server port to listen on', port => parseInt(port, 10))
   .option('--server-port <port number>', 'Specify server port to listen on', port => parseInt(port, 10))
@@ -67,6 +75,7 @@ program
       args: opts && opts.args,
       env: opts && opts.env,
       openBrowser: opts && opts.open,
+      silent: opts && opts.silent,
     }).catch(err => console.error(err));
   });
 

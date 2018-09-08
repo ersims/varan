@@ -14,7 +14,7 @@
     "start": "node dist/server/bin/web.js",
     "test": "jest",
     "prewatch": "npm run clean",
-    "watch": "varan watch --open -- --inspect"
+    "watch": "varan watch -- --inspect"
   },
   "dependencies": {
     "core-js": "^2.5.7",

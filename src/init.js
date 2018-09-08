@@ -3,8 +3,13 @@ const defaults = require('lodash.defaults');
 const validateProjectName = require('validate-npm-package-name');
 const path = require('path');
 const fs = require('fs-extra');
-const spawn = require('react-dev-utils/crossSpawn');
-const { measureFileSizesBeforeBuild, printFileSizesAfterBuild } = require('react-dev-utils/FileSizeReporter');
+const Listr = require('listr');
+const SilentRenderer = require('listr-silent-renderer');
+const execa = require('execa');
+const split = require('split');
+const { merge, throwError } = require('rxjs');
+const { catchError, filter } = require('rxjs/operators');
+const streamToObservable = require('@samverschueren/stream-to-observable');
 const logger = require('./lib/logger');
 const pkg = require('../package.json');
 
@@ -16,6 +21,13 @@ const getOpts = options =>
     silent: false,
     cwd: process.cwd(),
   });
+const exec = (cmd, args) => {
+  const cp = execa(cmd, args);
+  return merge(
+    streamToObservable(cp.stdout.pipe(split()), { await: cp }),
+    streamToObservable(cp.stderr.pipe(split()), { await: cp }),
+  ).pipe(filter(Boolean));
+};
 
 // Exports
 module.exports = async options => {
@@ -24,22 +36,66 @@ module.exports = async options => {
   const appName = opts.name;
   const appPath = path.resolve(opts.cwd, opts.name);
   const templatePath = path.resolve(__dirname, '..', 'template');
-  const printErrors = (...errorMsgs) => {
-    console.error();
-    console.error(`Could not create project with name "${appName}":`);
-    errorMsgs
-      .reduce((acc, cur) => acc.concat(cur), [])
-      .forEach(errorMsg => errorMsg && console.error(`  • ${errorMsg}`));
-    process.exit(1);
-  };
+  const tasks = new Listr(
+    [
+      {
+        title: 'Prerequisite check',
+        task: () => {
+          // Validate project name
+          const projectNameValidation = validateProjectName(appName);
+          if (!projectNameValidation.validForNewPackages)
+            throw new Error((projectNameValidation.errors || []).concat(projectNameValidation.warnings).join('\n'));
 
-  // Validate project name
-  const projectNameValidation = validateProjectName(appName);
-  if (!projectNameValidation.validForNewPackages)
-    printErrors((projectNameValidation.errors || []).concat(projectNameValidation.warnings));
-
-  // Check if directory name is available
-  if (fs.existsSync(appPath)) printErrors(`Something already exists at "${appPath}"`);
+          // Check if directory name is available
+          if (fs.existsSync(appPath)) throw new Error(`Something already exists at "${appPath}"`);
+          return true;
+        },
+      },
+      {
+        title: `Cloning existing boilerplate from ${opts.fromGitRepo}`,
+        enabled: () => opts.fromGitRepo,
+        task: () =>
+          exec('git', ['clone', '--quiet', '--depth=1', '--origin=upstream', opts.fromGitRepo, appPath]).pipe(
+            catchError(err => {
+              throwError(
+                new Error(
+                  `Failed to clone from git repo ${
+                    opts.fromGitRepo
+                  }. Make sure you have git (https://git-scm.com/) installed, the remote repository exists, you have the necessary permissions and internet connectivity.`,
+                ),
+              );
+            }),
+          ),
+      },
+      {
+        title: `Creating project directory`,
+        enabled: () => !opts.fromGitRepo,
+        task: () => fs.copySync(templatePath, appPath),
+      },
+      {
+        title: `Changing working directory`,
+        task: () => process.chdir(appPath),
+      },
+      {
+        title: `Creating project files`,
+        task: () => {
+          const prefix = 'v-keep-';
+          return fs
+            .readdirSync('./')
+            .filter(f => f.startsWith('v-keep-'))
+            .forEach(f => fs.renameSync(f, f.substr(prefix.length)));
+        },
+      },
+      {
+        title: `Installing project dependencies`,
+        task: () => exec('npm', ['install']),
+      },
+    ],
+    {
+      showSubtasks: false,
+      renderer: opts.silent && SilentRenderer,
+    },
+  );
 
   /**
    * Create project
@@ -48,53 +104,30 @@ module.exports = async options => {
   log(`Creating ${pkg.name} project ${appName} at ${appPath}`);
   log();
 
-  // Use advanced boilerplate?
-  if (opts.fromGitRepo) {
-    log(` 🛴 1. Cloning existing boilerplate from ${opts.fromGitRepo}`);
-    const procGit = spawn.sync(
-      'git',
-      ['clone', '--quiet', '--depth=1', '--origin=upstream', opts.fromGitRepo, appPath],
-      {
-        stdio: 'inherit',
-      },
-    );
-    if (procGit.status !== 0)
-      printErrors(
-        `Failed to clone from git repo ${
-          opts.fromGitRepo
-        }. Make sure you have git (https://git-scm.com/) installed, the remote repository exists, you have the necessary permissions and internet connectivity.`,
-      );
-  } else {
-    log(' 🛴 1. Creating project directory');
-    fs.copySync(templatePath, appPath);
-  }
-
-  log(' 🚲 2. Changing working directory');
-  process.chdir(appPath);
-
-  log(' 🚜 3. Creating useful project files');
-  const prefix = 'v-keep-';
-  fs.readdirSync('./')
-    .filter(f => f.startsWith('v-keep-'))
-    .forEach(f => fs.renameSync(f, f.substr(prefix.length)));
-
-  log(' 🚗 4. Installing project dependencies');
-  const procDeps = spawn.sync('npm', ['install', '--silent', '--quiet', '--loglevel=silent'], {
-    stdio: 'inherit',
-  });
-  if (procDeps.status !== 0) printErrors(`Failed to install project dependencies`);
-
-  log(` 🚀 5. Success! Project ${appName} is now created at ${appPath}`);
-  log(`     The following commands can be used inside your newly created project`);
-  log(`       npm run watch`);
-  log(`         Starts the development version of the project. Hot reloading is automatically enabled`);
-  log(`       npm run build`);
-  log(`         Build a production ready version of your project`);
-  log(`       npm run start`);
-  log(`         Run the production build you built using the previous command`);
-  log();
-  log(`     To get started, run the following commands`);
-  log(`       cd ${appPath}`);
-  log(`       npm run watch`);
-  log();
+  return tasks
+    .run()
+    .then(() => {
+      log();
+      log();
+      log(` 🚀 Success! Project ${appName} is now created at ${appPath}`);
+      log(`     The following commands can be used inside your newly created project`);
+      log(`       npm run watch`);
+      log(`         Starts the development version of the project. Hot reloading is automatically enabled`);
+      log(`       npm run build`);
+      log(`         Build a production ready version of your project`);
+      log(`       npm run start`);
+      log(`         Run the production build you built using the previous command`);
+      log();
+      log(`     To get started, run the following commands`);
+      log(`       cd ${appPath}`);
+      log(`       npm run watch`);
+      log();
+    })
+    .catch(err => {
+      console.error();
+      console.error();
+      console.error(` 💥 Failure! Project ${appName} could not be created at ${appPath}.`);
+      console.error();
+      console.error();
+    });
 };

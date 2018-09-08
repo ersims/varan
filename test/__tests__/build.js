@@ -34,7 +34,7 @@ describe('build', () => {
     expect(console.error).toHaveBeenCalled();
     expect(console.error.mock.calls[0][0][0]).toEqual(
       expect.arrayContaining([
-        expect.stringContaining('(index) ./src/client/index.js'),
+        expect.stringContaining('./src/client/index.js'),
         expect.stringContaining('Module build failed'),
         expect.stringMatching(/^SyntaxError(.+)index.js: Unexpected token \(7:26\)$/),
       ]),
@@ -64,8 +64,8 @@ describe('build', () => {
 
     // Check logging
     expect(console.warn).toHaveBeenCalled();
-    expect(console.warn.mock.calls[0][0]).toBe('⚠ Build has warnings:');
-    expect(console.warn.mock.calls[1][0]).toEqual(expect.stringContaining('(index) ./src/client/index.js'));
+    expect(console.warn.mock.calls[0][0]).toMatch(/Build has warnings/);
+    expect(console.warn.mock.calls[1][0]).toEqual(expect.stringContaining('./src/client/index.js'));
 
     // Done
     done();

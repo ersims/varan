@@ -2,6 +2,8 @@
 const webpack = require('webpack');
 const path = require('path');
 const spawn = require('react-dev-utils/crossSpawn');
+const figures = require('figures');
+const chalk = require('chalk');
 const getCompilationStats = require('./getCompilationStats');
 const pkg = require('../../package.json');
 
@@ -53,7 +55,7 @@ module.exports = log => async (config, opts, waitForResolved) =>
     compiler.hooks.done.tap(pkg.name, async stats => {
       const buildStats = getCompilationStats(stats);
       if (!runner) {
-        log(`✅  Server compiled in ${buildStats.timings.total.duration}ms`);
+        log(`${chalk.green(figures.tick)} Server compiled in ${buildStats.timings.total.duration}ms`);
         // Pass in arguments to child
         const debugArgs = [
           ...new Set(
@@ -81,8 +83,8 @@ module.exports = log => async (config, opts, waitForResolved) =>
         // Let server be restarted if it closed prematurely
         runner.on('close', code => {
           runner = null;
-          if (code === 1) log('❌  Server stopped - waiting for changes to try again');
+          if (code === 1) log(`${chalk.redBright(figures.cross)} Server stopped - waiting for changes to try again`);
         });
-      } else log(`🔁  Server recompiled in ${buildStats.timings.total.duration}ms`);
+      } else log(`${chalk.yellow(figures.circleFilled)} Server recompiled in ${buildStats.timings.total.duration}ms`);
     });
   });

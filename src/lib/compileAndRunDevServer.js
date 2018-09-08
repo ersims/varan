@@ -4,6 +4,8 @@ const { createCompiler, prepareUrls } = require('react-dev-utils/WebpackDevServe
 const getCompilationStats = require('./getCompilationStats');
 const omit = require('lodash.omit');
 const serve = require('webpack-serve');
+const figures = require('figures');
+const chalk = require('chalk');
 const pkg = require('../../package.json');
 
 // Exports
@@ -44,17 +46,17 @@ module.exports = log => async (config, host, port, opts, waitForPromise) => {
       compiler.hooks.done.tap(pkg.name, stats => {
         const buildStats = getCompilationStats(stats);
         if (initialBuild) {
-          log(`✅  Client compiled in ${buildStats.timings.total.duration}ms`);
+          log(`${chalk.green(figures.tick)} Client compiled in ${buildStats.timings.total.duration}ms`);
           initialBuild = false;
           return devServer.then(res => resolve(res.app)).catch(reject);
         }
-        log(`🔁  Client recompiled in ${buildStats.timings.total.duration}ms`);
+        log(`${chalk.yellow(figures.circleFilled)} Client recompiled in ${buildStats.timings.total.duration}ms`);
       });
     });
   } else {
     compiler.hooks.done.tap(pkg.name, stats => {
       const buildStats = getCompilationStats(stats);
-      log(`✅  Client compiled in ${buildStats.timings.total.duration}ms`);
+      log(`${chalk.green(figures.tick)} Client compiled in ${buildStats.timings.total.duration}ms`);
     });
     return new Promise((resolve, reject) =>
       compiler.run((err, stats) => {
