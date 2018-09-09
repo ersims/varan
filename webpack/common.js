@@ -5,17 +5,16 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const cssNano = require('cssnano');
-const defaults = require('lodash.defaults');
+const { defaults } = require('lodash');
 const path = require('path');
-const getPaths = require('../src/lib/getPaths');
 
 // Init
 const getOpts = options => {
-  const paths = getPaths(options.cwd);
+  const resolve = relativePath => path.resolve(options.appDir || process.cwd(), relativePath);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
     target: 'web',
-    appDir: paths.appDir,
+    appDir: resolve('./'),
     cssModulesIdent: '[local]',
   });
 };

@@ -9,7 +9,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpackServeWaitpage = require('webpack-serve-waitpage');
-const defaults = require('lodash.defaults');
+const { defaults } = require('lodash');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
@@ -18,12 +18,11 @@ const history = require('connect-history-api-fallback');
 const proxy = require('http-proxy-middleware');
 const path = require('path');
 const common = require('./common.js');
-const getPaths = require('../src/lib/getPaths');
 const clientBabelPreset = require('../babel/client');
 
 // Init
 const getOpts = options => {
-  const paths = getPaths(options.cwd);
+  const resolve = relativePath => path.resolve(options.cwd || process.cwd(), relativePath);
   return defaults({}, options, {
     env: process.env.NODE_ENV,
     analyze: false,
@@ -38,13 +37,9 @@ const getOpts = options => {
     //   icons: [],
     // },
     pwaManifest: false,
-    appDir: paths.appDir,
-    appSourceDir: paths.appSourceDir,
-    appTargetDir: paths.appTargetDir,
-    targetDir: paths.client.targetDir,
-    sourceDir: paths.client.sourceDir,
-    entry: paths.client.entry,
-    favicon: paths.client.favicon,
+    targetDir: resolve('dist/client'),
+    sourceDir: resolve('src/client'),
+    entry: 'index',
     devServerPort: process.env.DEV_PORT || 3000,
     serverPort: process.env.PORT || 3001,
   });

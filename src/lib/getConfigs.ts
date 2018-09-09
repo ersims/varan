@@ -1,5 +1,17 @@
+// Dependencies
+import webpack from 'webpack';
+
 // Exports
-module.exports = (configFilesOrObjectsOrFns, opts) => {
+export default function getConfigs<T>(
+  configFilesOrObjectsOrFns:
+    | string
+    | string[]
+    | webpack.Configuration
+    | webpack.Configuration[]
+    | ((opts: T) => webpack.Configuration)
+    | ((opts: T) => webpack.Configuration)[],
+  opts: T,
+) {
   const configs = (Array.isArray(configFilesOrObjectsOrFns)
     ? configFilesOrObjectsOrFns
     : [configFilesOrObjectsOrFns]
@@ -13,4 +25,4 @@ module.exports = (configFilesOrObjectsOrFns, opts) => {
     const rawConfig = typeof config === 'string' ? require(config) : config;
     return typeof rawConfig === 'function' ? rawConfig(opts) : rawConfig;
   });
-};
+}
