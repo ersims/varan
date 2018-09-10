@@ -1,17 +1,12 @@
 // Dependencies
 import webpack from 'webpack';
 
+// Types
+export type ValidConfiguration<T = any> = string | webpack.Configuration | ((opts: T) => webpack.Configuration);
+export type ValidConfigurations<T = any> = ValidConfiguration<T> | Array<ValidConfiguration<T>>;
+
 // Exports
-export default function getConfigs<T>(
-  configFilesOrObjectsOrFns:
-    | string
-    | string[]
-    | webpack.Configuration
-    | webpack.Configuration[]
-    | ((opts: T) => webpack.Configuration)
-    | ((opts: T) => webpack.Configuration)[],
-  opts: T,
-) {
+export default function getConfigs<T>(configFilesOrObjectsOrFns: ValidConfigurations<T>, opts?: T) {
   const configs = (Array.isArray(configFilesOrObjectsOrFns)
     ? configFilesOrObjectsOrFns
     : [configFilesOrObjectsOrFns]

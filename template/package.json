@@ -31,7 +31,6 @@
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.4.2",
     "del-cli": "^1.1.0",
     "jest": "^23.5.0",
     "normalize.css": "^8.0.0",
@@ -47,15 +46,15 @@
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 10,
-        "functions": 10,
-        "lines": 10,
-        "statements": 10
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
       }
     },
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock",
+      "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock"
     },
     "testEnvironment": "node",
     "testMatch": [

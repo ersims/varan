@@ -10,11 +10,12 @@ const path = require('path');
 
 // Init
 const getOpts = options => {
-  const resolve = relativePath => path.resolve(options.appDir || process.cwd(), relativePath);
+  const appDir = options.appDir || process.cwd();
+  const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
+    appDir: resolve('./'),
     env: process.env.NODE_ENV,
     target: 'web',
-    appDir: resolve('./'),
     cssModulesIdent: '[local]',
   });
 };

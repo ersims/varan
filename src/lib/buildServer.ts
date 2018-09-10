@@ -35,9 +35,10 @@ export default async function buildServer(config: webpack.Configuration, options
       out.errors = info.errors;
       out.warnings = info.warnings;
       if (stats.hasErrors() || info.errors.length > 0) {
-        const error = new BuildError('Build failed with errors');
-        error.out = out;
-        return reject(error);
+        const buildError = new BuildError('Build failed with errors');
+        buildError.errors = out.errors;
+        buildError.warnings = out.warnings;
+        return reject(buildError);
       }
 
       resolve(out);

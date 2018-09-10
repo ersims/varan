@@ -5,6 +5,7 @@
     "traceResolution": false,
     "allowJs": false,
     "checkJs": false,
+    "jsx": "react",
     "noEmit": false,
     "target": "es2017",
     "module": "commonjs",

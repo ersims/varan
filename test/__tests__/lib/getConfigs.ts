@@ -1,25 +1,29 @@
 // Dependencies
-const path = require('path');
-const getConfigs = require('../../../src/lib/getConfigs');
+import path from 'path';
+import getConfigs from '../../../src/lib/getConfigs';
+import mini from '../../fixtures/webpack/mini';
+import miniFn from '../../fixtures/webpack/miniFn';
 
 // Init
-const resolve = p => path.resolve(__dirname, p);
+const resolve = (p: string) => path.resolve(__dirname, p);
 
 // Tests
 describe('lib', () => {
   describe('getConfigs', () => {
     it('should give meaningful error message if no configs were provided', () => {
+      // @ts-ignore
       expect(() => getConfigs()).toThrow('Must specify at least one config');
       expect(() => getConfigs([])).toThrow('Must specify at least one config');
+      // @ts-ignore
       expect(() => getConfigs([null, undefined, ''])).toThrow('Must specify at least one config');
     });
     it('should support a single config file returning an object', () => {
       const configPath = resolve('../../fixtures/webpack/mini');
-      expect(getConfigs(configPath)).toEqual([require(configPath)]);
+      expect(getConfigs(configPath)).toEqual([mini]);
     });
     it('should support a single config file returning a function', () => {
       const configPath = resolve('../../fixtures/webpack/miniFn');
-      expect(getConfigs(configPath)).toEqual([require(configPath)()]);
+      expect(getConfigs(configPath)).toEqual([miniFn()]);
     });
     it('should support a single config object', () => {
       expect(getConfigs({ mode: 'production' })).toEqual([{ mode: 'production' }]);
@@ -29,15 +33,23 @@ describe('lib', () => {
     });
     it('should support multiple mixed configs', () => {
       const configPath = resolve('../../fixtures/webpack/mini');
-      const configs = [configPath, () => ({ mode: 'development' }), { mode: 'production' }];
-      expect(getConfigs(configs)).toEqual([require(configPath), { mode: 'development' }, { mode: 'production' }]);
+      const configs = [
+        configPath,
+        () => ({ mode: 'development' as 'development' }),
+        { mode: 'production' as 'production' },
+      ];
+      expect(getConfigs(configs)).toEqual([mini, { mode: 'development' }, { mode: 'production' }]);
     });
     it('should pass options to the config function', () => {
       const options = { optionKey: 'optionValue' };
       const configPath = resolve('../../fixtures/webpack/miniFn');
-      const configs = [configPath, opts => ({ mode: 'development', ...opts }), { mode: 'production' }];
+      const configs = [
+        configPath,
+        (opts: any) => ({ mode: 'development' as 'development', ...opts }),
+        { mode: 'production' as 'production' },
+      ];
       expect(getConfigs(configs, options)).toEqual([
-        require(configPath)(options),
+        miniFn(options),
         { mode: 'development', optionKey: 'optionValue' },
         { mode: 'production' },
       ]);

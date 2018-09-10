@@ -92,6 +92,7 @@ export default async function buildAndRunDevServer(
       const out = {
         compiler,
         stats,
+        app: null,
         errors: [],
         warnings: [],
       };
@@ -100,9 +101,10 @@ export default async function buildAndRunDevServer(
       out.errors = info.errors;
       out.warnings = info.warnings;
       if (stats.hasErrors() || info.errors.length > 0) {
-        const error = new BuildError('Build failed with errors');
-        error.out = out;
-        return reject(error);
+        const buildError = new BuildError('Build failed with errors');
+        buildError.errors = out.errors;
+        buildError.warnings = out.warnings;
+        return reject(buildError);
       }
 
       resolve(out);

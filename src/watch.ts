@@ -3,7 +3,7 @@ import { defaults, get } from 'lodash';
 import path from 'path';
 import detectPort from 'detect-port-alt';
 import createLogger from './lib/createLogger';
-import getConfigs from './lib/getConfigs';
+import getConfigs, { ValidConfiguration } from './lib/getConfigs';
 import Listr, { ListrOptions } from 'listr';
 import ora from 'ora';
 import chalk from 'chalk';
@@ -26,6 +26,7 @@ interface TaskListContext {
   client?: {
     compiler: webpack.Compiler;
     runner: WebpackServe.Result;
+    app: { stop: () => Promise<void> } | null;
     warnings: string[];
     errors: string[];
     stats: webpack.Stats;
@@ -41,13 +42,14 @@ interface TaskListContext {
   totals: CompilerStats;
 }
 export interface Options {
-  configs: string[];
+  configs: ValidConfiguration[];
   devServerProtocol: 'http' | 'https';
   devServerHost: string;
   devServerPort: number;
   silent: boolean;
   env: 'development' | 'production';
   args: string[];
+  appDir: string;
   openBrowser: boolean;
   waitForServer: boolean;
   inputFileSystem?: webpack.Compiler['inputFileSystem'];
@@ -56,7 +58,7 @@ export interface Options {
 }
 
 // Init
-const getOpts = (options: Partial<Options> & Pick<Options, 'configs'>): Options =>
+const getOpts = (options: Partial<Options>): Options =>
   defaults({}, options, {
     configs: [path.resolve(__dirname, '../webpack/server'), path.resolve(__dirname, '../webpack/client')],
     devServerProtocol: 'http',
@@ -66,13 +68,14 @@ const getOpts = (options: Partial<Options> & Pick<Options, 'configs'>): Options 
     serverPort: process.env.PORT ? parseInt(process.env.PORT, 10) : undefined,
     silent: false,
     env: 'development',
+    appDir: process.cwd(),
     args: process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [],
     openBrowser: false,
     waitForServer: true,
   });
 
 // Exports
-export default async function watch(options: Partial<Options> & Pick<Options, 'configs'>) {
+export default async function watch(options: Partial<Options>) {
   const opts = getOpts(options);
   const log = createLogger(opts);
 
@@ -83,6 +86,12 @@ export default async function watch(options: Partial<Options> & Pick<Options, 'c
   const configs = getConfigs(opts.configs, opts);
   const clientConfig = configs.find(c => !c.target || c.target === 'web');
   const serverConfig = configs.find(c => c.target === 'node');
+
+  // Check if config is valid
+  if (configs.length >= 2 && (!clientConfig || !serverConfig)) {
+    throw new Error('One or more invalid config files provided. Maximum of one config file per target is supported.');
+  }
+
   const tasks = new Listr(
     [
       {
@@ -283,9 +292,7 @@ export default async function watch(options: Partial<Options> & Pick<Options, 'c
 
   return {
     async close() {
-      return Promise.all([this.server && this.server.close(), this.client && this.client.close()].filter(
-        Boolean,
-      ) as Promise<any>[]);
+      return Promise.all([this.server && this.server.close(), this.client && this.client.close()] as Promise<any>[]);
     },
     server: result.server
       ? {
@@ -303,7 +310,7 @@ export default async function watch(options: Partial<Options> & Pick<Options, 'c
       ? {
           runner: result.client.runner,
           async close() {
-            return Promise.all([result.client!.runner.app.stop()]);
+            return Promise.all([result.client!.app && result.client!.app!.stop()].filter(Boolean) as Promise<any>[]);
           },
         }
       : null,

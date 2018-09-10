@@ -1,7 +1,7 @@
 // Dependencies
 import { defaults, omit } from 'lodash';
 import path from 'path';
-import webpack = require('webpack');
+import webpack from 'webpack';
 import chalk from 'chalk';
 import Listr, { ListrOptions } from 'listr';
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
@@ -11,8 +11,9 @@ import fileSize from 'filesize';
 import getBuildStatsFromManifest, { BuildStats } from './lib/getBuildStatsFromManifest';
 import getCompilerStats, { CompilerStats } from './lib/getCompilerStats';
 import emojis from './lib/emojis';
-import getConfigs from './lib/getConfigs';
+import getConfigs, { ValidConfiguration } from './lib/getConfigs';
 import createLogger from './lib/createLogger';
+import BuildError from './lib/BuildError';
 
 // tslint:disable-next-line no-var-requires
 const pkg = require('../package.json');
@@ -35,30 +36,32 @@ interface TaskListContext {
   totals: CompilerStats;
 }
 export interface Options {
-  configs: string[];
+  configs: ValidConfiguration[];
   warnAssetSize: number;
   warnChunkSize: number;
   silent: boolean;
   env: 'development' | 'production';
+  appDir: string;
   inputFileSystem?: webpack.Compiler['inputFileSystem'];
   outputFileSystem?: webpack.Compiler['outputFileSystem'];
   [webpackKey: string]: any;
 }
 
 // Init
-const getOpts = (options: Partial<Options> & Pick<Options, 'configs'>): Options =>
+const getOpts = (options: Partial<Options>): Options =>
   defaults({}, options, {
     configs: [path.resolve(__dirname, '../webpack/server'), path.resolve(__dirname, '../webpack/client')],
     warnAssetSize: 512 * 1024,
     warnChunkSize: 1024 * 1024,
     silent: false,
     env: 'production',
+    appDir: process.cwd(),
     inputFileSystem: undefined,
     outputFileSystem: undefined,
   });
 
 // Exports
-export default async function build(options: Partial<Options> & Pick<Options, 'configs'>) {
+export default async function build(options: Partial<Options>) {
   const opts = getOpts(options);
   const log = createLogger(opts);
 
@@ -78,7 +81,9 @@ export default async function build(options: Partial<Options> & Pick<Options, 'c
             [
               ...multiCompiler.compilers.map((compiler, i) => ({
                 title: `Build ${path.resolve(
-                  typeof opts.configs[i] === 'string' ? opts.configs[i] : compiler.options.name || i.toString(),
+                  typeof opts.configs[i] === 'string'
+                    ? opts.configs[i].toString()
+                    : compiler.options.name || i.toString(),
                 )}`,
                 task: () =>
                   new Listr([
@@ -122,7 +127,10 @@ export default async function build(options: Partial<Options> & Pick<Options, 'c
                             ctx.stats[i].errors = info.errors;
                             ctx.stats[i].warnings = info.warnings;
                             if (stats.hasErrors() || info.errors.length > 0) {
-                              return reject(new Error('Build failed with errors'));
+                              const buildError = new BuildError('Build failed with errors');
+                              buildError.errors = ctx.stats[i].errors;
+                              buildError.warnings = ctx.stats[i].warnings;
+                              return reject(buildError);
                             }
 
                             // Send data
@@ -131,7 +139,9 @@ export default async function build(options: Partial<Options> & Pick<Options, 'c
                               config,
                               stats,
                               configFile: path.resolve(
-                                typeof opts.configs[i] === 'string' ? opts.configs[i] : config.name || i.toString(),
+                                typeof opts.configs[i] === 'string'
+                                  ? opts.configs[i].toString()
+                                  : config.name || i.toString(),
                               ),
                               outputPath:
                                 (config.output && config.output.path && path.dirname(config.output.path)) || undefined,
@@ -143,7 +153,7 @@ export default async function build(options: Partial<Options> & Pick<Options, 'c
                     },
                     {
                       title: 'Measure current build',
-                      skip: (ctx: TaskListContext) => !ctx.stats[i].previousBuild,
+                      skip: () => opts.silent || compiler.options.target === 'node',
                       task: async (ctx: TaskListContext) => {
                         const statsPlugin =
                           compiler.options.plugins &&
@@ -344,15 +354,18 @@ export default async function build(options: Partial<Options> & Pick<Options, 'c
           }, []);
         const previousBuildSum =
           stat.previousBuild &&
-          Object.values(stat.previousBuild.assets).reduce<{ sum: { name: string; [type: string]: number | string } }>(
-            (acc, cur) => {
-              ['size', 'gzip', 'brotli'].forEach(k => {
-                if (cur[k]) acc.sum[k] = acc.sum[k] ? ((acc.sum[k] as number) += cur[k] as number) : (cur[k] as number);
-              });
-              return acc;
-            },
-            { sum: { name: 'sum' } },
-          );
+          Object.values(stat.previousBuild.assets)
+            .filter(asset => !!((stat.currentBuild && stat.currentBuild.assets[asset.name]) || false))
+            .reduce<{ sum: { name: string; [type: string]: number | string } }>(
+              (acc, cur) => {
+                ['size', 'gzip', 'brotli'].forEach(k => {
+                  if (cur[k])
+                    acc.sum[k] = acc.sum[k] ? ((acc.sum[k] as number) += cur[k] as number) : (cur[k] as number);
+                });
+                return acc;
+              },
+              { sum: { name: 'sum' } },
+            );
         const currentBuildSum = Object.values(stat.currentBuild.assets).reduce<{
           name: string;
           [type: string]: number | string;

@@ -16,14 +16,20 @@ const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const convert = require('koa-connect');
 const history = require('connect-history-api-fallback');
 const proxy = require('http-proxy-middleware');
+const proxyLogger = require('http-proxy-middleware/lib/logger').getInstance();
 const path = require('path');
 const common = require('./common.js');
 const clientBabelPreset = require('../babel/client');
 
+// Reduce proxy loglevel to reduce noise
+proxyLogger.setLevel('warn');
+
 // Init
 const getOpts = options => {
-  const resolve = relativePath => path.resolve(options.cwd || process.cwd(), relativePath);
+  const appDir = options.appDir || process.cwd();
+  const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
+    appDir: resolve('./'),
     env: process.env.NODE_ENV,
     analyze: false,
     target: 'web',
@@ -152,7 +158,7 @@ module.exports = options => {
       opts.analyze && new BundleAnalyzerPlugin(),
       !isDev &&
         new CompressionPlugin({
-          asset: '[path].gz[query]',
+          filename: '[path].gz[query]',
           algorithm: 'gzip',
           test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
           threshold: 3 * 1024,

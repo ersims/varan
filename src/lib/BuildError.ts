@@ -1,4 +1,5 @@
 // Exports
 export default class BuildError extends Error {
-  public out: object = {};
+  public errors: string[] = [];
+  public warnings: string[] = [];
 }

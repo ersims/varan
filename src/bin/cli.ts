@@ -10,13 +10,12 @@ import { build, init, watch } from '../index';
 import emojis from '../lib/emojis';
 import chalk from 'chalk';
 import createLogger from '../lib/createLogger';
-import Signals = NodeJS.Signals;
 
 // tslint:disable-next-line no-var-requires
 const pkg = require('../../package.json');
 
 // Types
-const enum TemplateTypes {
+enum TemplateTypes {
   ADVANCED = 'ADVANCED',
   BASIC = 'BASIC',
 }
@@ -140,7 +139,7 @@ program
         openBrowser: opts && opts.open,
         silent: opts && opts.silent,
       });
-      (['SIGTERM', 'SIGINT'] as Signals[]).forEach((signal: Signals) =>
+      ['SIGTERM', 'SIGINT'].forEach((signal: any) =>
         process.on(signal, async () => {
           try {
             let isDone = false;
