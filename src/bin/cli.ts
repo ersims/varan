@@ -79,7 +79,8 @@ program
         )}`,
       );
       if (err.details) log.error(`  ${chalk.cyan('Details:')} ${err.details}`);
-      if (err.stack) log.error(`  ${err.stack}`);
+      if (err.errors) log.error(`  ${err.errors}`);
+      else if (err.stack) log.error(`  ${err.stack}`);
       log.error();
     }
   });
@@ -103,7 +104,8 @@ program
       log.error();
       log.error(`  ${chalk.red(emojis.failure)} Failure! Failed to build project ${chalk.red(emojis.failure)}`);
       if (err.details) log.error(`  ${chalk.cyan('Details:')} ${err.details}`);
-      if (err.stack) log.error(`  ${err.stack}`);
+      if (err.errors) log.error(`  ${err.errors}`);
+      else if (err.stack) log.error(`  ${err.stack}`);
       log.error();
     }
   });
@@ -160,7 +162,8 @@ program
       log.error();
       log.error(`  ${chalk.red(emojis.failure)} Failure! Failed to watch project ${chalk.red(emojis.failure)}`);
       if (err.details) log.error(`  ${chalk.cyan('Details:')} ${err.details}`);
-      if (err.stack) log.error(`  ${err.stack}`);
+      if (err.errors) log.error(`  ${err.errors}`);
+      else if (err.stack) log.error(`  ${err.stack}`);
       log.error();
     }
   });
