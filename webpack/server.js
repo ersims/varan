@@ -2,27 +2,25 @@
 const { DefinePlugin, EnvironmentPlugin, HotModuleReplacementPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
-const defaults = require('lodash.defaults');
+const { defaults } = require('lodash');
 const path = require('path');
 const common = require('./common.js');
-const getPaths = require('../src/lib/getPaths');
 const serverBabelPreset = require('../babel/server');
 
 // Init
-const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;
+const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?500`;
 const getOpts = options => {
-  const paths = getPaths(options.cwd);
+  const appDir = options.appDir || process.cwd();
+  const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
+    appDir: resolve('./'),
     env: process.env.NODE_ENV,
     target: 'node',
     name: undefined,
-    appDir: paths.appDir,
-    appSourceDir: paths.appSourceDir,
-    appTargetDir: paths.appTargetDir,
-    targetDir: paths.server.targetDir,
-    sourceDir: paths.server.sourceDir,
-    entry: paths.server.entry,
-    clientTargetDir: paths.client.targetDir,
+    targetDir: resolve('dist/server'),
+    sourceDir: resolve('src/server'),
+    entry: 'bin/web',
+    clientTargetDir: resolve('dist/client'),
   });
 };
 

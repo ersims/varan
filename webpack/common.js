@@ -5,17 +5,17 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const cssNano = require('cssnano');
-const defaults = require('lodash.defaults');
+const { defaults } = require('lodash');
 const path = require('path');
-const getPaths = require('../src/lib/getPaths');
 
 // Init
 const getOpts = options => {
-  const paths = getPaths(options.cwd);
+  const appDir = options.appDir || process.cwd();
+  const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
+    appDir: resolve('./'),
     env: process.env.NODE_ENV,
     target: 'web',
-    appDir: paths.appDir,
     cssModulesIdent: '[local]',
   });
 };
@@ -33,7 +33,6 @@ module.exports = options => {
     resolve: {
       extensions: ['.js', '.jsx', '.mjs', '.json', '.ts', '.tsx'],
       alias: {
-        '@babel/runtime': path.resolve(require.resolve('@babel/runtime/package.json'), '..'),
         'webpack-hot-client/client': require.resolve('webpack-hot-client/client'),
       },
     },
@@ -96,6 +95,7 @@ module.exports = options => {
       new NoEmitOnErrorsPlugin(),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',
+        fields: ['assetsByChunkName', 'assets'],
       }),
     ].filter(Boolean),
   };

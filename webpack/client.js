@@ -9,22 +9,27 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPl
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpackServeWaitpage = require('webpack-serve-waitpage');
-const defaults = require('lodash.defaults');
+const { defaults } = require('lodash');
 const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const convert = require('koa-connect');
 const history = require('connect-history-api-fallback');
 const proxy = require('http-proxy-middleware');
+const proxyLogger = require('http-proxy-middleware/lib/logger').getInstance();
 const path = require('path');
 const common = require('./common.js');
-const getPaths = require('../src/lib/getPaths');
 const clientBabelPreset = require('../babel/client');
+
+// Reduce proxy loglevel to reduce noise
+proxyLogger.setLevel('warn');
 
 // Init
 const getOpts = options => {
-  const paths = getPaths(options.cwd);
+  const appDir = options.appDir || process.cwd();
+  const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
+    appDir: resolve('./'),
     env: process.env.NODE_ENV,
     analyze: false,
     target: 'web',
@@ -38,13 +43,9 @@ const getOpts = options => {
     //   icons: [],
     // },
     pwaManifest: false,
-    appDir: paths.appDir,
-    appSourceDir: paths.appSourceDir,
-    appTargetDir: paths.appTargetDir,
-    targetDir: paths.client.targetDir,
-    sourceDir: paths.client.sourceDir,
-    entry: paths.client.entry,
-    favicon: paths.client.favicon,
+    targetDir: resolve('dist/client'),
+    sourceDir: resolve('src/client'),
+    entry: 'index',
     devServerPort: process.env.DEV_PORT || 3000,
     serverPort: process.env.PORT || 3001,
   });
@@ -157,7 +158,7 @@ module.exports = options => {
       opts.analyze && new BundleAnalyzerPlugin(),
       !isDev &&
         new CompressionPlugin({
-          asset: '[path].gz[query]',
+          filename: '[path].gz[query]',
           algorithm: 'gzip',
           test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
           threshold: 3 * 1024,

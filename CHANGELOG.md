@@ -1,3 +1,24 @@
+<a name="0.8.0-0"></a>
+# [0.8.0-0](https://github.com/ersims/varan/compare/v0.7.1...v0.8.0-0) (2018-09-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency http-proxy-middleware to ^0.19.0 ([54ee10e](https://github.com/ersims/varan/commit/54ee10e))
+* **deps:** update dependency wait-on to v3 ([36909af](https://github.com/ersims/varan/commit/36909af))
+* misc fixes ([3f94101](https://github.com/ersims/varan/commit/3f94101))
+* unregister any service workers by default in the simple template ([e73cd12](https://github.com/ersims/varan/commit/e73cd12))
+* version bump template package.json ([9aefcb7](https://github.com/ersims/varan/commit/9aefcb7))
+
+
+### Features
+
+* add detailed bundle statistics on build ([5a0309c](https://github.com/ersims/varan/commit/5a0309c))
+* add support for preloading ([bb72e48](https://github.com/ersims/varan/commit/bb72e48))
+* rewrite to typescript ([65a65cd](https://github.com/ersims/varan/commit/65a65cd))
+
+
+
 <a name="0.7.1"></a>
 ## [0.7.1](https://github.com/ersims/varan/compare/v0.7.0...v0.7.1) (2018-08-28)
 

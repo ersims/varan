@@ -3,7 +3,7 @@
 // Dependencies
 const fs = require('fs');
 const path = require('path');
-const spawn = require('react-dev-utils/crossSpawn');
+const execa = require('execa');
 const pkg = require('../package.json');
 
 // Init
@@ -19,13 +19,7 @@ try {
   fs.writeFileSync(pkgFile, JSON.stringify(templatePkg, null, 2), 'UTF-8');
 
   // Add changed file to git
-  const procGit = spawn.sync('git', ['add', pkgFile], {
-    stdio: 'inherit',
-  });
-  if (procGit.status !== 0) {
-    console.error(`Failed to git add template/package.json`);
-    process.exit(1);
-  }
+  execa.sync('git', ['add', pkgFile]);
 } catch (err) {
   console.error(`Failed to update template dependency version`);
   process.exit(1);

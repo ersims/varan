@@ -2,6 +2,10 @@
   "name": "varan-example-basic",
   "private": true,
   "license": "MIT",
+  "engines": {
+    "node": ">= 8.11.3",
+    "npm": ">= 5.6.0"
+  },
   "browserslist": [
     ">0.25%",
     "not ie <11"
@@ -14,9 +18,10 @@
     "start": "node dist/server/bin/web.js",
     "test": "jest",
     "prewatch": "npm run clean",
-    "watch": "varan watch --open -- --inspect"
+    "watch": "varan watch -- --inspect"
   },
   "dependencies": {
+    "@babel/runtime": "^7.0.0",
     "core-js": "^2.5.7",
     "express": "^4.16.3",
     "prop-types": "^15.6.2",
@@ -25,17 +30,16 @@
     "react-helmet": "^5.2.0",
     "react-hot-loader": "^4.3.4",
     "serialize-javascript": "^1.4.0",
-    "source-map-support": "^0.5.6",
-    "varan": "^0.7.1"
+    "source-map-support": "^0.5.6"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0",
     "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "^23.4.2",
     "del-cli": "^1.1.0",
     "jest": "^23.5.0",
     "normalize.css": "^8.0.0",
-    "react-test-renderer": "^16.4.2"
+    "react-test-renderer": "^16.4.2",
+    "varan": "^0.8.0-0"
   },
   "jest": {
     "bail": true,
@@ -47,22 +51,22 @@
     "coverageDirectory": ".coverage",
     "coverageThreshold": {
       "global": {
-        "branches": 10,
-        "functions": 10,
-        "lines": 10,
-        "statements": 10
+        "branches": 0,
+        "functions": 0,
+        "lines": 0,
+        "statements": 0
       }
     },
     "moduleNameMapper": {
-      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock.js",
-      "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock.js"
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico)$": "<rootDir>/test/__mocks__/fileMock",
+      "\\.(css|sass|scss|less)$": "<rootDir>/test/__mocks__/styleMock"
     },
     "testEnvironment": "node",
     "testMatch": [
       "<rootDir>/test/__tests__/**/*.{ts,js}?(x)"
     ],
     "transform": {
-      "^.+\\.(jsx?|tsx?)$": "<rootDir>/test/fixtures/jestPreprocessor.js"
+      "^.+\\.(js|ts)x?$": "<rootDir>/test/fixtures/jestPreprocessor.js"
     },
     "silent": true,
     "verbose": true
