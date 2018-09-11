@@ -21,14 +21,14 @@ export interface Options {
   name: string;
   fromGitRepo?: string;
   silent: boolean;
-  cwd: string;
+  appDir: string;
 }
 
 // Init
 const getOpts = (options: Partial<Options> & Pick<Options, 'name'>): Options =>
   defaults({}, options, {
     silent: false,
-    cwd: process.cwd(),
+    appDir: process.cwd(),
   });
 const exec = (cmd: string, args: string[]) => {
   const cp = execa(cmd, args);
@@ -43,7 +43,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
   const opts = getOpts(options);
   const log = createLogger(opts);
   const appName = opts.name;
-  const appDir = path.resolve(opts.cwd, opts.name);
+  const newAppDir = path.resolve(opts.appDir, opts.name);
   const templatePath = path.resolve(__dirname, '..', 'template');
   const tasks = new Listr(
     [
@@ -57,7 +57,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
           }
 
           // Check if directory is available
-          if (fs.existsSync(appDir)) throw new Error(`Something already exists at ${chalk.cyan(appName)}`);
+          if (fs.existsSync(newAppDir)) throw new Error(`Something already exists at ${chalk.cyan(appName)}`);
           return `${chalk.green(emojis.success)} All checks passed`;
         },
       },
@@ -65,7 +65,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
         title: `Cloning existing boilerplate from ${opts.fromGitRepo}`,
         enabled: () => !!opts.fromGitRepo,
         task: () =>
-          exec('git', ['clone', '--quiet', '--depth=1', '--origin=upstream', opts.fromGitRepo!, appDir]).pipe(
+          exec('git', ['clone', '--quiet', '--depth=1', '--origin=upstream', opts.fromGitRepo!, newAppDir]).pipe(
             catchError(() =>
               throwError(
                 new Error(
@@ -80,11 +80,11 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
       {
         title: `Creating project directory`,
         enabled: () => !opts.fromGitRepo,
-        task: () => fs.copySync(templatePath, appDir),
+        task: () => fs.copySync(templatePath, newAppDir),
       },
       {
         title: `Changing working directory`,
-        task: () => process.chdir(appDir),
+        task: () => process.chdir(newAppDir),
       },
       {
         title: `Creating project files`,
@@ -116,10 +116,10 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
   const ctx = await tasks.run();
   log.info();
   log.info(`  ${chalk.green(emojis.rocket)} Success! ${chalk.green(emojis.rocket)}`);
-  log.info(`  Project ${chalk.cyan(appName)} is now created at ${chalk.cyan(appDir)}`);
+  log.info(`  Project ${chalk.cyan(appName)} is now created at ${chalk.cyan(newAppDir)}`);
   log.info();
   log.info(`  To get started, run the following commands`);
-  log.info(`    ${chalk.cyan(`cd ${path.relative(process.cwd(), appDir)}`)}`);
+  log.info(`    ${chalk.cyan(`cd ${path.relative(opts.appDir, newAppDir)}`)}`);
   log.info(`    ${chalk.cyan('npm run watch')}`);
   log.info();
   log.info(

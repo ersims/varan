@@ -54,7 +54,7 @@ program
             message: 'Which boilerplate do you want to use?',
             choices: [
               {
-                name: 'Basic (recommended)',
+                name: 'Basic (recommended for simple apps)',
                 value: TemplateTypes.BASIC,
               },
               {
