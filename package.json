@@ -140,7 +140,7 @@
     "conventional-recommended-bump": "4.0.1",
     "del-cli": "1.1.0",
     "express": "4.16.3",
-    "husky": "1.0.0-rc.13",
+    "husky": "1.0.0-rc.14",
     "jest": "23.6.0",
     "memory-fs": "0.4.1",
     "normalize.css": "8.0.0",
