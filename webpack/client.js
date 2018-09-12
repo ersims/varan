@@ -10,7 +10,6 @@ const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
 const webpackServeWaitpage = require('webpack-serve-waitpage');
 const { defaults } = require('lodash');
-const errorOverlayMiddleware = require('react-dev-utils/errorOverlayMiddleware');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
 const ignoredFiles = require('react-dev-utils/ignoredFiles');
 const convert = require('koa-connect');
@@ -69,7 +68,7 @@ module.exports = options => {
       logLevel: 'silent',
       hotClient: {
         logTime: true,
-        logLevel: 'silent',
+        logLevel: 'warn',
         reload: true,
         hmr: true,
       },
@@ -87,7 +86,6 @@ module.exports = options => {
         // TODO: Enable this again (after webpack-serve >v2.0.2) and verify HMR is working correctly => writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
       add: (app, middleware, options) => {
-        app.use(convert(errorOverlayMiddleware()));
         app.use(webpackServeWaitpage(options, { title: '🔁 Building...', theme: 'dark' }));
         app.use((ctx, next) => {
           if (options.waitForPromise) return options.waitForPromise.then(next);
@@ -113,7 +111,9 @@ module.exports = options => {
       },
     },
     performance: false,
-    entry: [path.resolve(opts.sourceDir, opts.entry)].filter(Boolean),
+    entry: [isDev && require.resolve('webpack-serve-overlay'), path.resolve(opts.sourceDir, opts.entry)].filter(
+      Boolean,
+    ),
     output: {
       path: outputPath,
       filename: isDev ? 'dev-bundle.js' : 'static/js/[name].[contenthash:8].js',

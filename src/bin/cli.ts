@@ -144,13 +144,16 @@ program
       ['SIGTERM', 'SIGINT'].forEach((signal: any) =>
         process.on(signal, async () => {
           try {
+            log.info(`Received ${signal}. Shutting down gracefully.`);
             let isDone = false;
-            await Promise.race([
-              watcher.close().then(() => {
-                isDone = true;
-              }),
-              new Promise(resolvePromise => setTimeout(() => !isDone && resolvePromise(), 5000)),
-            ]);
+            if (watcher) {
+              await Promise.race([
+                watcher.close().then(() => {
+                  isDone = true;
+                }),
+                new Promise(resolvePromise => setTimeout(() => !isDone && resolvePromise(), 5000)),
+              ]);
+            }
             process.exit(0);
           } catch (err) {
             log.error(`Failed to handle ${signal} gracefully. Exiting with status code 1`);

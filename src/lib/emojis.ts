@@ -12,6 +12,7 @@ const emojis = {
   pointLeft: '👈',
   pointUp: '☝',
   pointDown: '👇',
+  speechBalloon: '💬',
 };
 
 // Exports

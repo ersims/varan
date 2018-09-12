@@ -56,6 +56,18 @@ export interface Options {
   outputFileSystem?: webpack.Compiler['outputFileSystem'];
   [webpackKey: string]: any;
 }
+export interface VaranWatcher {
+  close: () => Promise<any>;
+  server: {
+    close: () => Promise<any>;
+    watcher: webpack.Compiler.Watching;
+    runner: ChildProcess;
+  } | null;
+  client: {
+    close: () => Promise<any>;
+    runner: WebpackServe.Result;
+  } | null;
+}
 
 // Init
 const getOpts = (options: Partial<Options>): Options =>
@@ -75,7 +87,7 @@ const getOpts = (options: Partial<Options>): Options =>
   });
 
 // Exports
-export default async function watch(options: Partial<Options>) {
+export default async function watch(options: Partial<Options>): Promise<VaranWatcher> {
   const opts = getOpts(options);
   const log = createLogger(opts);
 
@@ -209,6 +221,7 @@ export default async function watch(options: Partial<Options>) {
 
   // Fetch statistics
   log.info();
+  log.info();
   log.info(
     `  ${chalk.green(emojis.rocket)} Success! ${
       hasWarnings ? `${chalk.yellow('With warnings. See below for more information!')} ` : ''
@@ -241,17 +254,34 @@ export default async function watch(options: Partial<Options>) {
     });
     result.server.compiler.hooks.done.tap(pkg.name, stats => {
       const compileStats = getCompilerStats(stats);
-      serverCompileSpinner.succeed(
-        chalk.bold(`Server recompiled in ${chalk.cyan(`${compileStats.timings.duration}ms`)}`),
-      );
+      const info = stats.toJson();
+      if (stats.hasErrors()) {
+        serverCompileSpinner.fail(
+          chalk.bold(
+            `Server failed to recompile in ${chalk.cyan(`${compileStats.timings.duration}ms`)} due to ${chalk.red(
+              'errors',
+            )}`,
+          ),
+        );
+        // Log errors
+        if (info.errors.length > 0) setImmediate(() => info.errors.forEach((error: string) => log.error(error)));
+      } else {
+        serverCompileSpinner.succeed(
+          chalk.bold(`Server recompiled in ${chalk.cyan(`${compileStats.timings.duration}ms`)}`),
+        );
+      }
     });
 
     // Pass logging through
     result.server.runner.stdout.on(
       'data',
-      data => !data.toString().startsWith('[HMR]') && console.log(data.toString()), // tslint:disable-line no-console
+      data =>
+        !data.toString().startsWith('[HMR]') &&
+        log.info(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
     );
-    result.server.runner.stderr.on('data', data => console.error(data.toString())); // tslint:disable-line no-console
+    result.server.runner.stderr.on('data', data =>
+      log.error(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
+    );
   }
 
   // Integrate with client
@@ -267,9 +297,19 @@ export default async function watch(options: Partial<Options>) {
     });
     result.client.compiler.hooks.done.tap(pkg.name, stats => {
       const compileStats = getCompilerStats(stats);
-      clientCompileSpinner.succeed(
-        chalk.bold(`Client recompiled in ${chalk.cyan(`${compileStats.timings.duration}ms`)}`),
-      );
+      if (stats.hasErrors()) {
+        clientCompileSpinner.fail(
+          chalk.bold(
+            `Client failed to recompile in ${chalk.cyan(`${compileStats.timings.duration}ms`)} due to ${chalk.red(
+              'errors',
+            )}`,
+          ),
+        );
+      } else {
+        clientCompileSpinner.succeed(
+          chalk.bold(`Client recompiled in ${chalk.cyan(`${compileStats.timings.duration}ms`)}`),
+        );
+      }
     });
 
     const urlToClient = get(
@@ -288,11 +328,14 @@ export default async function watch(options: Partial<Options>) {
       `      ${chalk.cyan(emojis.pointRight)}  ${chalk.bold(chalk.cyan(urlToClient))}  ${chalk.cyan(emojis.pointLeft)}`,
     );
     log.info();
+    log.info();
   }
 
   return {
     async close() {
-      return Promise.all([this.server && this.server.close(), this.client && this.client.close()] as Promise<any>[]);
+      return Promise.all(
+        [this.server && this.server.close(), this.client && this.client.close()].filter(Boolean),
+      ) as Promise<any>;
     },
     server: result.server
       ? {
@@ -301,8 +344,11 @@ export default async function watch(options: Partial<Options>) {
           async close() {
             return Promise.all([
               new Promise(resolve => result.server!.watcher.close(resolve)),
-              result.server!.runner.kill(),
-            ]);
+              new Promise(resolve => {
+                result.server!.runner.once('close', resolve);
+                result.server!.runner.kill();
+              }),
+            ]) as Promise<any>;
           },
         }
       : null,
@@ -310,7 +356,9 @@ export default async function watch(options: Partial<Options>) {
       ? {
           runner: result.client.runner,
           async close() {
-            return Promise.all([result.client!.app && result.client!.app!.stop()].filter(Boolean) as Promise<any>[]);
+            return Promise.all([result.client!.app && result.client!.app!.stop()].filter(Boolean) as Promise<
+              any
+            >[]) as Promise<any>;
           },
         }
       : null,
