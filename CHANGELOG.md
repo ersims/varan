@@ -1,3 +1,18 @@
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/ersims/varan/compare/v0.8.0...v0.8.1) (2018-09-12)
+
+
+### Bug Fixes
+
+* add [@babel](https://github.com/babel)/runtime to dev dependencies ([7207d07](https://github.com/ersims/varan/commit/7207d07))
+
+
+### Features
+
+* add error overlay ([7f635fe](https://github.com/ersims/varan/commit/7f635fe))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/ersims/varan/compare/v0.8.0-0...v0.8.0) (2018-09-11)
 
