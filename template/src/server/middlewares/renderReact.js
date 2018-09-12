@@ -3,7 +3,7 @@ import React from 'react';
 import { renderToStaticMarkup, renderToString } from 'react-dom/server';
 import Helmet from 'react-helmet';
 import App from '../../client/components/App';
-import Html from '../../client/components/Html';
+import Html from '../components/Html';
 
 // Add hot reloading
 if (module.hot) module.hot.accept('../../client/components/App');
