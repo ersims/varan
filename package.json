@@ -152,7 +152,7 @@
     "react": "16.5.1",
     "react-dom": "16.5.1",
     "react-helmet": "5.2.0",
-    "react-hot-loader": "4.3.6",
+    "react-hot-loader": "4.3.7",
     "react-test-renderer": "16.5.1",
     "tslint": "5.11.0",
     "tslint-config-airbnb": "5.11.0",
