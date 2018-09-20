@@ -92,7 +92,7 @@
     "mini-css-extract-plugin": "^0.4.1",
     "ora": "^3.0.0",
     "postcss-loader": "^3.0.0",
-    "postcss-preset-env": "^5.1.0",
+    "postcss-preset-env": "^6.0.0",
     "react-dev-utils": "^5.0.2",
     "resolve-url-loader": "^3.0.0",
     "rxjs": "^6.3.2",
