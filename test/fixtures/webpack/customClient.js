@@ -1,7 +1,7 @@
 // Dependencies
 const { DefinePlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
 const clientBabelConfig = require('../../../babel/client');
@@ -86,10 +86,10 @@ module.exports = {
   ],
   optimization: {
     minimizer: [
-      new UglifyJSPlugin({
+      new TerserPlugin({
         cache: true,
         parallel: true,
-        uglifyOptions: {
+        terserOptions: {
           compress: true,
           output: {
             comments: false,

@@ -2,7 +2,7 @@
 const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
@@ -201,10 +201,10 @@ module.exports = options => {
       ? {}
       : {
           minimizer: [
-            new UglifyJSPlugin({
+            new TerserPlugin({
               cache: true,
               parallel: true,
-              uglifyOptions: {
+              terserOptions: {
                 compress: true,
                 output: {
                   comments: false,
