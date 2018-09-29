@@ -4,7 +4,7 @@ import App from './components/App';
 import { unregister } from './serviceWorker';
 
 // Styles
-import './sass/index.scss';
+import './styles/index.scss';
 
 // Init
 window.addEventListener('load', unregister);
