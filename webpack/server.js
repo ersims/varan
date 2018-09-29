@@ -8,7 +8,7 @@ const common = require('./common.js');
 const serverBabelPreset = require('../babel/server');
 
 // Init
-const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?500`;
+const HotReloadEntry = `${require.resolve('webpack/hot/poll')}?1000`;
 const getOpts = options => {
   const appDir = options.appDir || process.cwd();
   const resolve = relativePath => path.resolve(appDir, relativePath);
