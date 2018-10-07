@@ -70,9 +70,10 @@ it('should work with default values', async done => {
   expect(js[1].size).toBeGreaterThan(0);
   expect(js[1].size).toBeLessThan(4 * 1024);
   expect(js[2].size).toBeGreaterThan(0);
-  expect(js[2].size).toBeLessThan(150 * 1024);
+  expect(js[2].size).toBeLessThan(170 * 1024);
   expect(js[3].size).toBeGreaterThan(0);
-  expect(js[3].size).toBeLessThan(50 * 1024);
+  expect(js[3].size).toBeLessThan(60 * 1024);
+  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(180 * 1024);
 
   // Media
   const media = getFiles(mfs, resolve('dist/client/static/media'));

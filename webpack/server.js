@@ -80,6 +80,10 @@ module.exports = options => {
         DEBUG: false,
       }),
     ].filter(Boolean),
+    optimization: {
+      namedModules: true,
+      noEmitOnErrors: true,
+    },
     node: {
       __dirname: false,
       __filename: false,

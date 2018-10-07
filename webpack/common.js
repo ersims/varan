@@ -1,6 +1,5 @@
 // Dependencies
 const Fiber = require('fibers');
-const { NamedModulesPlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
@@ -48,14 +47,6 @@ module.exports = options => {
         {
           oneOf: [
             {
-              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/, /\.ico$/],
-              loader: require.resolve('url-loader'),
-              options: {
-                limit: 10000,
-                name: 'static/media/[name].[hash:8].[ext]',
-              },
-            },
-            {
               test: /\.(sa|sc|c)ss$/,
               use: [
                 !isNode && { loader: isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader },
@@ -82,6 +73,14 @@ module.exports = options => {
               ].filter(Boolean),
             },
             {
+              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/, /\.ico$/],
+              loader: require.resolve('url-loader'),
+              options: {
+                limit: 10000,
+                name: 'static/media/[name].[hash:8].[ext]',
+              },
+            },
+            {
               exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/],
               loader: require.resolve('file-loader'),
               options: { name: 'static/media/[name].[hash:8].[ext]' },
@@ -91,8 +90,6 @@ module.exports = options => {
       ],
     },
     plugins: [
-      isDev && new NamedModulesPlugin(),
-      new NoEmitOnErrorsPlugin(),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',
         fields: ['assetsByChunkName', 'assets'],
