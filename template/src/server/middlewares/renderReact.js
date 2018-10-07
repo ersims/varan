@@ -33,7 +33,7 @@ export default (stats, assets, preload = []) => {
   return function renderReact(req, res) {
     const body = renderToString(<App />);
     const helmet = Helmet.renderStatic();
-    const html = renderToStaticMarkup(
+    const html = `<!DOCTYPE html>${renderToStaticMarkup(
       <Html
         htmlAttributes={helmet.htmlAttributes.toComponent()}
         bodyAttributes={helmet.bodyAttributes.toComponent()}
@@ -50,7 +50,7 @@ export default (stats, assets, preload = []) => {
         manifest={manifest}
         preload={preloadedAssets}
       />,
-    );
+    )}`;
     return res.send(html);
   };
 };
