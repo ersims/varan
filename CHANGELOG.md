@@ -1,3 +1,24 @@
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/ersims/varan/compare/v0.8.1...v0.9.0) (2018-10-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency postcss-preset-env to v6 ([9a2b8d8](https://github.com/ersims/varan/commit/9a2b8d8))
+* increase polling interval to support less responsive computers ([82a1682](https://github.com/ersims/varan/commit/82a1682))
+* **deps:** update dependency react-dev-utils to v6 ([99767da](https://github.com/ersims/varan/commit/99767da))
+* **deps:** update dependency resolve-url-loader to v3 ([cd52065](https://github.com/ersims/varan/commit/cd52065))
+* **deps:** update dependency uglifyjs-webpack-plugin to v2 ([ae42e0e](https://github.com/ersims/varan/commit/ae42e0e))
+
+
+### Features
+
+* add IE11 polyfill by default ([2d7a09c](https://github.com/ersims/varan/commit/2d7a09c))
+* update browserslist and add doctype ([70ea62b](https://github.com/ersims/varan/commit/70ea62b))
+* upgrade to terser-webpack-plugin ([349f8b1](https://github.com/ersims/varan/commit/349f8b1))
+
+
+
 <a name="0.8.1"></a>
 ## [0.8.1](https://github.com/ersims/varan/compare/v0.8.0...v0.8.1) (2018-09-12)
 
