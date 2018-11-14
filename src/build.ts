@@ -337,8 +337,8 @@ export default async function build(options: Partial<Options>) {
                     opts.warnAssetSize && asset.size > opts.warnAssetSize
                       ? chalk.red(asset.name)
                       : chunkTooBig
-                        ? chalk.yellow(asset.name)
-                        : asset.name;
+                      ? chalk.yellow(asset.name)
+                      : asset.name;
                   acc.push([
                     `  ${assetName}${Object.keys(asset.chunks).length > 1 ? ' +' : ''}`,
                     printSize('size', asset),
