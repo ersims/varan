@@ -65,7 +65,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
         title: `Cloning existing boilerplate from ${opts.fromGitRepo}`,
         enabled: () => !!opts.fromGitRepo,
         task: () =>
-          exec('git', ['clone', '--quiet', '--depth=1', '--origin=upstream', opts.fromGitRepo!, newAppDir]).pipe(
+          exec('git', ['clone', '--quiet', '--origin=upstream', opts.fromGitRepo!, newAppDir]).pipe(
             catchError(() =>
               throwError(
                 new Error(
