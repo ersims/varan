@@ -78,16 +78,24 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
           ),
       },
       {
-        title: `Creating project directory`,
+        title: 'Creating project directory',
         enabled: () => !opts.fromGitRepo,
         task: () => fs.copySync(templatePath, newAppDir),
       },
       {
-        title: `Changing working directory`,
+        title: 'Changing working directory',
         task: () => process.chdir(newAppDir),
       },
       {
-        title: `Creating project files`,
+        title: 'Preparing new git repository',
+        enabled: () => !!opts.fromGitRepo,
+        task: () =>
+          exec('git', ['branch', '--unset-upstream']).pipe(
+            catchError(() => throwError(new Error(`Failed to prepare git repo`))),
+          ),
+      },
+      {
+        title: 'Creating project files',
         task: () => {
           const prefix = 'v-keep-';
           return fs
@@ -97,7 +105,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
         },
       },
       {
-        title: `Installing project dependencies`,
+        title: 'Installing project dependencies',
         task: () => exec('npm', ['install']),
       },
     ],
