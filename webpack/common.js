@@ -51,8 +51,13 @@ module.exports = options => {
               use: [
                 !isNode && { loader: isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader },
                 {
-                  loader: isNode ? require.resolve('css-loader/locals') : require.resolve('css-loader'),
-                  options: { modules: true, localIdentName: opts.cssModulesIdent, importLoaders: 3 },
+                  loader: require.resolve('css-loader'),
+                  options: {
+                    exportOnlyLocals: isNode,
+                    modules: true,
+                    localIdentName: opts.cssModulesIdent,
+                    importLoaders: 3,
+                  },
                 },
                 {
                   loader: require.resolve('postcss-loader'),
