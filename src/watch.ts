@@ -331,36 +331,33 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     log.info();
   }
 
-  return {
-    async close() {
-      return Promise.all(
-        [this.server && this.server.close(), this.client && this.client.close()].filter(Boolean),
-      ) as Promise<any>;
-    },
-    server: result.server
-      ? {
-          runner: result.server.runner,
-          watcher: result.server.watcher,
-          async close() {
-            return Promise.all([
-              new Promise(resolve => result.server!.watcher.close(resolve)),
-              new Promise(resolve => {
-                result.server!.runner.once('close', resolve);
-                result.server!.runner.kill();
-              }),
-            ]) as Promise<any>;
-          },
-        }
-      : null,
-    client: result.client
-      ? {
-          runner: result.client.runner,
-          async close() {
-            return Promise.all([result.client!.app && result.client!.app!.stop()].filter(Boolean) as Promise<
-              any
-            >[]) as Promise<any>;
-          },
-        }
-      : null,
-  };
+  // Create watching helpers
+  const clientWatcher = result.client
+    ? {
+        runner: result.client.runner,
+        async close() {
+          return Promise.all([result.client!.app && result.client!.app!.stop()].filter(Boolean) as Promise<
+            any
+          >[]) as Promise<any>;
+        },
+      }
+    : null;
+  const serverWatcher = result.server
+    ? {
+        runner: result.server.runner,
+        watcher: result.server.watcher,
+        async close() {
+          return Promise.all([
+            new Promise(resolve => result.server!.watcher.close(resolve)),
+            new Promise(resolve => {
+              result.server!.runner.once('close', resolve);
+              result.server!.runner.kill();
+            }),
+          ]) as Promise<any>;
+        },
+      }
+    : null;
+  const close = async () =>
+    Promise.all([serverWatcher && serverWatcher.close(), clientWatcher && clientWatcher.close()].filter(Boolean));
+  return { close, client: clientWatcher, server: serverWatcher };
 }
