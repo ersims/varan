@@ -5,13 +5,14 @@ Note that `varan` is in pre-alpha stage and breaking changes may occur.
 
 Disclaimer: There will be breaking changes and outdated documentation during the pre-v1.0.0 cycles.
 
-[![npm](https://img.shields.io/npm/v/varan.svg)](https://npmjs.org/package/varan)
-[![CircleCI](https://img.shields.io/circleci/project/github/ersims/varan/master.svg)](https://circleci.com/gh/ersims/varan/tree/master)
-[![Codecov branch](https://img.shields.io/codecov/c/github/ersims/varan/master.svg)](https://codecov.io/gh/ersims/varan/tree/master)
-[![David](https://img.shields.io/david/ersims/varan/master.svg)](https://david-dm.org/ersims/varan/master)
-[![Known Vulnerabilities](https://snyk.io/test/github/ersims/varan/master/badge.svg)](https://snyk.io/test/github/ersims/varan/master)
-[![renovate-app badge](https://img.shields.io/badge/renovate-app-blue.svg)](https://renovateapp.com/)
-[![license](https://img.shields.io/github/license/ersims/varan.svg)](https://github.com/ersims/varan/blob/master/LICENSE.md)
+[![npm][npm-image]][npm-url]
+[![CircleCI][circleci-image]][circleci-url]
+[![Codecov branch][codecov-image]][codecov-url]
+[![David][david-image]][david-url]
+[![Known Vulnerabilities][snyk-image]][snyk-url]
+[![renovate-app badge][renovate-image]][renovate-url]
+[![Conventional Commits][conventional-commits-image]][conventional-commits-url]
+[![license][license-image]][license-url]
 
 ## Documentation
 
@@ -213,3 +214,21 @@ Run `npm run release` to publish a new release and `npm run release --tag=next` 
 ## License
 
   [MIT](LICENSE.md)
+
+
+[npm-url]: https://npmjs.org/package/varan
+[npm-image]: https://img.shields.io/npm/v/varan.svg
+[circleci-url]: https://circleci.com/gh/ersims/varan/tree/master
+[circleci-image]: https://img.shields.io/circleci/project/github/ersims/varan/master.svg
+[codecov-url]: https://codecov.io/gh/ersims/varan/tree/master
+[codecov-image]: https://img.shields.io/codecov/c/github/ersims/varan/master.svg
+[david-url]: https://david-dm.org/ersims/varan/master
+[david-image]: https://img.shields.io/david/ersims/varan/master.svg
+[snyk-url]: https://snyk.io/test/github/ersims/varan/master
+[snyk-image]: https://snyk.io/test/github/ersims/varan/master/badge.svg
+[renovate-url]: https://renovateapp.com/
+[renovate-image]: https://img.shields.io/badge/renovate-app-blue.svg
+[conventional-commits-image]: https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg
+[conventional-commits-url]: https://conventionalcommits.org/
+[license-url]: https://github.com/ersims/varan/blob/master/LICENSE.md
+[license-image]: https://img.shields.io/github/license/ersims/varan.svg
