@@ -83,7 +83,7 @@
     "execa": "^1.0.0",
     "fibers": "^3.0.0",
     "file-loader": "^3.0.0",
-    "filesize": "^3.6.1",
+    "filesize": "^4.0.0",
     "fs-extra": "^7.0.0",
     "http-proxy-middleware": "^0.19.0",
     "inquirer": "^6.2.0",
