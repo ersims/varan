@@ -130,7 +130,7 @@
     "@types/filesize": "^4.0.0",
     "@types/fs-extra": "^5.0.4",
     "@types/inquirer": "^0.0.43",
-    "@types/jest": "^23.3.12",
+    "@types/jest": "^24.0.0",
     "@types/listr": "^0.13.0",
     "@types/lodash": "^4.14.118",
     "@types/node": "^8.10.34",
