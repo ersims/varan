@@ -59,6 +59,18 @@ module.exports = options => {
           options: {
             cacheDirectory: isDev,
             presets: [serverBabelPreset],
+            plugins: [
+              [
+                require.resolve('babel-plugin-named-asset-import'),
+                {
+                  loaderMap: {
+                    svg: {
+                      ReactComponent: require.resolve('@svgr/webpack') + '?-svgo,+ref![path]',
+                    },
+                  },
+                },
+              ],
+            ],
           },
         },
       ],
