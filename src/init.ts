@@ -119,7 +119,11 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
    * Create project
    */
   log.info();
-  log.info(`  Creating new project ${chalk.cyan(appName)} using ${chalk.cyan(pkg.name)} ${chalk.green(emojis.robot)}`);
+  log.info(
+    `  Creating new project ${chalk.cyan(appName)} using ${chalk.cyan(pkg.name)} ${chalk.cyan(
+      `v${pkg.version}`,
+    )} ${chalk.green(emojis.robot)}`,
+  );
   log.info();
   const ctx = await tasks.run();
   log.info();

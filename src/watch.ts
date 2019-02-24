@@ -210,7 +210,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
   log.info(
     `  Watching project with ${chalk.cyan(configs.length.toString())} configs in ${chalk.cyan(
       opts.env,
-    )} mode using ${chalk.cyan(pkg.name)} ${chalk.green(emojis.robot)}`,
+    )} mode using ${chalk.cyan(pkg.name)} ${chalk.cyan(`v${pkg.version}`)} ${chalk.green(emojis.robot)}`,
   );
   log.info();
 

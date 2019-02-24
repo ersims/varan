@@ -230,7 +230,7 @@ export default async function build(options: Partial<Options>) {
   log.info(
     `  Building ${chalk.cyan(multiCompiler.compilers.length.toString())} configs for ${chalk.cyan(
       opts.env,
-    )} using ${chalk.cyan(pkg.name)} ${chalk.green(emojis.robot)}`,
+    )} using ${chalk.cyan(pkg.name)} ${chalk.cyan(`v${pkg.version}`)} ${chalk.green(emojis.robot)}`,
   );
   log.info();
   const result: TaskListContext = await tasks.run();
