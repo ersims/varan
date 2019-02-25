@@ -5,9 +5,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ImageminPlugin = require('imagemin-webpack-plugin').default;
+const imageminMozjpeg = require('imagemin-mozjpeg');
 const webpackServeWaitpage = require('webpack-serve-waitpage');
 const { defaults } = require('lodash');
 const noopServiceWorkerMiddleware = require('react-dev-utils/noopServiceWorkerMiddleware');
@@ -159,16 +162,6 @@ module.exports = options => {
       new EnvironmentPlugin({
         DEBUG: false,
       }),
-      new ManifestPlugin({
-        fileName: 'asset-manifest.json',
-      }),
-      opts.pwaManifest &&
-        new WebpackPwaManifest({
-          inject: false,
-          fingerprints: !isDev,
-          ...opts.pwaManifest,
-        }),
-      opts.analyze && new BundleAnalyzerPlugin(),
       !isDev &&
         new CompressionPlugin({
           filename: '[path].gz[query]',
@@ -181,6 +174,33 @@ module.exports = options => {
         new MiniCssExtractPlugin({
           filename: 'static/css/[name].[contenthash:8].css',
           chunkFilename: 'static/css/[name].[contenthash:8].chunk.css',
+        }),
+      !isDev &&
+        new ImageminPlugin({
+          test: /\.(jpe?g|png|gif|svg)$/i,
+          minFileSize: 10 * 1024,
+          pngquant: { quality: '90' },
+          optipng: null,
+          jpegtran: null,
+          plugins: [
+            imageminMozjpeg({
+              quality: 90,
+              progressive: true,
+            }),
+          ],
+        }),
+      new ManifestPlugin({
+        fileName: 'asset-manifest.json',
+      }),
+      new StatsWriterPlugin({
+        filename: 'stats-manifest.json',
+        fields: ['assetsByChunkName', 'assets'],
+      }),
+      opts.pwaManifest &&
+        new WebpackPwaManifest({
+          inject: false,
+          fingerprints: !isDev,
+          ...opts.pwaManifest,
         }),
       !isDev &&
         new SWPrecacheWebpackPlugin({
@@ -209,6 +229,7 @@ module.exports = options => {
             console.log(message);
           },
         }),
+      opts.analyze && new BundleAnalyzerPlugin(),
     ].filter(Boolean),
     optimization: isDev
       ? {

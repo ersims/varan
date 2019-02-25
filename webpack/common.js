@@ -1,7 +1,6 @@
 // Dependencies
 const Fiber = require('fibers');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const cssNano = require('cssnano');
 const { defaults } = require('lodash');
@@ -66,7 +65,12 @@ module.exports = options => {
                     plugins: [postcssPresetEnv(), !isNode && !isDev && cssNano({ preset: 'default' })].filter(Boolean),
                   },
                 },
-                { loader: require.resolve('resolve-url-loader') },
+                {
+                  loader: require.resolve('resolve-url-loader'),
+                  options: {
+                    keepQuery: true,
+                  },
+                },
                 {
                   loader: require.resolve('sass-loader'),
                   options: {
@@ -76,6 +80,14 @@ module.exports = options => {
                   },
                 },
               ].filter(Boolean),
+            },
+            !isDev && {
+              test: /\.(png|jpe?g)$/i,
+              loader: require.resolve('responsive-loader'),
+              options: {
+                adapter: require('responsive-loader/sharp'),
+                name: 'static/media/[name].[width].[hash:8].[ext]',
+              },
             },
             {
               exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/, /\.ico$/],
@@ -90,15 +102,9 @@ module.exports = options => {
               loader: require.resolve('file-loader'),
               options: { name: 'static/media/[name].[hash:8].[ext]' },
             },
-          ],
+          ].filter(Boolean),
         },
       ],
     },
-    plugins: [
-      new StatsWriterPlugin({
-        filename: 'stats-manifest.json',
-        fields: ['assetsByChunkName', 'assets'],
-      }),
-    ].filter(Boolean),
   };
 };

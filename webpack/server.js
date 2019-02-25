@@ -2,6 +2,7 @@
 const { DefinePlugin, EnvironmentPlugin, HotModuleReplacementPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
+const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const { defaults } = require('lodash');
 const path = require('path');
 const common = require('./common.js');
@@ -90,6 +91,10 @@ module.exports = options => {
       }),
       new EnvironmentPlugin({
         DEBUG: false,
+      }),
+      new StatsWriterPlugin({
+        filename: 'stats-manifest.json',
+        fields: ['assetsByChunkName', 'assets'],
       }),
     ].filter(Boolean),
     optimization: {
