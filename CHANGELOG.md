@@ -1,3 +1,27 @@
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/ersims/varan/compare/v0.9.1...v0.10.0) (2019-03-04)
+
+
+### Bug Fixes
+
+* **deps:** update dependency css-loader to v2 ([211b6d6](https://github.com/ersims/varan/commit/211b6d6))
+* **deps:** update dependency file-loader to v3 ([f71d331](https://github.com/ersims/varan/commit/f71d331))
+* refactor for new css-loader api ([f97cf1f](https://github.com/ersims/varan/commit/f97cf1f))
+* update npm-run-all to 4.1.5 to fix vulnerability ([c097d97](https://github.com/ersims/varan/commit/c097d97))
+* **deps:** update dependency filesize to v4 ([d6806d6](https://github.com/ersims/varan/commit/d6806d6))
+* **deps:** update dependency react-dev-utils to v7 ([fbe5c8b](https://github.com/ersims/varan/commit/fbe5c8b))
+* **deps:** update dependency webpack-pwa-manifest to v4 ([cfb274d](https://github.com/ersims/varan/commit/cfb274d))
+
+
+### Features
+
+* add option to whitelist externals for bundling on server ([96262e7](https://github.com/ersims/varan/commit/96262e7))
+* add support for automatic image resizing and compression ([5c159c9](https://github.com/ersims/varan/commit/5c159c9))
+* add support for svg as native react components ([95272df](https://github.com/ersims/varan/commit/95272df))
+
+
+
+<a name="0.9.1"></a>
 ## [0.9.1](https://github.com/ersims/varan/compare/v0.9.0...v0.9.1) (2018-11-17)
 
 
@@ -8,6 +32,7 @@
 
 
 
+<a name="0.9.0"></a>
 # [0.9.0](https://github.com/ersims/varan/compare/v0.8.1...v0.9.0) (2018-10-07)
 
 
@@ -28,6 +53,7 @@
 
 
 
+<a name="0.8.1"></a>
 ## [0.8.1](https://github.com/ersims/varan/compare/v0.8.0...v0.8.1) (2018-09-12)
 
 
@@ -42,10 +68,12 @@
 
 
 
+<a name="0.8.0"></a>
 # [0.8.0](https://github.com/ersims/varan/compare/v0.8.0-0...v0.8.0) (2018-09-11)
 
 
 
+<a name="0.8.0-0"></a>
 # [0.8.0-0](https://github.com/ersims/varan/compare/v0.7.1...v0.8.0-0) (2018-09-11)
 
 
@@ -66,6 +94,7 @@
 
 
 
+<a name="0.7.1"></a>
 ## [0.7.1](https://github.com/ersims/varan/compare/v0.7.0...v0.7.1) (2018-08-28)
 
 
@@ -75,6 +104,7 @@
 
 
 
+<a name="0.7.0"></a>
 # [0.7.0](https://github.com/ersims/varan/compare/v0.6.1...v0.7.0) (2018-08-28)
 
 
@@ -94,6 +124,7 @@
 
 
 
+<a name="0.6.1"></a>
 ## [0.6.1](https://github.com/ersims/varan/compare/v0.6.0...v0.6.1) (2018-08-22)
 
 
@@ -111,6 +142,7 @@
 
 
 
+<a name="0.6.0"></a>
 # [0.6.0](https://github.com/ersims/varan/compare/v0.5.0...v0.6.0) (2018-08-10)
 
 
@@ -126,6 +158,7 @@
 
 
 
+<a name="0.5.0"></a>
 # [0.5.0](https://github.com/ersims/varan/compare/v0.4.0...v0.5.0) (2018-08-05)
 
 
@@ -142,6 +175,7 @@
 
 
 
+<a name="0.4.0"></a>
 # [0.4.0](https://github.com/ersims/varan/compare/v0.3.1...v0.4.0) (2018-07-13)
 
 
@@ -156,10 +190,12 @@
 
 
 
+<a name="0.3.1"></a>
 ## [0.3.1](https://github.com/ersims/varan/compare/v0.3.0-1...v0.3.1) (2018-07-10)
 
 
 
+<a name="0.3.0-1"></a>
 # [0.3.0-1](https://github.com/ersims/varan/compare/v0.3.0-0...v0.3.0-1) (2018-07-10)
 
 
@@ -174,6 +210,7 @@
 
 
 
+<a name="0.3.0-0"></a>
 # [0.3.0-0](https://github.com/ersims/varan/compare/v0.2.7...v0.3.0-0) (2018-07-10)
 
 
@@ -195,54 +232,67 @@
 
 
 
+<a name="0.2.7"></a>
 ## [0.2.7](https://github.com/ersims/varan/compare/v0.2.6...v0.2.7) (2018-06-24)
 
 
 
+<a name="0.2.6"></a>
 ## [0.2.6](https://github.com/ersims/varan/compare/v0.2.5...v0.2.6) (2018-06-15)
 
 
 
+<a name="0.2.5"></a>
 ## [0.2.5](https://github.com/ersims/varan/compare/v0.2.4...v0.2.5) (2018-06-14)
 
 
 
+<a name="0.2.4"></a>
 ## [0.2.4](https://github.com/ersims/varan/compare/v0.2.3...v0.2.4) (2018-06-13)
 
 
 
+<a name="0.2.3"></a>
 ## [0.2.3](https://github.com/ersims/varan/compare/v0.2.2...v0.2.3) (2018-06-13)
 
 
 
+<a name="0.2.2"></a>
 ## [0.2.2](https://github.com/ersims/varan/compare/v0.2.1...v0.2.2) (2018-06-13)
 
 
 
+<a name="0.2.1"></a>
 ## [0.2.1](https://github.com/ersims/varan/compare/v0.2.0...v0.2.1) (2018-06-09)
 
 
 
+<a name="0.2.0"></a>
 # [0.2.0](https://github.com/ersims/varan/compare/v0.1.1...v0.2.0) (2018-06-09)
 
 
 
+<a name="0.1.1"></a>
 ## [0.1.1](https://github.com/ersims/varan/compare/v0.1.0...v0.1.1) (2018-04-26)
 
 
 
+<a name="0.1.0"></a>
 # [0.1.0](https://github.com/ersims/varan/compare/v0.0.4...v0.1.0) (2018-04-12)
 
 
 
+<a name="0.0.4"></a>
 ## [0.0.4](https://github.com/ersims/varan/compare/v0.0.3...v0.0.4) (2018-04-03)
 
 
 
+<a name="0.0.3"></a>
 ## [0.0.3](https://github.com/ersims/varan/compare/v0.0.2...v0.0.3) (2018-03-29)
 
 
 
+<a name="0.0.2"></a>
 ## 0.0.2 (2018-03-29)
 
 

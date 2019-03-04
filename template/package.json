@@ -40,7 +40,7 @@
     "jest": "^24.0.0",
     "normalize.css": "^8.0.0",
     "react-test-renderer": "^16.4.2",
-    "varan": "^0.9.1"
+    "varan": "^0.10.0"
   },
   "jest": {
     "bail": true,
