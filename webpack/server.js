@@ -22,6 +22,7 @@ const getOpts = options => {
     sourceDir: resolve('src/server'),
     entry: 'bin/web',
     clientTargetDir: resolve('dist/client'),
+    whitelistExternals: [],
   });
 };
 
@@ -44,11 +45,15 @@ module.exports = options => {
     externals: [
       nodeExternals({
         modulesDir: path.resolve(process.cwd(), 'node_modules'),
-        whitelist: [isDev && HotReloadEntry].filter(Boolean),
+        whitelist: [isDev && HotReloadEntry, /\.(?!(?:jsx?|tsx?|json)$).{1,5}$/i, ...opts.whitelistExternals].filter(
+          Boolean,
+        ),
       }),
       nodeExternals({
-        whitelist: [isDev && HotReloadEntry].filter(Boolean),
         modulesDir: path.resolve(__dirname, '..', 'node_modules'),
+        whitelist: [isDev && HotReloadEntry, /\.(?!(?:jsx?|tsx?|json)$).{1,5}$/i, ...opts.whitelistExternals].filter(
+          Boolean,
+        ),
       }),
     ],
     module: {

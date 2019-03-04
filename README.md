@@ -202,6 +202,53 @@ varan build ./webpack/client ./webpack/server
 
 Remember to update your npm scripts to use the new config files as shown above.
 
+<a id="dependency-errors"></a>
+### Syntax errors in dependencies
+
+Sometimes you may encounter dependencies that require special care or a custom webpack config.
+This is usually because the dependency is built for a different environment than you have, either it is browser vs Node.js or different version of Node.js.
+
+Typically you will see something similar when running your application:
+
+```bash
+💬 SERVER: [REDACTED]/node_modules/@aws-amplify/ui/dist/style.css:13
+:root {
+^
+
+SyntaxError: Unexpected token :
+    at new Script (vm.js:79:7)
+    at createScript (vm.js:251:10)
+    at Object.runInThisContext (vm.js:303:10)
+    at Module._compile (internal/modules/cjs/loader.js:657:28)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:700:10)
+    at Module.load (internal/modules/cjs/loader.js:599:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:538:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:530:3)
+    at Module.require (internal/modules/cjs/loader.js:637:17)
+    at require (internal/modules/cjs/helpers.js:20:18)
+```
+
+In this case it is because `aws-amplify` and `aws-amplify-react` is installed and depends on `@aws-amplify/ui` which requires a `.css` file.
+This works fine in the front-end because all code, including `node_modules`, is bundled and run through webpack.
+The back-end Node.js server does not run `node_modules` through webpack and hence does not know how to parse `.css` files.
+The result is that the crashes immediately when started.
+
+This specific issue can be solved in two ways;
+
+1. Bundle the specific dependency that causes issues. This is the recommended approach.
+2. Bundle all `node_modules` - even on the server. Note that this may have severe performance implications.
+
+In both cases you will need to create your own webpack configuration and override the relevant options.
+See [customizing webpack](#customization-webpack) for more information on using your own webpack config.
+
+This is an example of a custom webpack config for solving the specific issue described above according to the recommended option 1):
+
+```javascript
+const server = require('varan/webpack/server');
+
+module.exports = options => server({ whitelistExternals: ['aws-amplify-react'] });
+``` 
+
 <a id="contributing"></a>
 ## Contributing
 
