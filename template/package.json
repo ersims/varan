@@ -19,7 +19,7 @@
     "start": "node dist/server/bin/web.js",
     "test": "jest",
     "prewatch": "npm run clean",
-    "watch": "varan watch -- --inspect"
+    "start:watch": "varan watch -- --inspect"
   },
   "dependencies": {
     "@babel/runtime": "^7.0.0",

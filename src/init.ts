@@ -132,7 +132,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
   log.info();
   log.info(`  To get started, run the following commands`);
   log.info(`    ${chalk.cyan(`cd ${path.relative(opts.appDir, newAppDir)}`)}`);
-  log.info(`    ${chalk.cyan('npm run watch')}`);
+  log.info(`    ${chalk.cyan('npm run start:watch')}`);
   log.info();
   log.info(
     `  For more information, please refer to the ${chalk.cyan('README.md')} file or visit ${chalk.cyan(pkg.homepage)}`,
