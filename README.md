@@ -246,7 +246,7 @@ This is an example of a custom webpack config for solving the specific issue des
 ```javascript
 const server = require('varan/webpack/server');
 
-module.exports = options => server({ whitelistExternals: ['aws-amplify-react'] });
+module.exports = options => server({ ...options, whitelistExternals: ['aws-amplify-react'] });
 ``` 
 
 <a id="contributing"></a>
