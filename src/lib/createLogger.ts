@@ -7,9 +7,10 @@ interface Options {
 
 // Exports
 export default function createLogger(options: Partial<Options> = {}) {
+  const logFn = console.log;
   return {
-    info: options.silent ? (...args: string[]) => {} : console.log,
-    warn: options.silent ? (...args: string[]) => {} : console.log,
-    error: console.log,
+    info: options.silent ? (...args: string[]) => {} : logFn,
+    warn: options.silent ? (...args: string[]) => {} : logFn,
+    error: logFn,
   };
 }

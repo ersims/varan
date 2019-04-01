@@ -23,6 +23,8 @@ module.exports = options => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const isNode = opts.target === 'node';
+  const responsiveImages = [/\.jpe?g$/, /\.png$/];
+  const images = [/\.bmp$/, /\.gif$/, /\.svg$/, /\.webp$/];
   return {
     target: opts.target,
     mode: isDev ? 'development' : 'production',
@@ -36,75 +38,112 @@ module.exports = options => {
     },
     output: {
       // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: info => path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+      devtoolModuleFilenameTemplate: info => 'file://' + path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
     },
     performance: isDev ? { hints: false } : undefined,
     stats: 'errors-only',
     module: {
       strictExportPresence: true,
       rules: [
+        { parser: { requireEnsure: false } },
+
+        /**
+         * Styles
+         * SASS, SCSS and CSS
+         */
         {
-          oneOf: [
+          test: /\.(sa|sc|c)ss$/,
+          use: [
+            !isNode &&
+              (isDev
+                ? { loader: require.resolve('style-loader'), options: { sourceMap: true } }
+                : { loader: MiniCssExtractPlugin.loader }),
             {
-              test: /\.(sa|sc|c)ss$/,
-              use: [
-                !isNode && { loader: isDev ? require.resolve('style-loader') : MiniCssExtractPlugin.loader },
-                {
-                  loader: require.resolve('css-loader'),
-                  options: {
-                    exportOnlyLocals: isNode,
-                    modules: true,
-                    localIdentName: opts.cssModulesIdent,
-                    importLoaders: 3,
-                  },
-                },
-                {
-                  loader: require.resolve('postcss-loader'),
-                  options: {
-                    ident: 'postcss',
-                    plugins: [postcssPresetEnv(), !isNode && !isDev && cssNano({ preset: 'default' })].filter(Boolean),
-                  },
-                },
-                {
-                  loader: require.resolve('resolve-url-loader'),
-                  options: {
-                    keepQuery: true,
-                  },
-                },
-                {
-                  loader: require.resolve('sass-loader'),
-                  options: {
-                    sourceMap: true,
-                    implementation: require('dart-sass'),
-                    fiber: Fiber,
-                  },
-                },
-              ].filter(Boolean),
-            },
-            !isDev && {
-              test: /\.(png|jpe?g)$/i,
-              loader: require.resolve('responsive-loader'),
+              loader: require.resolve('css-loader'),
               options: {
-                adapter: require('responsive-loader/sharp'),
-                name: 'static/media/[name].[width].[hash:8].[ext]',
+                exportOnlyLocals: isNode,
+                modules: true,
+                localIdentName: opts.cssModulesIdent,
+                importLoaders: 3,
+                sourceMap: isDev,
               },
             },
             {
-              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/, /\.ico$/],
-              loader: require.resolve('url-loader'),
+              loader: require.resolve('postcss-loader'),
               options: {
-                limit: 10000,
-                name: 'static/media/[name].[hash:8].[ext]',
+                ident: 'postcss',
+                plugins: [postcssPresetEnv(), !isNode && !isDev && cssNano({ preset: 'default' })].filter(Boolean),
+                sourceMap: isDev,
               },
             },
             {
-              exclude: [/\.html$/, /\.(jsx?|mjs|tsx?)$/, /\.(sa|sc|c)ss$/, /\.json$/],
-              loader: require.resolve('file-loader'),
-              options: { name: 'static/media/[name].[hash:8].[ext]' },
+              loader: require.resolve('resolve-url-loader'),
+              options: {
+                keepQuery: true,
+              },
+            },
+            {
+              loader: require.resolve('sass-loader'),
+              options: {
+                sourceMap: true,
+                implementation: require('dart-sass'),
+                fiber: Fiber,
+              },
             },
           ].filter(Boolean),
         },
-      ],
+
+        /**
+         * Responsive images
+         */
+        {
+          test: responsiveImages,
+          loader: require.resolve('url-loader'),
+          options: isDev
+            ? {
+                limit: 10000,
+                name: 'static/media/[name].[width].[hash:8].[ext]',
+                adapter: require('responsive-loader/sharp'),
+              }
+            : {
+                limit: 10000,
+                name: 'static/media/[name].[width].[hash:8].[ext]',
+                fallback: require.resolve('responsive-loader'),
+                adapter: require('responsive-loader/sharp'),
+              },
+        },
+
+        /**
+         * Fallback images
+         */
+        {
+          test: images,
+          loader: require.resolve('url-loader'),
+          options: {
+            limit: 10000,
+            name: 'static/media/[name].[hash:8].[ext]',
+            fallback: require.resolve('file-loader'),
+          },
+        },
+
+        /**
+         * Fallback for all other files
+         */
+        {
+          exclude: [
+            /\.html$/,
+            /\.(le|sa|sc|c)ss$/,
+            /\.json$/,
+            /\.(ejs|pug|hbs)$/,
+            /\.(jsx?|mjs|tsx?)$/,
+            /\.vue$/,
+            ...responsiveImages,
+            ...images,
+          ],
+          loader: require.resolve('file-loader'),
+          options: { name: 'static/media/[name].[hash:8].[ext]' },
+        },
+      ].filter(Boolean),
     },
   };
 };

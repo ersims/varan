@@ -298,6 +298,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     result.client.compiler.hooks.done.tap(pkg.name, stats => {
       const compileStats = getCompilerStats(stats);
       if (stats.hasErrors()) {
+        const stat: { errors: string[] } = stats.toJson();
         clientCompileSpinner.fail(
           chalk.bold(
             `Client failed to recompile in ${chalk.cyan(`${compileStats.timings.duration}ms`)} due to ${chalk.red(
@@ -305,6 +306,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
             )}`,
           ),
         );
+        stat.errors.forEach(error => log.error(`   ${chalk.red(emojis.smallSquare)} ${error}`));
       } else {
         clientCompileSpinner.succeed(
           chalk.bold(`Client recompiled in ${chalk.cyan(`${compileStats.timings.duration}ms`)}`),
