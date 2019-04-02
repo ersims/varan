@@ -24,7 +24,12 @@ enum TemplateTypes {
 process.on('unhandledRejection', err => {
   throw err;
 });
-const resolve = (file: string) => file && path.resolve(process.cwd(), file);
+const resolve = (file: string) => {
+  const varanLocalPath = `varan${path.sep}`;
+  return file.startsWith(varanLocalPath)
+    ? path.resolve(__dirname, '..', '..') + path.sep + file.substr(varanLocalPath.length)
+    : file && path.resolve(process.cwd(), file);
+};
 
 // Check for updates
 updateNotifier({ pkg }).notify();
@@ -128,10 +133,7 @@ program
     const files = rawFiles.filter(f => !opts.args.includes(f));
     try {
       const watcher = await watch({
-        configs: (files.length > 0 && files.map(resolve)) || [
-          path.resolve(__dirname, '../../webpack/server'),
-          path.resolve(__dirname, '../../webpack/client'),
-        ],
+        configs: (files.length > 0 && files.map(resolve)) || undefined,
         devServerHost: opts && opts.host,
         devServerPort: opts && opts.clientPort,
         serverHost: opts && opts.host,

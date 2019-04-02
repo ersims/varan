@@ -72,7 +72,7 @@ export interface VaranWatcher {
 // Init
 const getOpts = (options: Partial<Options>): Options =>
   defaults({}, options, {
-    configs: [path.resolve(__dirname, '../webpack/server'), path.resolve(__dirname, '../webpack/client')],
+    configs: [path.resolve(__dirname, '..', 'webpack', 'server'), path.resolve(__dirname, '..', 'webpack', 'client')],
     devServerProtocol: 'http',
     devServerHost: process.env.HOST || 'localhost',
     devServerPort: process.env.DEV_PORT ? parseInt(process.env.DEV_PORT, 10) : 3000,

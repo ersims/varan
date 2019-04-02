@@ -1,7 +1,5 @@
 # Varan
-A webpack starter-kit for server side rendered react applications.
-
-Note that `varan` is in pre-alpha stage and breaking changes may occur.
+A webpack starter-kit for production ready webpack applications. Includes full support for server side rendered React applications out of the box.
 
 Disclaimer: There will be breaking changes and outdated documentation during the pre-v1.0.0 cycles.
 
@@ -26,6 +24,8 @@ Disclaimer: There will be breaking changes and outdated documentation during the
   * [Polyfill and browser support](#customization-polyfill)
   * [Browserslist](#customization-browserslist)
   * [Webpack](#customization-webpack)
+    * [Progressive web apps](#customization-webpack-pwa)
+    * [Static client side apps (create-react-app)](#customization-webpack-static)
 * [Contributing](#contributing)
 * [License](#license)
 
@@ -147,24 +147,37 @@ Varan supports [browserslist](https://github.com/browserslist/browserslist) for 
 ### Custom webpack config
 
 Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
-It is recommended to create your own `webpack` directory with your client and server files, and specifying these when using `varan build` and `varan watch`.
+It is recommended to create your own `webpack` directory with your custom client and server files, and specifying these when using `varan build` and `varan watch`.
 
-#### Example
+Note that development mode only supports up to two config files, one with `target: 'browser'` and one with `target: 'node'`, while production mode supports any number of configs.
+
+To use your new local configs in development mode you can provide the path to your config files directly.
+If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config. 
+
+To override only the client config for development mode, run:
+```bash
+varan watch ./webpack/client varan/webpack/server
+```
+
+For production build you can specify a list of config files to build like so:
+```bash
+varan build ./webpack/client ./webpack/server
+```
+
+Remember to update your npm scripts to use the new config files as shown above.
+
+<a id="customization-webpack-pwa"></a>
+#### Progressive Web Apps
 
 Create the following directory structure in the root of your project
 ```bash
 my-project
 \--- webpack
      +--- client.js - client customizations
-     \--- server.js - server customizations
 ```
 
-Make sure the `client.js` and `server.js` files exports a function that returns the webpack configuration object.
+Make sure the `client.js` file exports a function that returns the webpack configuration object.
 
-`server.js` with no modifications:
-```javascript
-module.exports = require('varan/webpack/server');
-```
 
 `client.js` with a Progressive Web App manifest while still using the default config in `varan`:
 ```javascript
@@ -189,18 +202,52 @@ const pwaManifest = {
 module.exports = options => client({ ...options, pwaManifest });
 ```
 
-Note that development mode only supports up to two config files, one with `target: 'browser'` and one with  `target: 'node'`
-To use your new files in development mode, run:
+<a id="customization-webpack-static"></a>
+#### Static client only applications (e.g. create-react-app)
+
+Create the following directory structure in the root of your project
 ```bash
-varan watch ./webpack/client ./webpack/server
+my-project
+\--- webpack
+     +--- client.js - client customizations
 ```
 
-For production build you can specify a list of config files to build like so:
-```bash
-varan build ./webpack/client ./webpack/server
-```
+Make sure the `client.js` file exports a function that returns the webpack configuration object.
+Install [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) and [webpack-merge](https://github.com/survivejs/webpack-merge) in your project by running `npm i --save-dev html-webpack-plugin webpack-merge`.
+ 
+Add `html-webpack-plugin` to your `client.js` configuration as seen below:
+```javascript
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const merge = require('webpack-merge');
+const path = require('path');
+const client = require('varan/webpack/client');
 
-Remember to update your npm scripts to use the new config files as shown above.
+module.exports = options => merge(
+  client(options),
+  {
+    plugins: [
+      new HtmlWebpackPlugin({
+        inject: true,
+        favicon: options.favicon,
+        // Optionally provide a custom index.html template
+        // template: path.resolve(__dirname, '..', 'src', 'client', 'index.html'),
+        minify: {
+          removeComments: true,
+          collapseWhitespace: true,
+          removeRedundantAttributes: true,
+          useShortDoctype: true,
+          removeEmptyAttributes: true,
+          removeStyleLinkTypeAttributes: true,
+          keepClosingSlash: true,
+          minifyJS: true,
+          minifyCSS: true,
+          minifyURLs: true,
+        },
+      }),
+    ],
+  },
+);
+```
 
 <a id="dependency-errors"></a>
 ### Syntax errors in dependencies
@@ -270,7 +317,7 @@ Run `npm run release` to publish a new release and `npm run release --tag=next` 
 [codecov-url]: https://codecov.io/gh/ersims/varan/tree/master
 [codecov-image]: https://img.shields.io/codecov/c/github/ersims/varan/master.svg
 [david-url]: https://david-dm.org/ersims/varan/master
-[david-image]: https://img.shields.io/david/ersims/varan/master.svg
+[david-image]:	https://img.shields.io/david/ersims/varan.svg
 [snyk-url]: https://snyk.io/test/github/ersims/varan/master
 [snyk-image]: https://snyk.io/test/github/ersims/varan/master/badge.svg
 [renovate-url]: https://renovateapp.com/
