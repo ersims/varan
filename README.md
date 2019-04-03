@@ -136,7 +136,7 @@ The default entry points in varan are as follows:
 ### Polyfills and browser support
 
 Varan automatically adds basic polyfills for IE11 (to be removed at some point) and injects any other necessary polyfills using [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env.html) and [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime.html) based on your [browserslist](#browserslist).
-Note that it is expected that you have `@babel/runtime` and either `core-js` or `@babel/runtime-corejs2` package as a production dependency to provide polyfills.
+Note that it is expected that you have `@babel/runtime` and, `core-js@3` or `core-js-pure@3` package as a production dependency to provide polyfills.
 
 <a id="customization-browserslist"></a>
 ### Browserslist
