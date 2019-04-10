@@ -50,7 +50,7 @@ export interface Options {
 // Init
 const getOpts = (options: Partial<Options>): Options =>
   defaults({}, options, {
-    configs: [path.resolve(__dirname, '../webpack/server'), path.resolve(__dirname, '../webpack/client')],
+    configs: [path.resolve(__dirname, '..', 'webpack', 'server'), path.resolve(__dirname, '..', 'webpack', 'client')],
     warnAssetSize: 512 * 1024,
     warnChunkSize: 1024 * 1024,
     silent: false,
