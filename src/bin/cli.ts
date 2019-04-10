@@ -25,7 +25,7 @@ process.on('unhandledRejection', err => {
   throw err;
 });
 const resolve = (file: string) => {
-  const varanLocalPath = `varan${path.sep}`;
+  const varanLocalPath = `varan/`;
   return file.startsWith(varanLocalPath)
     ? path.resolve(__dirname, '..', '..') + path.sep + file.substr(varanLocalPath.length)
     : file && path.resolve(process.cwd(), file);
