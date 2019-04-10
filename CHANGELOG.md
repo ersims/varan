@@ -1,3 +1,22 @@
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/ersims/varan/compare/v0.10.0...v0.11.0) (2019-04-10)
+
+
+### Bug Fixes
+
+* **deps:** add support for core-js v3 ([81dc5d9](https://github.com/ersims/varan/commit/81dc5d9))
+* **deps:** update dependency sharp to ^0.22.0 ([2cda6a4](https://github.com/ersims/varan/commit/2cda6a4))
+* always use / to compare with local varan path ([827c321](https://github.com/ersims/varan/commit/827c321))
+* standardize on using npm run start:watch for start script ([c1289c6](https://github.com/ersims/varan/commit/c1289c6))
+
+
+### Features
+
+* add support for static client ([558bb51](https://github.com/ersims/varan/commit/558bb51))
+* add support for using varan webpack config directly through cli ([bbd2739](https://github.com/ersims/varan/commit/bbd2739))
+
+
+
 <a name="0.10.0"></a>
 # [0.10.0](https://github.com/ersims/varan/compare/v0.9.1...v0.10.0) (2019-03-04)
 
