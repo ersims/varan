@@ -94,7 +94,7 @@
     "koa-connect": "^2.0.1",
     "listr": "^0.14.2",
     "lodash": "^4.17.10",
-    "mini-css-extract-plugin": "^0.5.0",
+    "mini-css-extract-plugin": "^0.6.0",
     "ora": "^3.4.0",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.6.0",
