@@ -7,7 +7,9 @@ const execa = require('execa');
 const pkg = require('../package.json');
 
 // Init
-process.on('unhandledRejection', (err) => { throw err; });
+process.on('unhandledRejection', err => {
+  throw err;
+});
 
 try {
   const pkgFile = path.resolve(__dirname, '..', 'template', 'package.json');
