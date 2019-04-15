@@ -1,1 +1,3 @@
 test/fixtures/projects/with-error
+dist
+.coverage

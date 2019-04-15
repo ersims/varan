@@ -40,13 +40,13 @@
     }
   },
   "scripts": {
-    "apply:format": "prettier --config .prettierrc --write \"{babel,template,src,test,types,webpack}/**/*.{ts,js}?(x)\" \"*.js\"",
+    "apply:format": "prettier --write \"**/*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}\"",
     "prebuild": "npm run clean",
     "build": "tsc",
     "build:watch": "tsc --watch",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
-    "check:format": "prettier --config .prettierrc --list-different \"{babel,template,src,test,types,webpack}/**/*.{ts,js}?(x)\" \"*.js\"",
-    "check:linting": "tslint --project tsconfig.json \"{babel,template,src,test,types,webpack}/**/*.{ts,js}?(x)\"",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0 && prettier --write \"CHANGELOG.md\"",
+    "check:format": "prettier --list-different \"**/*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}\"",
+    "check:linting": "tslint --project tsconfig.json \"**/*.{ts,js}?(x)\"",
     "check:types": "tsc --noEmit",
     "check": "npm-run-all check:*",
     "clean": "del-cli ./.coverage ./dist",

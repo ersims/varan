@@ -1,4 +1,5 @@
 # Varan
+
 A webpack starter-kit for production ready webpack applications. Includes full support for server side rendered React applications out of the box.
 
 Disclaimer: There will be breaking changes and outdated documentation during the pre-v1.0.0 cycles.
@@ -14,25 +15,27 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 
 ## Documentation
 
-* [Installation](#installation)
-  * [Global installation](#installation-global)
-  * [Local installation (recommended)](#installation-local)
-* [Usage](#usage)
-  * [Development](#usage-development)
-  * [Production](#usage-production)
-* [Customization](#customization)
-  * [Polyfill and browser support](#customization-polyfill)
-  * [Browserslist](#customization-browserslist)
-  * [Webpack](#customization-webpack)
-    * [Progressive web apps](#customization-webpack-pwa)
-    * [Static client side apps (create-react-app)](#customization-webpack-static)
-* [Contributing](#contributing)
-* [License](#license)
+- [Installation](#installation)
+  - [Global installation](#installation-global)
+  - [Local installation (recommended)](#installation-local)
+- [Usage](#usage)
+  - [Development](#usage-development)
+  - [Production](#usage-production)
+- [Customization](#customization)
+  - [Polyfill and browser support](#customization-polyfill)
+  - [Browserslist](#customization-browserslist)
+  - [Webpack](#customization-webpack)
+    - [Progressive web apps](#customization-webpack-pwa)
+    - [Static client side apps (create-react-app)](#customization-webpack-static)
+- [Contributing](#contributing)
+- [License](#license)
 
 <a id="installation"></a>
+
 ## Installation
 
 <a id="installation-global"></a>
+
 ### Global installation
 
 It is possible to install `varan` globally and initiate new projects similar to [create-react-app](https://github.com/facebook/create-react-app).
@@ -57,6 +60,7 @@ $ varan init --advanced my-varan-app
 ```
 
 <a id="installation-local"></a>
+
 ### Local installation for existing projects
 
 1. Install `varan` in your project
@@ -80,13 +84,14 @@ $ npm i --save-dev varan
 At a minimum, make sure your entry files are explicitly defined in your own custom config, or matches the defaults of varan. See [customization](#customization) for more information.
 
 <a id="usage"></a>
+
 ## Usage
 
 ```bash
 $ varan
 
   Usage:  <command> [options]
-  
+
   Options:
 
     -V, --version               output the version number
@@ -101,49 +106,60 @@ $ varan
 ```
 
 <a id="usage-development"></a>
+
 ### Development (using local installation and npm scripts)
+
 Start the development server with hot reloading by running
+
 ```bash
 npm run watch
 ```
 
 <a id="usage-production"></a>
+
 ### Production (using local installation and npm scripts)
+
 To create a minified and bundled production build, run
+
 ```bash
 npm run build
 ```
 
 To analyze the production build, run
+
 ```bash
 npm run build:analyze
 ```
 
 <a id="customization"></a>
+
 ## Customization
 
-Varan provides sane defaults and should be a good starting point for most projects. You can find the default [client](/webpack/client.js) and [server](/webpack/server.js) config files under `varan/webpack`. 
+Varan provides sane defaults and should be a good starting point for most projects. You can find the default [client](/webpack/client.js) and [server](/webpack/server.js) config files under `varan/webpack`.
 
-The most important option to set correctly is the entry points. Existing projects implementing varan might have to set a custom entry point for the client and/or the server using a [custom webpack config](#customization-webpack). 
+The most important option to set correctly is the entry points. Existing projects implementing varan might have to set a custom entry point for the client and/or the server using a [custom webpack config](#customization-webpack).
 The default entry points in varan are as follows:
 
 | Type   | Entry file relative to project root |
-|--------|-------------------------------------|
+| ------ | ----------------------------------- |
 | Client | `src/client/index`                  |
 | Server | `src/server/bin/web`                |
 
 <a id="customization-polyfill"></a>
+
 ### Polyfills and browser support
 
 Varan automatically adds basic polyfills for IE11 (to be removed at some point) and injects any other necessary polyfills using [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env.html) and [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime.html) based on your [browserslist](#browserslist).
 Note that it is expected that you have `@babel/runtime` and, `core-js@3` or `core-js-pure@3` package as a production dependency to provide polyfills.
 
 <a id="customization-browserslist"></a>
+
 ### Browserslist
 
 Varan supports [browserslist](https://github.com/browserslist/browserslist) for polyfilling. Refer to [browserslist](https://github.com/browserslist/browserslist) for more information on how to use it. Varan supports both `.browserslistrc` files and the `browserslist` property in `package.json`.
 
 <a id="customization-webpack"></a>
+
 ### Custom webpack config
 
 Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
@@ -152,14 +168,16 @@ It is recommended to create your own `webpack` directory with your custom client
 Note that development mode only supports up to two config files, one with `target: 'browser'` and one with `target: 'node'`, while production mode supports any number of configs.
 
 To use your new local configs in development mode you can provide the path to your config files directly.
-If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config. 
+If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config.
 
 To override only the client config for development mode, run:
+
 ```bash
 varan watch ./webpack/client varan/webpack/server
 ```
 
 For production build you can specify a list of config files to build like so:
+
 ```bash
 varan build ./webpack/client ./webpack/server
 ```
@@ -167,9 +185,11 @@ varan build ./webpack/client ./webpack/server
 Remember to update your npm scripts to use the new config files as shown above.
 
 <a id="customization-webpack-pwa"></a>
+
 #### Progressive Web Apps
 
 Create the following directory structure in the root of your project
+
 ```bash
 my-project
 \--- webpack
@@ -178,8 +198,8 @@ my-project
 
 Make sure the `client.js` file exports a function that returns the webpack configuration object.
 
-
 `client.js` with a Progressive Web App manifest while still using the default config in `varan`:
+
 ```javascript
 // Dependencies
 const path = require('path');
@@ -203,9 +223,11 @@ module.exports = options => client({ ...options, pwaManifest });
 ```
 
 <a id="customization-webpack-static"></a>
+
 #### Static client only applications (e.g. create-react-app)
 
 Create the following directory structure in the root of your project
+
 ```bash
 my-project
 \--- webpack
@@ -214,17 +236,17 @@ my-project
 
 Make sure the `client.js` file exports a function that returns the webpack configuration object.
 Install [html-webpack-plugin](https://github.com/jantimon/html-webpack-plugin) and [webpack-merge](https://github.com/survivejs/webpack-merge) in your project by running `npm i --save-dev html-webpack-plugin webpack-merge`.
- 
+
 Add `html-webpack-plugin` to your `client.js` configuration as seen below:
+
 ```javascript
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const merge = require('webpack-merge');
 const path = require('path');
 const client = require('varan/webpack/client');
 
-module.exports = options => merge(
-  client(options),
-  {
+module.exports = options =>
+  merge(client(options), {
     plugins: [
       new HtmlWebpackPlugin({
         inject: true,
@@ -245,11 +267,11 @@ module.exports = options => merge(
         },
       }),
     ],
-  },
-);
+  });
 ```
 
 <a id="dependency-errors"></a>
+
 ### Syntax errors in dependencies
 
 Sometimes you may encounter dependencies that require special care or a custom webpack config.
@@ -294,21 +316,23 @@ This is an example of a custom webpack config for solving the specific issue des
 const server = require('varan/webpack/server');
 
 module.exports = options => server({ ...options, whitelistExternals: ['aws-amplify-react'] });
-``` 
+```
 
 <a id="contributing"></a>
+
 ## Contributing
 
 This project follows [angular commit conventions](https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit).
+
 ### Release
 
 Run `npm run release` to publish a new release and `npm run release --tag=next` to publish a pre-release.
 
 <a id="license"></a>
+
 ## License
 
-  [MIT](LICENSE.md)
-
+[MIT](LICENSE.md)
 
 [npm-url]: https://npmjs.org/package/varan
 [npm-image]: https://img.shields.io/npm/v/varan.svg
@@ -317,7 +341,7 @@ Run `npm run release` to publish a new release and `npm run release --tag=next` 
 [codecov-url]: https://codecov.io/gh/ersims/varan/tree/master
 [codecov-image]: https://img.shields.io/codecov/c/github/ersims/varan/master.svg
 [david-url]: https://david-dm.org/ersims/varan/master
-[david-image]:	https://img.shields.io/david/ersims/varan.svg
+[david-image]: https://img.shields.io/david/ersims/varan.svg
 [snyk-url]: https://snyk.io/test/github/ersims/varan/master
 [snyk-image]: https://snyk.io/test/github/ersims/varan/master/badge.svg
 [renovate-url]: https://renovateapp.com/
