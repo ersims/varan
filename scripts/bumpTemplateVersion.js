@@ -3,7 +3,6 @@
 // Dependencies
 const fs = require('fs');
 const path = require('path');
-const execa = require('execa');
 const pkg = require('../package.json');
 
 // Init
@@ -19,9 +18,6 @@ try {
 
   // Update file contents
   fs.writeFileSync(pkgFile, JSON.stringify(templatePkg, null, 2), 'UTF-8');
-
-  // Add changed file to git
-  execa.sync('git', ['add', pkgFile]);
 } catch (err) {
   console.error(`Failed to update template dependency version`);
   process.exit(1);
