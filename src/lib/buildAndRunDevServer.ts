@@ -20,6 +20,14 @@ export interface VaranServeOptions extends serve.Options {
   proxy?: boolean;
   waitForPromise?: null | Promise<any>;
 }
+export interface Output {
+  compiler: webpack.Compiler;
+  stats: webpack.Stats;
+  app: null | serve.Result['app'];
+  runner: null | Promise<serve.Result>;
+  errors: string[];
+  warnings: string[];
+}
 
 // Init
 const getOpts = (options: Partial<Options>): Options =>
@@ -36,7 +44,7 @@ export default async function buildAndRunDevServer(
   host: string,
   port: number,
   options: Partial<Options>,
-) {
+): Promise<Output> {
   const opts = getOpts(options);
   const compiler = webpack(omit(config, ['serve']));
   if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
@@ -89,10 +97,11 @@ export default async function buildAndRunDevServer(
   return new Promise((resolve, reject) =>
     compiler.run((err, stats) => {
       if (err) return reject(err);
-      const out = {
+      const out: Output = {
         compiler,
         stats,
         app: null,
+        runner: null,
         errors: [],
         warnings: [],
       };

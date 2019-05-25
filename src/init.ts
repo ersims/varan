@@ -33,8 +33,10 @@ const getOpts = (options: Partial<Options> & Pick<Options, 'name'>): Options =>
 const exec = (cmd: string, args: string[]) => {
   const cp = execa(cmd, args);
   return merge(
-    streamToObservable(cp.stdout.pipe(split()), { await: cp }),
-    streamToObservable(cp.stderr.pipe(split()), { await: cp }),
+    ...([
+      cp.stdout && streamToObservable(cp.stdout.pipe(split()), { await: cp }),
+      cp.stderr && streamToObservable(cp.stderr.pipe(split()), { await: cp }),
+    ].filter(Boolean) as ReturnType<typeof streamToObservable>[]),
   ).pipe(filter(Boolean));
 };
 

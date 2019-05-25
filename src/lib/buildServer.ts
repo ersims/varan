@@ -8,11 +8,19 @@ export interface Options {
   inputFileSystem?: webpack.Compiler['inputFileSystem'];
   outputFileSystem?: webpack.Compiler['outputFileSystem'];
 }
+export interface Output {
+  compiler: webpack.Compiler;
+  stats: webpack.Stats;
+  watcher: webpack.Compiler.Watching;
+  errors: string[];
+  warnings: string[];
+}
+
 // Init
 const getOpts = (options: Partial<Options>): Options => defaults({}, options, {});
 
 // Exports
-export default async function buildServer(config: webpack.Configuration, options: Partial<Options>) {
+export default async function buildServer(config: webpack.Configuration, options: Partial<Options>): Promise<Output> {
   const opts = getOpts(options);
   const compiler = webpack(config);
   if (opts.inputFileSystem) compiler.inputFileSystem = opts.inputFileSystem;
@@ -23,7 +31,7 @@ export default async function buildServer(config: webpack.Configuration, options
     // Watch
     const watcher = compiler.watch({}, (err, stats) => {
       if (err) return reject(err);
-      const out = {
+      const out: Output = {
         watcher,
         compiler,
         stats,

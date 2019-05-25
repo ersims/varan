@@ -273,15 +273,19 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     });
 
     // Pass logging through
-    result.server.runner.stdout.on(
-      'data',
-      data =>
-        !data.toString().startsWith('[HMR]') &&
-        log.info(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
-    );
-    result.server.runner.stderr.on('data', data =>
-      log.error(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
-    );
+    if (result.server.runner.stdout) {
+      result.server.runner.stdout.on(
+        'data',
+        data =>
+          !data.toString().startsWith('[HMR]') &&
+          log.info(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
+      );
+    }
+    if (result.server.runner.stderr) {
+      result.server.runner.stderr.on('data', data =>
+        log.error(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
+      );
+    }
   }
 
   // Integrate with client
