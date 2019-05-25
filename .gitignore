@@ -3,7 +3,6 @@
 
 # Exceptions
 !.babelrc*
-!.circleci
 !.env.example
 !.eslintrc
 !.eslintignore
@@ -15,7 +14,10 @@
 !.prettierignore
 !.prettierrc
 !.travis.yml
+!.circleci
 !.gitlab-ci.yml
+!.dependabot
+!.github
 
 # Generated directories
 build
