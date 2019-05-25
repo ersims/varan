@@ -1,3 +1,16 @@
+<a name="0.12.0"></a>
+
+# [0.12.0](https://github.com/ersims/varan/compare/v0.11.0...v0.12.0) (2019-05-25)
+
+### Bug Fixes
+
+- **deps:** update dependency fibers to v4 ([0a1d765](https://github.com/ersims/varan/commit/0a1d765))
+- **deps:** update dependency mini-css-extract-plugin to ^0.6.0 ([382db64](https://github.com/ersims/varan/commit/382db64))
+
+### Features
+
+- **deps:** update dependencies ([3bfca0a](https://github.com/ersims/varan/commit/3bfca0a))
+
 <a name="0.11.0"></a>
 
 # [0.11.0](https://github.com/ersims/varan/compare/v0.10.0...v0.11.0) (2019-04-10)
