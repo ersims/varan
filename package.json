@@ -54,7 +54,7 @@
     "release": "echo Recommended semver version bump: && conventional-recommended-bump -p angular && np",
     "pretest": "npm run check",
     "test": "jest",
-    "version": "node scripts/bumpTemplateVersion && git add \"template/package.json\" && prettier --write \"template/package.json\" && npm run changelog && git add CHANGELOG.md"
+    "version": "node scripts/bumpTemplateVersion && prettier --write \"template/package.json\" && git add \"template/package.json\" && npm run changelog && git add CHANGELOG.md"
   },
   "dependencies": {
     "@babel/core": "^7.4.5",
