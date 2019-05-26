@@ -2,6 +2,7 @@
 // TypeScript Version: 3.0.3
 
 import webpack from 'webpack';
+
 declare module 'webpack' {
   interface MultiCompiler {
     inputFileSystem?: webpack.Compiler['inputFileSystem'];

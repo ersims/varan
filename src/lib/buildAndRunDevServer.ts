@@ -4,7 +4,7 @@ import serve from 'webpack-serve';
 import webpack from 'webpack';
 import BuildError from './BuildError';
 
-// tslint:disable-next-line no-var-requires
+// eslint-disable-next-line
 const pkg = require('../../package.json');
 
 // Types
@@ -116,7 +116,7 @@ export default async function buildAndRunDevServer(
         return reject(buildError);
       }
 
-      resolve(out);
+      return resolve(out);
     }),
   );
 }

@@ -3,6 +3,7 @@
 
 declare module 'webpack-stats-plugin' {
   import webpack from 'webpack';
+
   export interface StatsWriterManifest {
     assetsByChunkName?: {
       [chunkName: string]: string | string[];

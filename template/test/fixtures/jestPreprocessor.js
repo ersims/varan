@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/no-unresolved */
 // Dependencies
 const babel = require('@babel/core');
 const preset = require('varan/babel/server');

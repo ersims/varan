@@ -15,5 +15,6 @@ app.get('*', (req, res) => res.json({ success: true }));
 
 // Export app
 export default app.listen(app.get('port'), () => {
+  // eslint-disable-next-line no-console
   console.log(`Server listening on ${app.get('port')} in ${app.get('env')} mode`);
 });

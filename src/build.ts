@@ -15,21 +15,22 @@ import getConfigs, { ValidConfiguration } from './lib/getConfigs';
 import createLogger from './lib/createLogger';
 import BuildError from './lib/BuildError';
 
-// tslint:disable-next-line no-var-requires
+// eslint-disable-next-line
 const pkg = require('../package.json');
 
 // Types
 interface TaskContext {
-  build?: {
-    stats: webpack.Stats;
-    config: webpack.Configuration;
-    outputPath: webpack.Output['path'];
-    configFile: string;
-  };
+  build?: TaskContextBuild;
   previousBuild?: BuildStats | null;
   currentBuild?: BuildStats | null;
   errors: string[];
   warnings: string[];
+}
+interface TaskContextBuild {
+  stats: webpack.Stats;
+  config: webpack.Configuration;
+  outputPath: webpack.Output['path'];
+  configFile: string;
 }
 interface TaskListContext {
   stats: TaskContext[];
@@ -112,7 +113,9 @@ export default async function build(options: Partial<Options>) {
                             const manifestRaw = await fs.readFile(manifestFile);
                             const manifest = JSON.parse(manifestRaw.toString());
                             ctx.stats[i].previousBuild = await getBuildStatsFromManifest(searchPath, manifest);
-                          } catch (err) {}
+                          } catch (err) {
+                            // Empty
+                          }
                         }
                       },
                     },
@@ -147,7 +150,7 @@ export default async function build(options: Partial<Options>) {
                                 (config.output && config.output.path && path.dirname(config.output.path)) || undefined,
                             };
 
-                            resolve(`${chalk.green(emojis.success)} Build completed successfully!`);
+                            return resolve(`${chalk.green(emojis.success)} Build completed successfully!`);
                           });
                         }),
                     },
@@ -169,7 +172,7 @@ export default async function build(options: Partial<Options>) {
                             // Check for chunk size violations
                             if (
                               ctx.stats[i].currentBuild &&
-                              Object.values(ctx.stats[i].currentBuild!.chunks).some(
+                              Object.values((ctx.stats[i].currentBuild as BuildStats).chunks).some(
                                 chunk => chunk.size > opts.warnChunkSize,
                               )
                             ) {
@@ -183,7 +186,7 @@ export default async function build(options: Partial<Options>) {
                             // Check for asset size violations
                             if (
                               ctx.stats[i].currentBuild &&
-                              Object.values(ctx.stats[i].currentBuild!.assets).some(
+                              Object.values((ctx.stats[i].currentBuild as BuildStats).assets).some(
                                 asset => asset.size > opts.warnAssetSize,
                               )
                             ) {
@@ -193,13 +196,16 @@ export default async function build(options: Partial<Options>) {
                                 )} limit of ${chalk.cyan(fileSize(opts.warnAssetSize))}`,
                               );
                             }
-                          } catch (err) {}
+                          } catch (err) {
+                            // Empty
+                          }
                         }
                       },
                     },
                   ]),
               })),
             ],
+            // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
             {
               showSubtasks: true,
               concurrent: true,
@@ -211,12 +217,13 @@ export default async function build(options: Partial<Options>) {
         task: (ctx: TaskListContext) => {
           const stats = Object.values(ctx.stats)
             .filter(s => s.build && s.build.stats)
-            .map(s => s.build!.stats);
+            .map(s => (s.build as TaskContextBuild).stats);
           ctx.totals = getCompilerStats(stats);
           return `${chalk.green(emojis.success)} Build statistics calculated successfully`;
         },
       },
     ],
+    // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
     {
       showSubtasks: true,
       renderer: opts.silent ? 'silent' : 'default',
@@ -285,7 +292,7 @@ export default async function build(options: Partial<Options>) {
         const isChunk = (
           assetOrChunk: BuildStats['chunks'][0] | BuildStats['assets'][0],
         ): assetOrChunk is BuildStats['chunks'][0] => {
-          return assetOrChunk.hasOwnProperty('assets');
+          return !!assetOrChunk.assets;
         };
         const tableHeaders = ['Asset [chunk]', 'Size', 'Gzipped', 'Brotli'];
         const printRelativeSize = (
@@ -293,13 +300,13 @@ export default async function build(options: Partial<Options>) {
           current: { name: string; [key: string]: any },
           comparisonObject?: { [key: string]: typeof current },
           warnSize?: number,
-        ) => {
-          if (!current[key]) return;
+        ): null | string => {
+          if (!current[key]) return null;
           let out = fileSize(current[key] as number);
           if (warnSize && current[key] > warnSize) out = chalk.red(out);
           if (comparisonObject && comparisonObject[current.name]) {
             const previous = comparisonObject[current.name] as typeof current;
-            if (previous.hasOwnProperty(key)) {
+            if (previous[key]) {
               if (current[key] > previous[key]) out += `  + ${chalk.red(fileSize(current[key] - previous[key]))}`;
               else if (current[key] === previous[key])
                 out += `  + ${chalk.yellow(fileSize(current[key] - previous[key]))}`;
@@ -333,12 +340,10 @@ export default async function build(options: Partial<Options>) {
               Object.values(cur.assets)
                 .sort((a, b) => b.size - a.size)
                 .forEach(asset => {
-                  const assetName =
-                    opts.warnAssetSize && asset.size > opts.warnAssetSize
-                      ? chalk.red(asset.name)
-                      : chunkTooBig
-                      ? chalk.yellow(asset.name)
-                      : asset.name;
+                  let assetName;
+                  if (opts.warnAssetSize && asset.size > opts.warnAssetSize) assetName = chalk.red(asset.name);
+                  else if (chunkTooBig) assetName = chalk.yellow(asset.name);
+                  else assetName = asset.name;
                   acc.push([
                     `  ${assetName}${Object.keys(asset.chunks).length > 1 ? ' +' : ''}`,
                     printSize('size', asset),

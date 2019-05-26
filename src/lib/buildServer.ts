@@ -49,7 +49,7 @@ export default async function buildServer(config: webpack.Configuration, options
         return reject(buildError);
       }
 
-      resolve(out);
+      return resolve(out);
     });
   });
 }

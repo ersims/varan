@@ -1,4 +1,4 @@
-// tslint:disable no-console
+/* eslint-disable no-console */
 // Dependencies
 import path from 'path';
 import MemoryFileSystem from 'memory-fs';
@@ -128,14 +128,14 @@ it('should work with default values', async done => {
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
-  expect(css.length).toBe(1);
+  expect(css).toHaveLength(1);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
   expect(css[0].size).toBeGreaterThan(0);
   expect(css[0].size).toBeLessThan(100);
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js.length).toBe(3);
+  expect(js).toHaveLength(3);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
@@ -200,14 +200,14 @@ it('should work with typescript', async done => {
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
-  expect(css.length).toBe(1);
+  expect(css).toHaveLength(1);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
   expect(css[0].size).toBeGreaterThan(0);
   expect(css[0].size).toBeLessThan(100);
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js.length).toBe(3);
+  expect(js).toHaveLength(3);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
@@ -252,7 +252,7 @@ it('should support custom webpack config', async done => {
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
-  expect(css.length).toBe(2);
+  expect(css).toHaveLength(2);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.css/);
   expect(css[1].name).toMatch(/main\.([a-z0-9]{8})\.css\.map/);
   expect(css[0].size).toBeGreaterThan(0);
@@ -263,7 +263,7 @@ it('should support custom webpack config', async done => {
   const js = getFiles(mfs, resolve('dist/client')).filter(
     f => f.isFile() && (f.name.endsWith('.js') || f.name.endsWith('.js.map')),
   );
-  expect(js.length).toBe(4);
+  expect(js).toHaveLength(4);
   expect(js[0].name).toMatch('customFileName.js');
   expect(js[1].name).toMatch('customFileName.js.map');
   expect(js[2].name).toMatch(/customFileName\.vendor\.([a-z0-9]{8})\.chunk\.js/);

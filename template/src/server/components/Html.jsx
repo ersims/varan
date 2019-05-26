@@ -11,20 +11,31 @@ class Html extends PureComponent {
     script: PropTypes.node,
     noscript: PropTypes.node,
     base: PropTypes.node,
-    htmlAttributes: PropTypes.object,
-    bodyAttributes: PropTypes.object,
+    htmlAttributes: PropTypes.objectOf(PropTypes.shape({})),
+    bodyAttributes: PropTypes.objectOf(PropTypes.shape({})),
     bundleJs: PropTypes.arrayOf(PropTypes.string.isRequired),
     bundleCss: PropTypes.arrayOf(PropTypes.string.isRequired),
     manifest: PropTypes.string,
     body: PropTypes.string,
-    initialState: PropTypes.object,
+    initialState: PropTypes.objectOf(PropTypes.shape({})),
     preload: PropTypes.arrayOf(PropTypes.string.isRequired),
   };
   static defaultProps = {
+    title: null,
+    meta: null,
+    link: null,
+    style: null,
+    script: null,
+    noscript: null,
+    base: null,
     htmlAttributes: {},
     bodyAttributes: {},
+    initialState: {},
     body: '',
+    manifest: '',
     preload: [],
+    bundleJs: [],
+    bundleCss: [],
   };
   render() {
     const {
@@ -45,7 +56,7 @@ class Html extends PureComponent {
       preload,
     } = this.props;
     return (
-      <html {...htmlAttributes}>
+      <html lang="en" {...htmlAttributes}>
         <head>
           {title}
           {meta}
@@ -53,34 +64,36 @@ class Html extends PureComponent {
           {base}
           {manifest && <link rel="manifest" href={manifest} />}
           {link}
-          {preload.map((file, i) => {
-            if (/\.js$/.test(file)) return <link key={i} href={file} rel="preload" as="script" />;
-            if (/\.css$/.test(file)) return <link key={i} href={file} rel="preload" as="style" />;
+          {preload.map(file => {
+            if (/\.js$/.test(file)) return <link key={file} href={file} rel="preload" as="script" />;
+            if (/\.css$/.test(file)) return <link key={file} href={file} rel="preload" as="style" />;
             if (/(\.woff|\.woff2|\.eot|\.ttf)$/.test(file))
-              return <link key={i} href={file} rel="preload" as="font" crossOrigin="anonymous" />;
+              return <link key={file} href={file} rel="preload" as="font" crossOrigin="anonymous" />;
             if (/(\.png|\.jpe?g|\.gif)$/.test(file))
-              return <link key={i} href={file} rel="preload" as="image" crossOrigin="anonymous" />;
+              return <link key={file} href={file} rel="preload" as="image" crossOrigin="anonymous" />;
             return null;
           })}
-          {bundleCss.map((css, i) => (
-            <link key={i} href={css} rel="stylesheet" />
+          {bundleCss.map(css => (
+            <link key={css} href={css} rel="stylesheet" />
           ))}
           {style}
           {script}
         </head>
         <body {...bodyAttributes}>
+          {/* eslint-disable-next-line react/no-danger */}
           <div id="root" dangerouslySetInnerHTML={{ __html: body }} />
           {initialState && (
             <script
               id="initial-state"
               type="text/javascript"
+              /* eslint-disable-next-line react/no-danger */
               dangerouslySetInnerHTML={{
                 __html: `window.__INITIAL_REDUX_STATE__ = ${serialize(initialState, { isJSON: true })}`,
               }}
             />
           )}
-          {bundleJs.map((js, i) => (
-            <script key={i} type="text/javascript" src={js} defer />
+          {bundleJs.map(js => (
+            <script key={js} type="text/javascript" src={js} defer />
           ))}
         </body>
       </html>

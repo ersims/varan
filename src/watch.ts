@@ -2,8 +2,6 @@
 import { defaults, get } from 'lodash';
 import path from 'path';
 import detectPort from 'detect-port-alt';
-import createLogger from './lib/createLogger';
-import getConfigs, { ValidConfiguration } from './lib/getConfigs';
 import Listr, { ListrOptions } from 'listr';
 import ora from 'ora';
 import chalk from 'chalk';
@@ -12,13 +10,15 @@ import { format } from 'url';
 import WebpackServe from 'webpack-serve';
 import { ChildProcess } from 'child_process';
 import waitOn from 'wait-on';
+import createLogger from './lib/createLogger';
+import getConfigs, { ValidConfiguration } from './lib/getConfigs';
 import emojis from './lib/emojis';
 import buildAndRunDevServer from './lib/buildAndRunDevServer';
 import buildServer from './lib/buildServer';
 import getCompilerStats, { CompilerStats } from './lib/getCompilerStats';
 import runServer from './lib/runServer';
 
-// tslint:disable-next-line no-var-requires
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const pkg = require('../package.json');
 
 // Types
@@ -115,7 +115,8 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
             (opts.serverPort && opts.serverPort !== opts.devServerPort && opts.serverPort) || opts.devServerPort + 1,
             opts.serverHost,
           );
-          opts.serverHost = process.env.HOST = opts.serverHost;
+          process.env.HOST = opts.serverHost;
+          opts.serverHost = process.env.HOST;
           opts.devServerWSPort = await detectPort(opts.devServerPort + 10, opts.devServerHost);
           process.env.PORT = opts.serverPort.toString();
           process.env.BABEL_ENV = opts.env;
@@ -141,7 +142,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
                           },
                           err => {
                             if (err) return reject(err);
-                            resolve();
+                            return resolve();
                           },
                         );
                       } else resolve();
@@ -166,6 +167,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
                 },
               },
             ],
+            // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
             {
               showSubtasks: true,
               concurrent: true,
@@ -191,12 +193,14 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
           if (rootPath && entryFile) {
             const serverOpts = Object.assign({}, opts, { entry: path.resolve(rootPath, entryFile) });
             const { server } = (await runServer(serverOpts)) as { server: ChildProcess };
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             ctx.server!.runner = server;
           }
           return `${chalk.green(emojis.success)} Server started successfully`;
         },
       },
     ],
+    // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
     {
       showSubtasks: true,
       renderer: opts.silent ? 'silent' : 'default',
@@ -342,9 +346,9 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     ? {
         runner: result.client.runner,
         async close() {
-          return Promise.all([result.client!.app && result.client!.app!.stop()].filter(Boolean) as Promise<
-            any
-          >[]) as Promise<any>;
+          return Promise.all([result.client && result.client.app && result.client.app.stop()].filter(
+            Boolean,
+          ) as Promise<any>[]) as Promise<any>;
         },
       }
     : null;
@@ -354,10 +358,12 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
         watcher: result.server.watcher,
         async close() {
           return Promise.all([
-            new Promise(resolve => result.server!.watcher.close(resolve)),
+            new Promise(resolve => result.server && result.server.watcher.close(resolve)),
             new Promise(resolve => {
-              result.server!.runner.once('close', resolve);
-              result.server!.runner.kill();
+              if (result.server) {
+                result.server.runner.once('close', resolve);
+                result.server.runner.kill();
+              }
             }),
           ]) as Promise<any>;
         },

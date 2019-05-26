@@ -71,7 +71,7 @@ module.exports = options => {
                 {
                   loaderMap: {
                     svg: {
-                      ReactComponent: require.resolve('@svgr/webpack') + '?-svgo,+ref![path]',
+                      ReactComponent: `${require.resolve('@svgr/webpack')}?-svgo,+ref![path]`,
                     },
                   },
                 },

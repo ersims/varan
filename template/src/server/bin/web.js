@@ -13,7 +13,7 @@ if (module.hot) module.hot.accept('../middlewares/renderReact');
 // Init
 const app = express();
 const ENV = process.env.NODE_ENV || 'production';
-const HOST = process.env.HOST;
+const HOST = process.env.HOST || '0.0.0.0';
 const PORT = (process.env.PORT && parseInt(process.env.PORT, 10)) || 3000;
 const stats =
   process.env.VARAN_STATS_MANIFEST &&
@@ -38,5 +38,6 @@ app.get('*', renderReact(stats, assets));
 // Export app
 export default app.listen(app.get('port'), app.get('host'), () => {
   if (process.send) process.send('ready');
+  // eslint-disable-next-line no-console
   console.log(`Server listening on ${app.get('port')} in ${app.get('env')} mode`);
 });

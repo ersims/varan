@@ -1,4 +1,4 @@
-// tslint:disable no-console
+/* eslint-disable no-console */
 // Dependencies
 import createLogger from '../../../src/lib/createLogger';
 

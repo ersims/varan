@@ -53,14 +53,14 @@ it('should work with default values', async done => {
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
-  expect(css.length).toBe(1);
+  expect(css).toHaveLength(1);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
   expect(css[0].size).toBeGreaterThan(0);
   expect(css[0].size).toBeLessThan(2 * 1024);
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js.length).toBe(4);
+  expect(js).toHaveLength(4);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js\.gz/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
@@ -77,7 +77,7 @@ it('should work with default values', async done => {
 
   // Media
   const media = getFiles(mfs, resolve('dist/client/static/media'));
-  expect(media.length).toBe(1);
+  expect(media).toHaveLength(1);
   expect(media[0].name).toMatch(/favicon\.([a-z0-9]{8})\.ico/);
 
   // Server
