@@ -4,5 +4,6 @@
 declare module '@samverschueren/stream-to-observable' {
   import { Stream } from 'stream';
   import { Observable } from 'rxjs';
+
   export default function streamToObservable<T = any>(stream: Stream, options: {}): Observable<T>;
 }

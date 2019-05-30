@@ -17,6 +17,7 @@ export default function getConfigs<T>(configFilesOrObjectsOrFns: ValidConfigurat
 
   // Load config files
   return configs.map(config => {
+    // eslint-disable-next-line
     const rawConfig = typeof config === 'string' ? require(config) : config;
     return typeof rawConfig === 'function' ? rawConfig(opts) : rawConfig;
   });

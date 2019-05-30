@@ -4,7 +4,7 @@
 # Exceptions
 !.babelrc*
 !.env.example
-!.eslintrc
+!.eslintrc*
 !.eslintignore
 !.editorconfig
 !.gitattributes

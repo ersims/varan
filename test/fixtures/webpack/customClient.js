@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // Dependencies
 const { DefinePlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -19,7 +20,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.mjs', '.json'],
   },
   devtool: 'cheap-module-source-map',
-  entry: [resolve('src/client/index.js')],
+  entry: [resolve('src/client/index.jsx')],
   output: {
     path: resolve('dist/client'),
     filename: 'customFileName.js',
@@ -93,6 +94,7 @@ module.exports = {
           compress: true,
           output: {
             comments: false,
+            // eslint-disable-next-line @typescript-eslint/camelcase
             ascii_only: true,
           },
         },
@@ -114,6 +116,7 @@ module.exports = {
     fs: 'empty',
     net: 'empty',
     tls: 'empty',
+    // eslint-disable-next-line @typescript-eslint/camelcase
     child_process: 'empty',
   },
 };

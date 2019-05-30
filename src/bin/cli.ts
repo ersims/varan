@@ -6,12 +6,12 @@ import program from 'commander';
 import path from 'path';
 import updateNotifier from 'update-notifier';
 import inquirer from 'inquirer';
+import chalk from 'chalk';
 import { build, init, watch } from '../index';
 import emojis from '../lib/emojis';
-import chalk from 'chalk';
 import createLogger from '../lib/createLogger';
 
-// tslint:disable-next-line no-var-requires
+// eslint-disable-next-line
 const pkg = require('../../package.json');
 
 // Types
@@ -69,6 +69,7 @@ program
             ],
           },
         ]);
+        // eslint-disable-next-line no-param-reassign
         if (answer.templateType === TemplateTypes.ADVANCED) opts.advanced = true;
       }
       await init({
@@ -129,6 +130,7 @@ program
   .option('--open', 'Open app in browser automatically?')
   .action(async (rawFiles: string[], opts) => {
     const log = createLogger({ silent: opts.silent });
+    // eslint-disable-next-line no-param-reassign
     opts.args = process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [];
     const files = rawFiles.filter(f => !opts.args.includes(f));
     try {

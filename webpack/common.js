@@ -38,7 +38,7 @@ module.exports = options => {
     },
     output: {
       // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: info => 'file://' + path.resolve(info.absoluteResourcePath).replace(/\\/g, '/'),
+      devtoolModuleFilenameTemplate: info => `file://${path.resolve(info.absoluteResourcePath).replace(/\\/g, '/')}`,
     },
     performance: isDev ? { hints: false } : undefined,
     stats: 'errors-only',

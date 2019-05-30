@@ -1,6 +1,7 @@
 // Get corejs version
 let corejs;
 try {
+  // eslint-disable-next-line import/no-dynamic-require
   corejs = require(require.resolve('core-js/package.json', { paths: [process.cwd()] })).version;
 } catch (err) {
   throw new Error('Peer dependency "core-js" or "core-js-pure" is required!');

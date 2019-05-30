@@ -13,7 +13,7 @@ import chalk from 'chalk';
 import emojis from './lib/emojis';
 import createLogger from './lib/createLogger';
 
-// tslint:disable-next-line no-var-requires
+// eslint-disable-next-line
 const pkg = require('../package.json');
 
 // Types
@@ -22,6 +22,9 @@ export interface Options {
   fromGitRepo?: string;
   silent: boolean;
   appDir: string;
+}
+export interface OptionsWithGitRepo extends Options {
+  fromGitRepo: string;
 }
 
 // Init
@@ -67,7 +70,13 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
         title: `Cloning existing boilerplate from ${opts.fromGitRepo}`,
         enabled: () => !!opts.fromGitRepo,
         task: () =>
-          exec('git', ['clone', '--quiet', '--origin=upstream', opts.fromGitRepo!, newAppDir]).pipe(
+          exec('git', [
+            'clone',
+            '--quiet',
+            '--origin=upstream',
+            (opts as OptionsWithGitRepo).fromGitRepo,
+            newAppDir,
+          ]).pipe(
             catchError(() =>
               throwError(
                 new Error(
@@ -111,6 +120,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
         task: () => exec('npm', ['install']),
       },
     ],
+    // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
     {
       showSubtasks: false,
       renderer: opts.silent ? 'silent' : 'default',

@@ -88,10 +88,10 @@ module.exports = options => {
         writeToDisk: true,
         // TODO: Enable this again (after webpack-serve >v2.0.2) and verify HMR is working correctly => writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
-      add: (app, middleware, options) => {
-        app.use(webpackServeWaitpage(options, { title: '🔁 Building...', theme: 'dark' }));
+      add: (app, middleware, serveOptions) => {
+        app.use(webpackServeWaitpage(serveOptions, { title: '🔁 Building...', theme: 'dark' }));
         app.use((ctx, next) => {
-          if (options.waitForPromise) return options.waitForPromise.then(next);
+          if (serveOptions.waitForPromise) return serveOptions.waitForPromise.then(next);
           return next();
         });
         app.use(
@@ -109,7 +109,7 @@ module.exports = options => {
         );
         middleware.webpack();
         middleware.content();
-        options.proxy && app.use(convert(proxy('/', { target: `http://localhost:${opts.serverPort}/` })));
+        if (serveOptions.proxy) app.use(convert(proxy('/', { target: `http://localhost:${opts.serverPort}/` })));
         app.use(convert(history()));
       },
     },
@@ -142,7 +142,7 @@ module.exports = options => {
                 {
                   loaderMap: {
                     svg: {
-                      ReactComponent: require.resolve('@svgr/webpack') + '?-svgo,+ref![path]',
+                      ReactComponent: `${require.resolve('@svgr/webpack')}?-svgo,+ref![path]`,
                     },
                   },
                 },
@@ -226,6 +226,7 @@ module.exports = options => {
           ],
           logger(message) {
             if (message.startsWith('Total precache size is') || message.startsWith('Skipping static resource')) return;
+            // eslint-disable-next-line no-console
             console.log(message);
           },
         }),
@@ -271,6 +272,7 @@ module.exports = options => {
                 output: {
                   ecma: 5,
                   comments: false,
+                  // eslint-disable-next-line @typescript-eslint/camelcase
                   ascii_only: true,
                 },
               },
@@ -297,6 +299,7 @@ module.exports = options => {
       fs: 'empty',
       net: 'empty',
       tls: 'empty',
+      // eslint-disable-next-line @typescript-eslint/camelcase
       child_process: 'empty',
     },
   });

@@ -82,12 +82,19 @@ export default async function getBuildStatsFromManifest(
     // Enrich files with compressed version details
     const files = Object.values(statistics.assets);
     const extensions = Object.entries(additionalExtensions);
+
+    // TODO: Consider rewriting to optimize for parallel lookup
+    // eslint-disable-next-line no-restricted-syntax
     for (const file of files) {
+      // eslint-disable-next-line no-restricted-syntax
       for (const [extName, extValue] of extensions) {
         try {
+          // eslint-disable-next-line no-await-in-loop
           const extFile = await fs.stat(path.resolve(searchPath, file.name + extValue));
           file[extName] = extFile.size;
-        } catch (err) {}
+        } catch (err) {
+          // Empty
+        }
       }
     }
 
