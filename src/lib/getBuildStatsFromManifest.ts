@@ -84,9 +84,7 @@ export default async function getBuildStatsFromManifest(
     const extensions = Object.entries(additionalExtensions);
 
     // TODO: Consider rewriting to optimize for parallel lookup
-    // eslint-disable-next-line no-restricted-syntax
     for (const file of files) {
-      // eslint-disable-next-line no-restricted-syntax
       for (const [extName, extValue] of extensions) {
         try {
           // eslint-disable-next-line no-await-in-loop
