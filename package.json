@@ -83,7 +83,7 @@
     "cssnano": "^4.1.0",
     "dart-sass": "^1.20.1",
     "detect-port-alt": "^1.1.6",
-    "execa": "^1.0.0",
+    "execa": "^2.0.0",
     "fibers": "^4.0.1",
     "file-loader": "^4.0.0",
     "filesize": "^4.0.0",
