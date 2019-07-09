@@ -61,11 +61,12 @@ module.exports = options => {
             {
               loader: require.resolve('css-loader'),
               options: {
-                exportOnlyLocals: isNode,
-                modules: true,
-                localIdentName: opts.cssModulesIdent,
+                onlyLocals: isNode,
                 importLoaders: 3,
                 sourceMap: isDev,
+                modules: {
+                  localIdentName: opts.cssModulesIdent,
+                },
               },
             },
             {
