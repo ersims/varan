@@ -80,9 +80,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
             catchError(() =>
               throwError(
                 new Error(
-                  `Failed to clone from git repo ${
-                    opts.fromGitRepo
-                  }. Make sure you have git (https://git-scm.com/) installed, the remote repository exists, you have the necessary permissions and internet connectivity.`,
+                  `Failed to clone from git repo ${opts.fromGitRepo}. Make sure you have git (https://git-scm.com/) installed, the remote repository exists, you have the necessary permissions and internet connectivity.`,
                 ),
               ),
             ),
