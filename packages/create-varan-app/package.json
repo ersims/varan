@@ -1,0 +1,74 @@
+{
+  "name": "create-varan-app",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Create varan app command line utility",
+  "author": "ersims",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ersims/varan.git"
+  },
+  "keywords": [
+    "varan",
+    "create-varan-app",
+    "create-react-app",
+    "react",
+    "webpack",
+    "ssr",
+    "pwa",
+    "offline",
+    "serviceworker",
+    "boilerplate"
+  ],
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/ersims/varan/issues"
+  },
+  "homepage": "https://github.com/ersims/varan#README.md",
+  "engines": {
+    "node": ">= 8.11.3",
+    "npm": ">= 5.6.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "create-varan-app": "./dist/bin/create-varan-app.js"
+  },
+  "scripts": {
+    "build": "tsc --build",
+    "build:watch": "tsc --build --watch",
+    "check:types": "tsc --noEmit",
+    "clean": "del-cli ./dist tsconfig.tsbuildinfo",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@samverschueren/stream-to-observable": "^0.3.0",
+    "chalk": "^2.4.2",
+    "commander": "^2.20.0",
+    "execa": "^2.0.0",
+    "fs-extra": "^8.1.0",
+    "listr": "^0.14.2",
+    "lodash.defaults": "^4.2.0",
+    "rxjs": "^6.5.2",
+    "source-map-support": "^0.5.12",
+    "split": "^1.0.1",
+    "update-notifier": "^3.0.1",
+    "validate-npm-package-name": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/execa": "^0.9.0",
+    "@types/fs-extra": "^8.0.0",
+    "@types/listr": "^0.14.0",
+    "@types/lodash.defaults": "^4.2.6",
+    "@types/split": "^1.0.0",
+    "@types/table": "^4.0.6",
+    "@types/update-notifier": "^2.5.0",
+    "typescript": "^3.5.3"
+  },
+  "jest": {
+    "transform": {
+      "\\.tsx?$": "ts-jest"
+    }
+  }
+}

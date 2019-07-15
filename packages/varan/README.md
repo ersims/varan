@@ -17,8 +17,8 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 ## Documentation
 
 - [Installation](#installation)
-  - [Global installation](#installation-global)
-  - [Local installation (recommended)](#installation-local)
+  - [Alternative 1: New Project](#installation-new-project)
+  - [Alternative 2: Existing Project](#installation-existing-project)
 - [Usage](#usage)
   - [Development](#usage-development)
   - [Production](#usage-production)
@@ -35,34 +35,25 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 
 ## Installation
 
-<a id="installation-global"></a>
+<a id="installation-new-project"></a>
 
-### Global installation
+### Alternative 1: New project
 
-It is possible to install `varan` globally and initiate new projects similar to [create-react-app](https://github.com/facebook/create-react-app).
-This is very useful for creating new projects, but keep in mind that it is highly recommended to use a local project installation of `varan` after creating a new project.
+The best way of creating a new varan project is to use the [create-varan-app][create-varan-app-url] script.
+This will automatically set up a project using varan with all the bells and whistles.
+It is very good starting point for modern web apps.
 
-1. Install `varan` globally
-
-```bash
-$ npm i -g varan
-```
-
-2. Create a new project
+1. Create a new varan project
 
 ```bash
-$ varan init my-varan-app
+$ npx create-varan-app my-project
 ```
 
-Optionally use the [advanced](https://github.com/ersims/varan-boilerplate/tree/master) project template/boilerplate by specifying `--advanced`:
+2. Profit. Do your magic.
 
-```bash
-$ varan init --advanced my-varan-app
-```
+<a id="installation-existing-project"></a>
 
-<a id="installation-local"></a>
-
-### Local installation for existing projects
+### Alternative 2: Existing projects
 
 1. Install `varan` in your project
 
@@ -100,7 +91,6 @@ $ varan
 
   Commands:
 
-    init [options] <name>
     build [options] [files...]
     watch [options]
 
@@ -301,7 +291,7 @@ SyntaxError: Unexpected token :
 In this case it is because `aws-amplify` and `aws-amplify-react` is installed and depends on `@aws-amplify/ui` which requires a `.css` file.
 This works fine in the front-end because all code, including `node_modules`, is bundled and run through webpack.
 The back-end Node.js server does not run `node_modules` through webpack and hence does not know how to parse `.css` files.
-The result is that the crashes immediately when started.
+The result is that it crashes immediately when started.
 
 This specific issue can be solved in two ways;
 
@@ -351,5 +341,6 @@ Run `npm run release` to publish a new release and `npm run release --tag=next` 
 [conventional-commits-url]: https://conventionalcommits.org/
 [lerna-image]: https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg
 [lerna-url]: https://lerna.js.org
+[create-varan-app-url]: https://npmjs.org/package/create-varan-app
 [license-url]: https://github.com/ersims/varan/blob/master/LICENSE.md
 [license-image]: https://img.shields.io/github/license/ersims/varan.svg
