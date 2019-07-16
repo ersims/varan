@@ -1,0 +1,66 @@
+{
+  "name": "babel-preset-varan",
+  "private": true,
+  "version": "0.0.1",
+  "description": "Babel preset used in varan applications",
+  "author": "ersims",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ersims/varan.git"
+  },
+  "keywords": [
+    "varan",
+    "react",
+    "webpack",
+    "babel",
+    "babel-preset"
+  ],
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/ersims/varan/issues"
+  },
+  "homepage": "https://github.com/ersims/varan#README.md",
+  "engines": {
+    "node": ">= 8.11.3",
+    "npm": ">= 5.6.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "check:types": "tsc --noEmit",
+    "clean": "del-cli ./dist",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.5.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-react-constant-elements": "^7.5.0",
+    "@babel/plugin-transform-react-inline-elements": "^7.2.0",
+    "@babel/plugin-transform-react-jsx-self": "^7.2.0",
+    "@babel/plugin-transform-react-jsx-source": "^7.5.0",
+    "@babel/plugin-transform-runtime": "^7.5.0",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@svgr/webpack": "^4.3.2",
+    "babel-plugin-named-asset-import": "^0.3.2",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.24"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.2",
+    "typescript": "^3.5.3"
+  },
+  "peerDependencies": {
+    "@babel/runtime": "^7.4.2",
+    "core-js": "^2.0.0 || ^3.0.0"
+  },
+  "jest": {
+    "transform": {
+      "\\.tsx?$": "ts-jest"
+    }
+  }
+}

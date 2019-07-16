@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const path = require('path');
-const babelConfig = require('../../../babel');
+const babelConfig = require('babel-preset-varan');
 
 // Init
 const resolve = p => path.resolve(process.env.TEST_USER_CWD, p);

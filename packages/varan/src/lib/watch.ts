@@ -104,7 +104,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     throw new Error('One or more invalid config files provided. Maximum of one config file per target is supported.');
   }
   const taskOptions: ListrOptions & { showSubtasks: boolean } = {
-    showSubtasks: false,
+    showSubtasks: true,
     renderer: opts.verbose ? 'default' : 'silent',
     nonTTYRenderer: opts.verbose ? 'verbose' : 'silent',
   };

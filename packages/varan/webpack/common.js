@@ -4,7 +4,7 @@ const postcssPresetEnv = require('postcss-preset-env');
 const cssNano = require('cssnano');
 const { defaults } = require('lodash');
 const path = require('path');
-const babelPreset = require('../babel');
+const babelPreset = require('babel-preset-varan');
 
 // Init
 const getOpts = options => {
@@ -57,18 +57,6 @@ module.exports = options => {
           options: {
             cacheDirectory: isDev,
             presets: [[babelPreset]],
-            plugins: [
-              [
-                require.resolve('babel-plugin-named-asset-import'),
-                {
-                  loaderMap: {
-                    svg: {
-                      ReactComponent: `${require.resolve('@svgr/webpack')}?-svgo,+ref![path]`,
-                    },
-                  },
-                },
-              ],
-            ],
           },
         },
 

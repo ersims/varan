@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const babel = require('@babel/core');
-const preset = require('../../babel');
+const preset = require('babel-preset-varan');
 
 // Exports
 module.exports = {

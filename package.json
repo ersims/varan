@@ -44,10 +44,10 @@
   "scripts": {
     "apply:format": "prettier --write \"**/*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}\"",
     "build": "lerna run build",
-    "build:watch": "lerna run build:watch",
-    "bootstrap": "lerna bootstrap --hoist",
+    "build:watch": "lerna run --parallel build:watch",
+    "bootstrap": "lerna bootstrap",
     "preunbootstrap": "npm run clean",
-    "unbootstrap": "lerna clean",
+    "unbootstrap": "lerna clean --yes",
     "check:format": "prettier --list-different \"**/*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}\"",
     "check:linting": "eslint --cache --cache-location node_modules/.cache/.eslintcache \"*.{ts,js}?(x)\" \"{packages,test,types}/**/*.{ts,js}?(x)\"",
     "check:types": "lerna run check:types",
