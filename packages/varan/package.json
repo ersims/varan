@@ -32,6 +32,11 @@
   "bin": {
     "varan": "./dist/bin/varan.js"
   },
+  "files": [
+    "dist",
+    "src",
+    "webpack"
+  ],
   "scripts": {
     "prebuild": "npm run clean",
     "build": "tsc",

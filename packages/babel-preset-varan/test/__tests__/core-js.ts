@@ -1,5 +1,5 @@
-// Init
-jest.doMock('core-js/package.json', () => undefined);
+// Mocks
+jest.mock('core-js/package.json', () => undefined);
 
 // Tests
 it('should require core-js peer dependency', async done => {

@@ -35,6 +35,10 @@
   "bin": {
     "create-varan-app": "./dist/bin/create-varan-app.js"
   },
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "build": "tsc --build",
     "build:watch": "tsc --build --watch",
@@ -43,16 +47,13 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "@samverschueren/stream-to-observable": "^0.3.0",
     "chalk": "^2.4.2",
     "commander": "^2.20.0",
     "execa": "^2.0.0",
     "fs-extra": "^8.1.0",
     "listr": "^0.14.2",
     "lodash.defaults": "^4.2.0",
-    "rxjs": "^6.5.2",
     "source-map-support": "^0.5.12",
-    "split": "^1.0.1",
     "update-notifier": "^3.0.1",
     "validate-npm-package-name": "^3.0.0"
   },
