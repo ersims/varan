@@ -45,7 +45,7 @@
     "apply:format": "prettier --write \"**/*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}\"",
     "build": "lerna run build",
     "build:watch": "lerna run --parallel build:watch",
-    "bootstrap": "lerna bootstrap",
+    "bootstrap": "lerna bootstrap --no-ci",
     "preunbootstrap": "npm run clean",
     "unbootstrap": "lerna clean --yes",
     "check:format": "prettier --list-different \"**/*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}\"",
