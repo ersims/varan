@@ -40,7 +40,7 @@ program.usage('<command> [options]').version(pkg.version);
  */
 program
   .command('build [files...]')
-  .option('--env <environment>', 'Environment to use. Defaults to production')
+  .option('--env <environment>', 'Environment to use.', 'production')
   .option('-a, --analyze', 'Analyze build')
   .option('-s, --silent', 'Disable output')
   .action(async (files: string[], opts) => {

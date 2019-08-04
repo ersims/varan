@@ -1,9 +1,12 @@
 {
   "version": "independent",
-  "packages": ["packages/*"],
+  "packages": ["packages/*", "examples/*"],
   "command": {
     "publish": {
       "conventionalCommits": true
+    },
+    "version": {
+      "message": "chore(release): publish %s"
     }
   },
   "changelog": {

@@ -9,9 +9,17 @@ module.exports = {
     es6: true,
   },
   overrides: [
+    // Browser environments
+    {
+      files: ['examples/**/src/client/**'],
+      env: {
+        browser: true,
+      },
+    },
+
     // Test environment
     {
-      files: ['test/**', 'packages/**/test/**'],
+      files: ['test/**', 'examples/**/test/**', 'packages/**/test/**'],
       env: {
         jest: true,
       },
@@ -27,7 +35,14 @@ module.exports = {
 
     // Dev dependencies
     {
-      files: ['test/**', 'types/**', 'packages/**/test/**', 'packages/**/types/**'],
+      files: [
+        'test/**',
+        'types/**',
+        'examples/**/test/**',
+        'examples/**/types/**',
+        'packages/**/test/**',
+        'packages/**/types/**',
+      ],
       rules: {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
       },

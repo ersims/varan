@@ -28,6 +28,15 @@ program.usage('<project name> [options]').version(pkg.version);
 program
   .arguments('<name>')
   .option('-s, --silent', 'silence output')
+  .option(
+    '-e, --example <example>',
+    'Create project from an example. See https://github.com/ersims/varan/tree/master/examples for a list of examples',
+  )
+  .option(
+    '-r, --fromGitRepo <gitRepo>',
+    'Create project from an existing Git repository',
+    'https://github.com/ersims/varan-boilerplate.git',
+  )
   .action(async (name, opts) => {
     const log = createLogger({ silent: opts.silent });
     const cwd = process.cwd();
@@ -41,6 +50,8 @@ program
       log.info();
       const { appDir } = await init({
         name,
+        example: opts.example,
+        fromGitRepo: !opts.example && opts.fromGitRepo,
         verbose: !opts.silent,
       });
 
