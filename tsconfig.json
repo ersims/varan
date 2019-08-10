@@ -28,7 +28,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": false,
     "resolveJsonModule": true,
-    "baseUrl": "./",
-    "paths": {}
+    "rootDir": "./"
   }
 }

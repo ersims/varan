@@ -11,6 +11,7 @@
 !.gitignore
 !.gitkeep
 !.npmignore
+!.npmrc
 !.prettierignore
 !.prettierrc
 !.travis.yml

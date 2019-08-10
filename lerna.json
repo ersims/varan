@@ -3,14 +3,17 @@
   "version": "independent",
   "packages": ["packages/*", "examples/*"],
   "command": {
-    "publish": {
-      "conventionalCommits": true
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"],
+      "strict": true
     },
     "version": {
-      "message": "chore(release): Publish release"
+      "allowBranch": "master",
+      "conventionalCommits": true,
+      "message": "chore(release): Publish release",
+      "ignoreChanges": ["**/test/**", "**/*.md"]
     }
   },
-  "ignoreChanges": ["**/test/**", "**/*.md"],
   "changelog": {
     "repo": "ersims/varan",
     "cacheDir": "node_modules/.cache/.changelog"
