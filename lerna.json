@@ -1,4 +1,5 @@
 {
+  "lerna": "3.16.4",
   "version": "independent",
   "packages": ["packages/*", "examples/*"],
   "command": {
@@ -6,20 +7,12 @@
       "conventionalCommits": true
     },
     "version": {
-      "message": "chore(release): publish %s"
+      "message": "chore(release): Publish release"
     }
   },
+  "ignoreChanges": ["**/test/**", "**/*.md"],
   "changelog": {
     "repo": "ersims/varan",
-    "labels": {
-      "tag: new feature": ":rocket: New Feature",
-      "tag: breaking change": ":boom: Breaking Change",
-      "tag: bug fix": ":bug: Bug Fix",
-      "tag: enhancement": ":nail_care: Enhancement",
-      "tag: documentation": ":memo: Documentation",
-      "tag: internal": ":house: Internal",
-      "tag: underlying tools": ":hammer: Underlying Tools"
-    },
     "cacheDir": "node_modules/.cache/.changelog"
   }
 }

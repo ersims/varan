@@ -35,6 +35,3 @@ npm-debug.log*
 yarn.lock
 *.lerna_backup
 *.tsbuildinfo
-
-# Varan examples lock files
-examples/**/package-lock.json

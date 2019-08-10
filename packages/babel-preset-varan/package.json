@@ -54,10 +54,7 @@
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24"
   },
-  "devDependencies": {
-    "@types/node": "^12.6.9",
-    "typescript": "^3.5.3"
-  },
+  "devDependencies": {},
   "peerDependencies": {
     "@babel/runtime": "^7.4.2",
     "core-js": "^2.0.0 || ^3.0.0"

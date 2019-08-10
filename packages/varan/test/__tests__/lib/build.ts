@@ -127,10 +127,10 @@ it('should work with default values', async done => {
   expect(js[0].size).toBeGreaterThan(0);
   expect(js[0].size).toBeLessThan(3 * 1024);
   expect(js[1].size).toBeGreaterThan(0);
-  expect(js[1].size).toBeLessThan(155 * 1024);
+  expect(js[1].size).toBeLessThan(160 * 1024);
   expect(js[2].size).toBeGreaterThan(0);
   expect(js[2].size).toBeLessThan(50 * 1024);
-  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(155 * 1024);
+  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(160 * 1024);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
@@ -198,10 +198,10 @@ it('should work with typescript', async done => {
   expect(js[0].size).toBeGreaterThan(0);
   expect(js[0].size).toBeLessThan(3 * 1024);
   expect(js[1].size).toBeGreaterThan(0);
-  expect(js[1].size).toBeLessThan(155 * 1024);
+  expect(js[1].size).toBeLessThan(160 * 1024);
   expect(js[2].size).toBeGreaterThan(0);
   expect(js[2].size).toBeLessThan(50 * 1024);
-  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(155 * 1024);
+  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(160 * 1024);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);

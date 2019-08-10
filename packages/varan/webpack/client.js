@@ -59,14 +59,12 @@ module.exports = options => {
         '/': `http://localhost:${opts.serverPort}/`,
       },
       compress: true,
-
       clientLogLevel: 'warn',
       quiet: true,
       noInfo: true,
       stats: 'errors-only',
       overlay: true,
-      progress: true,
-
+      progress: false,
       contentBase: opts.targetDir,
       watchContentBase: false,
       publicPath,

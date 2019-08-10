@@ -53,7 +53,7 @@
     "babel-loader": "^8.0.6",
     "babel-preset-varan": "^0.0.1",
     "chalk": "^2.4.2",
-    "commander": "^2.20.0",
+    "commander": "^3.0.0",
     "compression-webpack-plugin": "^3.0.0",
     "css-loader": "^3.1.0",
     "cssnano": "^4.1.0",
@@ -105,7 +105,6 @@
     "@types/fs-extra": "^8.0.0",
     "@types/listr": "^0.14.2",
     "@types/lodash": "^4.14.136",
-    "@types/node": "^12.6.9",
     "@types/ora": "^3.2.0",
     "@types/react": "^16.8.24",
     "@types/react-dom": "^16.8.5",
@@ -123,8 +122,7 @@
     "react-dom": "^16.8.6",
     "react-helmet": "^5.2.1",
     "react-hot-loader": "^4.12.10",
-    "react-test-renderer": "^16.8.6",
-    "typescript": "^3.5.3"
+    "react-test-renderer": "^16.8.6"
   },
   "peerDependencies": {
     "@babel/runtime": "^7.4.2",

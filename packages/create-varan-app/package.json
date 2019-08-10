@@ -49,7 +49,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "chalk": "^2.4.2",
-    "commander": "^2.20.0",
+    "commander": "^3.0.0",
     "execa": "^2.0.0",
     "fs-extra": "^8.1.0",
     "listr": "^0.14.2",
@@ -67,8 +67,7 @@
     "@types/split": "^1.0.0",
     "@types/table": "^4.0.6",
     "@types/tar": "^4.0.3",
-    "@types/update-notifier": "^2.5.0",
-    "typescript": "^3.5.3"
+    "@types/update-notifier": "^2.5.0"
   },
   "jest": {
     "transform": {
