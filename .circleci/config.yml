@@ -8,8 +8,6 @@ x-version-check: &version-check
   run: npm -v && node -v
 x-install-deps: &install-dependencies
   run: npm install
-x-bootstrap-packages: &bootstrap-packages
-  run: npm run bootstrap
 x-save-cache: &save-cache
   save_cache:
     paths:
@@ -35,7 +33,6 @@ jobs:
       - *restore-cache
       - *version-check
       - *install-dependencies
-      - *bootstrap-packages
       - *save-cache
       - *build
       - *run-tests
@@ -50,7 +47,6 @@ jobs:
       - *restore-cache
       - *version-check
       - *install-dependencies
-      - *bootstrap-packages
       - *save-cache
       - *build
       - *run-tests
@@ -65,7 +61,6 @@ jobs:
       - *restore-cache
       - *version-check
       - *install-dependencies
-      - *bootstrap-packages
       - *save-cache
       - *build
       - *run-tests

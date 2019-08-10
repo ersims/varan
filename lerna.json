@@ -5,6 +5,7 @@
   "command": {
     "bootstrap": {
       "npmClientArgs": ["--no-package-lock"],
+      "ci": false,
       "strict": true
     },
     "version": {

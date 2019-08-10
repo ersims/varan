@@ -1,6 +1,7 @@
 # Varan basic example
 
-This project is a [varan][varan-url] project. This is the simplified boilerplate. To use the more advanced boilerplate, initiate you project using `varan init -a my-awesome-project` or clone the [advanced boilerplate][varan-advanced-boilerplate-url] manually.
+This example contains a basic `server` and `client` component.
+For most projects this is an ideal starting point as it allows maximum portability and flexibility.
 
 ## Documentation
 
@@ -13,12 +14,24 @@ This project is a [varan][varan-url] project. This is the simplified boilerplate
 
 <a id="getting-started"></a>
 
-### Getting Started
+### Getting started
 
-The quickest way to get started is to use [Heroku][heroku-url].
+Here is an excerpt of the project directory structure with the most important directories.
 
-1. Sign up for [Heroku][heroku-url] and create an app.
-2. Follow the `Deploy using Heroku Git` steps in [Heroku][heroku-url] to deploy the app.
+```bash
+.
+├── dist // (auto generated when running npm run build)
+├── src // source code
+│   ├── assets
+│   │   └── favicon.ico
+│   ├── client // all client specific code - this runs in the browser (and during server side rendering)
+│   │   └── index.jsx
+│   └── server // all server code - this runs on the server and handles serving the client directory
+│       └── bin
+│           └── web.js
+└── test
+    └── __tests__
+```
 
 <a id="usage"></a>
 
@@ -28,32 +41,32 @@ The quickest way to get started is to use [Heroku][heroku-url].
 
 #### Development
 
-Start a development server with hot reloading
+Start a development server with hot reloading.
 
 ```bash
-npm run watch
+$ npm run start:watch
 ```
 
 <a id="usage-production"></a>
 
 #### Production
 
-Build a production build
+Build a production build.
 
 ```bash
-npm run build
+$ npm run build
 ```
 
-Analyze the production build
+Analyze the production build.
 
 ```bash
-npm run build:analyze
+$ npm run build:analyze
 ```
 
-Start the production server
+Deploy your application and start the production server.
 
 ```bash
-npm start
+$ npm start
 ```
 
 <a id="customization"></a>
@@ -70,5 +83,3 @@ For more information on how to customize your build, development, browser suppor
 [MIT](LICENSE.md)
 
 [varan-url]: https://github.com/ersims/varan
-[varan-advanced-boilerplate-url]: https://github.com/ersims/varan-boilerplate
-[heroku-url]: https://dashboard.heroku.com
