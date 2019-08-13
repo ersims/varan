@@ -1,6 +1,6 @@
 {
   "name": "varan",
-  "version": "0.13.0",
+  "version": "0.13.1",
   "description": "A webpack starter kit for offline-first bring-your-own-code apps with server side rendering",
   "author": "ersims",
   "repository": {
@@ -51,7 +51,7 @@
     "@types/wait-on": "^3.2.0",
     "@types/webpack": "^4.32.1",
     "babel-loader": "^8.0.6",
-    "babel-preset-varan": "^0.1.0",
+    "babel-preset-varan": "^0.1.1",
     "chalk": "^2.4.2",
     "commander": "^3.0.0",
     "compression-webpack-plugin": "^3.0.0",

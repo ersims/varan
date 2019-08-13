@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/ersims/varan/compare/create-varan-app@0.1.0...create-varan-app@0.1.1) (2019-08-13)
+
+### Bug Fixes
+
+- add missing files to released packages ([fbf7816](https://github.com/ersims/varan/commit/fbf7816))
+
 # 0.1.0 (2019-08-13)
 
 ### Features
