@@ -11,6 +11,7 @@
     "version": {
       "allowBranch": "master",
       "conventionalCommits": true,
+      "createRelease": "github",
       "message": "chore(release): publish release",
       "ignoreChanges": ["**/test/**", "**/*.md"]
     }
