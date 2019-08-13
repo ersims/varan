@@ -1,6 +1,6 @@
 {
   "name": "babel-preset-varan",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Babel preset used in varan applications",
   "author": "ersims",
   "repository": {
@@ -53,7 +53,6 @@
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24"
   },
-  "devDependencies": {},
   "peerDependencies": {
     "@babel/runtime": "^7.4.2",
     "core-js": "^2.0.0 || ^3.0.0"
