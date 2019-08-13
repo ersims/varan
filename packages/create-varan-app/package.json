@@ -1,6 +1,5 @@
 {
   "name": "create-varan-app",
-  "private": true,
   "version": "0.0.1",
   "description": "Create varan app command line utility",
   "author": "ersims",

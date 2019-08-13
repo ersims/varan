@@ -76,7 +76,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
                     const response = await axios.get('https://registry.npmjs.org/varan', { timeout });
 
                     // Use latest dist-tag as the git tag
-                    ctx.varanSourceBranch = `v${response.data['dist-tags'].latest}`;
+                    ctx.varanSourceBranch = `varan@${response.data['dist-tags'].latest}`;
                   } catch (err) {
                     throw new Error(
                       `Failed to fetch latest varan information from npm. Make sure you have internet connectivity and access to registry.npmjs.org is not blocked.`,

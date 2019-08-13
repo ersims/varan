@@ -1,6 +1,5 @@
 {
   "name": "babel-preset-varan",
-  "private": true,
   "version": "0.0.1",
   "description": "Babel preset used in varan applications",
   "author": "ersims",
