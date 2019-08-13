@@ -27,16 +27,16 @@
     "node": ">= 8.11.3",
     "npm": ">= 5.6.0"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "varan": "./dist/bin/varan.js"
   },
   "files": [
-    "./babel.js",
-    "./dist",
-    "./src",
-    "./webpack"
+    "babel.js",
+    "dist",
+    "src",
+    "webpack"
   ],
   "scripts": {
     "prebuild": "npm run clean",

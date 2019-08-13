@@ -29,14 +29,14 @@
     "node": ">= 8.11.3",
     "npm": ">= 5.6.0"
   },
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "create-varan-app": "./dist/bin/create-varan-app.js"
   },
   "files": [
-    "./dist",
-    "./src"
+    "dist",
+    "src"
   ],
   "scripts": {
     "build": "tsc --build",
