@@ -1,3 +1,10 @@
-test/fixtures/projects/with-error
+build
 dist
 .coverage
+node_modules
+
+# Package specific ignores
+packages/varan/test/fixtures/projects/with-error
+
+# Varan examples lock files
+examples/**/package-lock.json

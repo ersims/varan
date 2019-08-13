@@ -2,11 +2,12 @@
   "compilerOptions": {
     "diagnostics": false,
     "declaration": true,
+    "incremental": true,
     "traceResolution": false,
     "allowJs": false,
     "checkJs": false,
     "jsx": "react",
-    "noEmit": false,
+    "noEmit": true,
     "target": "es2017",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -27,8 +28,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": false,
     "resolveJsonModule": true,
-    "outDir": "dist",
-    "rootDir": "src"
-  },
-  "include": ["types", "src"]
+    "rootDir": "./"
+  }
 }

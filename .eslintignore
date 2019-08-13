@@ -1,2 +1,7 @@
-test/fixtures/projects/with-error
-test/fixtures/projects/with-warning
+node_modules
+build
+dist
+
+# Package specific ignores
+packages/varan/test/fixtures/projects/with-error
+packages/varan/test/fixtures/projects/with-warning

@@ -13,6 +13,8 @@ x-save-cache: &save-cache
     paths:
       - node_modules
     key: v1-dependencies-{{ arch }}-{{ .Environment.CIRCLE_JOB }}-{{ checksum "package.json" }}
+x-build: &build
+  run: npm run build
 x-run-tests: &run-tests
   run: npm test
 x-coverage: &coverage
@@ -32,6 +34,7 @@ jobs:
       - *version-check
       - *install-dependencies
       - *save-cache
+      - *build
       - *run-tests
       - *coverage
 
@@ -45,6 +48,7 @@ jobs:
       - *version-check
       - *install-dependencies
       - *save-cache
+      - *build
       - *run-tests
       - *coverage
 
@@ -58,6 +62,7 @@ jobs:
       - *version-check
       - *install-dependencies
       - *save-cache
+      - *build
       - *run-tests
       - *coverage
 

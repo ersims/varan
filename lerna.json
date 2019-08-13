@@ -1,0 +1,22 @@
+{
+  "lerna": "3.16.4",
+  "version": "independent",
+  "packages": ["packages/*", "examples/*"],
+  "command": {
+    "bootstrap": {
+      "npmClientArgs": ["--no-package-lock"],
+      "ci": false,
+      "strict": true
+    },
+    "version": {
+      "allowBranch": "master",
+      "conventionalCommits": true,
+      "message": "chore(release): Publish release",
+      "ignoreChanges": ["**/test/**", "**/*.md"]
+    }
+  },
+  "changelog": {
+    "repo": "ersims/varan",
+    "cacheDir": "node_modules/.cache/.changelog"
+  }
+}

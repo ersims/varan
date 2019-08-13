@@ -9,9 +9,9 @@ module.exports = {
     es6: true,
   },
   overrides: [
-    // Client environment
+    // Browser environments
     {
-      files: ['template/src/client/**', 'template/test/client/**'],
+      files: ['examples/**/src/client/**'],
       env: {
         browser: true,
       },
@@ -19,7 +19,7 @@ module.exports = {
 
     // Test environment
     {
-      files: ['test/**', 'template/test/**'],
+      files: ['test/**', 'examples/**/test/**', 'packages/**/test/**'],
       env: {
         jest: true,
       },
@@ -35,18 +35,16 @@ module.exports = {
 
     // Dev dependencies
     {
-      files: ['babel/**', 'scripts/**', 'template/**', 'test/**', 'types/**', 'webpack/**'],
+      files: [
+        'test/**',
+        'types/**',
+        'examples/**/test/**',
+        'examples/**/types/**',
+        'packages/**/test/**',
+        'packages/**/types/**',
+      ],
       rules: {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
-      },
-    },
-
-    // Non-transpiled content
-    {
-      files: ['babel/**', 'scripts/**', 'webpack/**'],
-      rules: {
-        'global-require': 0,
-        '@typescript-eslint/no-var-requires': 0,
       },
     },
   ],

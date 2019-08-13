@@ -11,6 +11,7 @@
 !.gitignore
 !.gitkeep
 !.npmignore
+!.npmrc
 !.prettierignore
 !.prettierrc
 !.travis.yml
@@ -33,6 +34,5 @@ node_modules
 *.log
 npm-debug.log*
 yarn.lock
-
-# Template package-lock
-template/package-lock.json
+*.lerna_backup
+*.tsbuildinfo
