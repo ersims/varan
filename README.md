@@ -6,7 +6,6 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 
 [![CircleCI][circleci-image]][circleci-url]
 [![Codecov branch][codecov-image]][codecov-url]
-[![David][david-image]][david-url]
 [![Known Vulnerabilities][snyk-image]][snyk-url]
 [![renovate-app badge][renovate-image]][renovate-url]
 [![Conventional Commits][conventional-commits-image]][conventional-commits-url]
@@ -65,8 +64,6 @@ You likely want to check out [varan](packages/varan/README.md) documentation.
 [circleci-image]: https://img.shields.io/circleci/project/github/ersims/varan/master.svg
 [codecov-url]: https://codecov.io/gh/ersims/varan/tree/master
 [codecov-image]: https://img.shields.io/codecov/c/github/ersims/varan/master.svg
-[david-url]: https://david-dm.org/ersims/varan/master
-[david-image]: https://img.shields.io/david/ersims/varan.svg
 [snyk-url]: https://snyk.io/test/github/ersims/varan/master
 [snyk-image]: https://snyk.io/test/github/ersims/varan/master/badge.svg
 [renovate-url]: https://renovateapp.com/
