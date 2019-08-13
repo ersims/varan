@@ -36,6 +36,7 @@ module.exports = {
     // Dev dependencies
     {
       files: [
+        '*.js',
         'test/**',
         'types/**',
         'examples/**/test/**',
