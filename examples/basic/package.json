@@ -1,5 +1,8 @@
 {
   "name": "varan-example-basic",
+  "description": "This is a varan example project",
+  "author": "ersims",
+  "homepage": "https://github.com/ersims/varan#README.md",
   "private": true,
   "license": "MIT",
   "engines": {
@@ -39,7 +42,7 @@
     "jest": "^24.8.0",
     "normalize.css": "^8.0.1",
     "react-test-renderer": "^16.8.6",
-    "varan": "^0.13.1"
+    "varan": "*"
   },
   "jest": {
     "bail": true,
