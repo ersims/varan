@@ -22,7 +22,9 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 - [Usage](#usage)
   - [Development](#usage-development)
   - [Production](#usage-production)
-- [Customization](#customization)
+- [Customization and Setup](#customization)
+  - [Performance](#customization-performance)
+    - [Fibers](#customization-performance-fibers)
   - [Polyfill and browser support](#customization-polyfill)
   - [Browserslist](#customization-browserslist)
   - [Webpack](#customization-webpack)
@@ -124,7 +126,7 @@ npm run build:analyze
 
 <a id="customization"></a>
 
-## Customization
+## Customization and Setup
 
 Varan provides sane defaults and should be a good starting point for most projects. You can find the default [client](/webpack/client.js) and [server](/webpack/server.js) config files under `varan/webpack`.
 
@@ -135,6 +137,22 @@ The default entry points in varan are as follows:
 | ------ | ----------------------------------- |
 | Client | `src/client/index`                  |
 | Server | `src/server/bin/web`                |
+
+<a id="customization-performance"></a>
+
+### Performance
+
+There are many things you can do to optimize build and runtime performance.
+Here are some recommendations.
+
+<a id="customization-performance-fibers"></a>
+
+#### Fibers
+
+Consider adding [fibers](https://www.npmjs.com/package/fibers) to your project as a development dependency.
+This may significantly improve build performance for sass heavy projects.
+
+**Note:** you have to select the right version of [fibers](https://www.npmjs.com/package/fibers) depending on your node version!
 
 <a id="customization-polyfill"></a>
 
