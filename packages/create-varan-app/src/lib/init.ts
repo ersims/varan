@@ -7,6 +7,7 @@ import path from 'path';
 import chalk from 'chalk';
 import tar from 'tar';
 import axios from 'axios';
+import writePkg from 'write-pkg';
 import emojis from './emojis';
 
 // Types
@@ -18,6 +19,7 @@ export interface Options {
   appDir: string;
 }
 export interface ContextWithTarballSource {
+  varanLatestVersion: string;
   varanSourceBranch: string;
 }
 
@@ -76,6 +78,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
                     const response = await axios.get('https://registry.npmjs.org/varan', { timeout });
 
                     // Use latest dist-tag as the git tag
+                    ctx.varanLatestVersion = response.data['dist-tags'].latest;
                     ctx.varanSourceBranch = `varan@${response.data['dist-tags'].latest}`;
                   } catch (err) {
                     throw new Error(
@@ -175,7 +178,10 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
             );
             sourceTarballResponse.data.pipe(extractProjectFiles);
 
-            await Promise.all([extractExampleSourceCode, extractProjectFiles]);
+            await Promise.all([
+              new Promise(resolve => extractExampleSourceCode.on('finish', resolve)),
+              new Promise(resolve => extractProjectFiles.on('finish', resolve)),
+            ]);
           } catch (err) {
             throw new Error(
               `Failed to fetch example ${example}. Ensure that the example exists, you have internet connectivity and access to github.com is not blocked.`,
@@ -195,6 +201,24 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
             await execa('git', ['branch', '--unset-upstream']);
           } catch (err) {
             throw new Error('Failed to prepare git repo');
+          }
+        },
+      },
+      {
+        title: 'Preparing new project',
+        enabled: () => !!opts.example,
+        task: async (ctx: ContextWithTarballSource) => {
+          try {
+            const pkg = await fs.readJSON('package.json');
+
+            // Update package json
+            pkg.name = appName;
+            pkg.devDependencies.varan = `^${ctx.varanLatestVersion}`;
+
+            // Save it
+            await writePkg(pkg);
+          } catch (err) {
+            throw new Error('Failed to prepare new project');
           }
         },
       },

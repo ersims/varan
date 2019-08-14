@@ -11,9 +11,8 @@
     "version": {
       "allowBranch": "master",
       "conventionalCommits": true,
-      "forcePublish": ["examples/*"],
       "message": "chore(release): publish release",
-      "ignoreChanges": ["**/test/**", "**/*.md"]
+      "ignoreChanges": ["examples/*", "**/test/**", "**/*.md"]
     }
   },
   "changelog": {
