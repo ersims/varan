@@ -79,7 +79,7 @@
     "sass-loader": "^7.1.0",
     "sharp": "^0.23.0",
     "source-map-support": "^0.5.13",
-    "style-loader": "^0.23.0",
+    "style-loader": "^1.0.0",
     "sw-precache-webpack-plugin": "^0.11.5",
     "table": "^5.4.5",
     "terser-webpack-plugin": "^1.4.1",
