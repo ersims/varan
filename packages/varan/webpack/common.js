@@ -1,10 +1,17 @@
-const Fiber = require('fibers');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const postcssPresetEnv = require('postcss-preset-env');
 const cssNano = require('cssnano');
 const { defaults } = require('lodash');
 const path = require('path');
 const babelPreset = require('babel-preset-varan');
+
+// Try to load fibers if available
+let Fiber;
+try {
+  // eslint-disable-next-line import/no-unresolved
+  Fiber = require('fibers');
+  // eslint-disable-next-line no-empty
+} catch (e) {}
 
 // Init
 const getOpts = options => {
