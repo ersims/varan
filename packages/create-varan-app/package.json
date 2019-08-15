@@ -32,9 +32,10 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "create-varan-app": "./dist/bin/create-varan-app.js"
+    "create-varan-app": "./create-varan-app.js"
   },
   "files": [
+    "create-varan-app.js",
     "dist",
     "src"
   ],

@@ -65,7 +65,7 @@ export default async function build(options: Partial<Options>) {
   // Setup
   process.env.BABEL_ENV = opts.env;
   const configs = getConfigs(opts.configs, opts);
-  const multiCompiler: webpack.MultiCompiler = webpack(configs.map(c => omit(c, ['serve'])));
+  const multiCompiler: webpack.MultiCompiler = webpack(configs.map(c => omit(c, ['devServer'])));
   if (opts.inputFileSystem) multiCompiler.inputFileSystem = opts.inputFileSystem;
   if (opts.outputFileSystem) multiCompiler.outputFileSystem = opts.outputFileSystem;
   const taskOptions: ListrOptions & { showSubtasks: boolean } = {
