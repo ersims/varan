@@ -58,7 +58,7 @@
     "compression-webpack-plugin": "^3.0.0",
     "css-loader": "^3.1.0",
     "cssnano": "^4.1.0",
-    "dart-sass": "^1.22.9",
+    "sass": "^1.22.9",
     "detect-port-alt": "^1.1.6",
     "execa": "^2.0.0",
     "file-loader": "^4.1.0",
@@ -80,7 +80,7 @@
     "sass-loader": "^7.1.0",
     "sharp": "^0.23.0",
     "source-map-support": "^0.5.13",
-    "style-loader": "^0.23.0",
+    "style-loader": "^1.0.0",
     "sw-precache-webpack-plugin": "^0.11.5",
     "table": "^5.4.5",
     "terser-webpack-plugin": "^1.4.1",
@@ -112,7 +112,7 @@
     "@types/update-notifier": "^2.5.0",
     "@types/webpack-dev-server": "^3.1.7",
     "@types/webpack-merge": "^4.1.5",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "express": "^4.17.1",
     "memory-fs": "^0.4.1",
@@ -124,7 +124,7 @@
     "react-test-renderer": "^16.8.6"
   },
   "peerDependencies": {
-    "@babel/runtime": "^7.4.2",
+    "@babel/runtime": "^7.5.5",
     "core-js": "^2.0.0 || ^3.0.0"
   },
   "jest": {

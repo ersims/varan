@@ -205,7 +205,6 @@ export default async function build(options: Partial<Options>) {
                   ]),
               })),
             ],
-            // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
             {
               showSubtasks: true,
               concurrent: true,

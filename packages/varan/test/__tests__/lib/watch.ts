@@ -27,6 +27,7 @@ it('should give meaningful error message if invalid config files are provided', 
 });
 it('should work with default values', async done => {
   jest.setTimeout(slowTimeout);
+  expect.assertions(8);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');
 

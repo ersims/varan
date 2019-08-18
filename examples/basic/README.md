@@ -16,6 +16,12 @@ For most projects this is an ideal starting point as it allows maximum portabili
 
 ### Getting started
 
+Create the example project by installing it using [create-varan-app][create-varan-app-url] like so:
+
+```bash
+$ npx create-varan-app --example=basic my-project
+```
+
 Here is an excerpt of the project directory structure with the most important directories.
 
 ```bash
@@ -83,3 +89,4 @@ For more information on how to customize your build, development, browser suppor
 [MIT](LICENSE.md)
 
 [varan-url]: https://github.com/ersims/varan
+[create-varan-app-url]: https://github.com/ersims/varan

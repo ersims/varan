@@ -71,6 +71,7 @@ it('should keep webpack warnings', async done => {
 });
 it('should work with default values', async done => {
   jest.setTimeout(slowTimeout);
+  expect.assertions(13);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');
 
@@ -115,8 +116,6 @@ it('should work with default values', async done => {
   const css = getFiles(mfs, resolve('dist/client/static/css'));
   expect(css).toHaveLength(1);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
-  expect(css[0].size).toBeGreaterThan(0);
-  expect(css[0].size).toBeLessThan(100);
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
@@ -124,13 +123,6 @@ it('should work with default values', async done => {
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-  expect(js[0].size).toBeGreaterThan(0);
-  expect(js[0].size).toBeLessThan(3 * 1024);
-  expect(js[1].size).toBeGreaterThan(0);
-  expect(js[1].size).toBeLessThan(160 * 1024);
-  expect(js[2].size).toBeGreaterThan(0);
-  expect(js[2].size).toBeLessThan(50 * 1024);
-  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(160 * 1024);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
@@ -142,6 +134,7 @@ it('should work with default values', async done => {
 });
 it('should work with typescript', async done => {
   jest.setTimeout(slowTimeout);
+  expect.assertions(13);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic-typescript');
 
@@ -186,8 +179,6 @@ it('should work with typescript', async done => {
   const css = getFiles(mfs, resolve('dist/client/static/css'));
   expect(css).toHaveLength(1);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
-  expect(css[0].size).toBeGreaterThan(0);
-  expect(css[0].size).toBeLessThan(100);
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
@@ -195,13 +186,6 @@ it('should work with typescript', async done => {
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-  expect(js[0].size).toBeGreaterThan(0);
-  expect(js[0].size).toBeLessThan(3 * 1024);
-  expect(js[1].size).toBeGreaterThan(0);
-  expect(js[1].size).toBeLessThan(160 * 1024);
-  expect(js[2].size).toBeGreaterThan(0);
-  expect(js[2].size).toBeLessThan(50 * 1024);
-  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(160 * 1024);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
@@ -213,6 +197,7 @@ it('should work with typescript', async done => {
 });
 it('should support custom webpack config', async done => {
   jest.setTimeout(slowTimeout);
+  expect.assertions(12);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');
 
@@ -238,8 +223,6 @@ it('should support custom webpack config', async done => {
   expect(css).toHaveLength(2);
   expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.css/);
   expect(css[1].name).toMatch(/main\.([a-z0-9]{8})\.css\.map/);
-  expect(css[0].size).toBeGreaterThan(0);
-  expect(css[0].size).toBeLessThan(2 * 1024);
 
   // JS
   expect(hasFile(mfs, resolve('dist/client/static/js'))).toBe(false);
@@ -251,11 +234,6 @@ it('should support custom webpack config', async done => {
   expect(js[1].name).toMatch('customFileName.js.map');
   expect(js[2].name).toMatch(/customFileName\.vendor\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[3].name).toMatch(/customFileName\.vendor\.([a-z0-9]{8})\.chunk\.js\.map/);
-  expect(js[0].size).toBeGreaterThan(0);
-  expect(js[0].size).toBeLessThan(3 * 1024);
-  expect(js[2].size).toBeGreaterThan(0);
-  expect(js[2].size).toBeLessThan(130 * 1024);
-  expect(js.filter(f => f.name.endsWith('.js')).reduce((acc, cur) => acc + cur.size, 0)).toBeLessThan(140 * 1024);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server'))).toBe(false);

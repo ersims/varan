@@ -1,8 +1,5 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  parserOptions: {
-    project: './tsconfig.json',
-  },
   env: {
     node: true,
     browser: false,
@@ -62,6 +59,9 @@ module.exports = {
     'import/ignore': [/node_modules/],
     'react/jsx-filename-extension': {
       extensions: ['.jsx', '.tsx'],
+    },
+    react: {
+      version: '16',
     },
   },
   rules: {

@@ -74,10 +74,7 @@ module.exports = options => {
         {
           test: /\.(sa|sc|c)ss$/,
           use: [
-            !isNode &&
-              (isDev
-                ? { loader: require.resolve('style-loader'), options: { sourceMap: true } }
-                : { loader: MiniCssExtractPlugin.loader }),
+            !isNode && (isDev ? { loader: require.resolve('style-loader') } : { loader: MiniCssExtractPlugin.loader }),
             {
               loader: require.resolve('css-loader'),
               options: {
@@ -107,7 +104,7 @@ module.exports = options => {
               loader: require.resolve('sass-loader'),
               options: {
                 sourceMap: true,
-                implementation: require('dart-sass'),
+                implementation: require('sass'),
                 fiber: Fiber,
               },
             },
