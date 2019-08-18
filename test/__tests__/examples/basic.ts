@@ -1,0 +1,108 @@
+import fs from 'fs-extra';
+import path from 'path';
+import execa from 'execa';
+import { listFiles } from '../../fixtures/utils';
+
+// Init
+const slowTimeout = 40000;
+const dir = path.join(__dirname, '..', '..', '..', 'examples', 'basic');
+
+// Tests
+beforeEach(() => {
+  fs.remove(path.join(dir, 'dist'));
+  process.chdir(dir);
+});
+it('builds successfully', async done => {
+  jest.setTimeout(slowTimeout);
+  expect.assertions(24);
+
+  // Assertions
+  const runner = execa.node('../../packages/varan/varan', ['build'], { timeout: slowTimeout - 10000 });
+
+  // Wait for builder ready
+  try {
+    await expect(runner).resolves.toEqual(expect.objectContaining({}));
+
+    // Client
+    expect(fs.existsSync('dist/client/asset-manifest.json')).toBe(true);
+    expect(fs.existsSync('dist/client/stats-manifest.json')).toBe(true);
+    expect(fs.existsSync('dist/client/service-worker.js')).toBe(true);
+
+    // CSS
+    const css = listFiles('dist/client/static/css');
+    expect(css).toHaveLength(1);
+    expect(css[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.css/);
+    expect(css[0].size).toBeGreaterThan(0);
+    expect(css[0].size).toBeLessThan(20 * 1024);
+
+    // JS
+    const js = listFiles('dist/client/static/js');
+    expect(js).toHaveLength(4);
+    expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
+    expect(js[1].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js.gz/);
+    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
+    expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+    expect(js[0].size).toBeGreaterThan(0);
+    expect(js[0].size).toBeLessThan(5 * 1024);
+    expect(js[1].size).toBeGreaterThan(0);
+    expect(js[1].size).toBeLessThan(2 * 1024);
+    expect(js[2].size).toBeGreaterThan(0);
+    expect(js[2].size).toBeLessThan(200 * 1024);
+    expect(js[3].size).toBeGreaterThan(0);
+    expect(js[3].size).toBeLessThan(70 * 1024);
+
+    // Server
+    expect(fs.existsSync('dist/server/bin/web.js')).toBe(true);
+    expect(fs.existsSync('dist/server/bin/web.js.map')).toBe(true);
+    expect(fs.existsSync('dist/server/bin/stats-manifest.json')).toBe(true);
+  } finally {
+    await runner.kill();
+
+    // Done
+    done();
+  }
+});
+it('watches successfully', async done => {
+  jest.setTimeout(slowTimeout);
+  expect.assertions(10);
+
+  // Assertions
+  const runner = execa.node('../../packages/varan/varan', ['watch'], { timeout: slowTimeout - 10000 });
+
+  // Wait for watcher ready
+  try {
+    await new Promise((resolve, reject) => {
+      if (!runner.stderr) reject(new Error('No stderr from watcher'));
+      else if (!runner.stdout) reject(new Error('No stdout from watcher'));
+      else {
+        runner.stderr.once('data', reject);
+        runner.stdout.on('data', async data => {
+          if (data.includes('Development server is now ready and you can view your project in the browser')) {
+            resolve();
+          }
+        });
+      }
+    });
+
+    // Client
+    expect(fs.existsSync('dist/client/asset-manifest.json')).toBe(true);
+    expect(fs.existsSync('dist/client/stats-manifest.json')).toBe(true);
+    expect(fs.existsSync('dist/client/service-worker.js')).toBe(false);
+    expect(fs.existsSync('dist/client/static/css')).toBe(false);
+    expect(fs.existsSync('dist/client/static/js')).toBe(false);
+
+    // JS
+    expect(fs.existsSync('dist/client/dev-bundle.js')).toBe(true);
+    expect(fs.existsSync('dist/client/dev-bundle.js.map')).toBe(true);
+
+    // Server
+    expect(fs.existsSync('dist/server/bin/web.js')).toBe(true);
+    expect(fs.existsSync('dist/server/bin/web.js.map')).toBe(true);
+    expect(fs.existsSync('dist/server/bin/stats-manifest.json')).toBe(true);
+  } finally {
+    await runner.kill();
+
+    // Done
+    done();
+  }
+});

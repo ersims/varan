@@ -15,5 +15,5 @@ const render = () => {
 };
 render();
 
-// // Enable hot reloading
+// Enable hot reloading
 if (module.hot) module.hot.accept('./components/App', render);

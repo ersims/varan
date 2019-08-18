@@ -1,10 +1,10 @@
 import path from 'path';
 import getConfigs from '../../../src/lib/getConfigs';
 
-// @ts-ignore
-import mini from '../../fixtures/webpack/mini';
-// @ts-ignore
-import miniFn from '../../fixtures/webpack/miniFn';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const mini = require('../../fixtures/webpack/mini');
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const miniFn = require('../../fixtures/webpack/miniFn');
 
 // Init
 const resolve = (p: string) => path.resolve(__dirname, p);
@@ -13,11 +13,9 @@ const resolve = (p: string) => path.resolve(__dirname, p);
 describe('lib', () => {
   describe('getConfigs', () => {
     it('should give meaningful error message if no configs were provided', () => {
-      // @ts-ignore
-      expect(() => getConfigs()).toThrow('Must specify at least one config');
+      expect(() => (getConfigs as any)()).toThrow('Must specify at least one config');
       expect(() => getConfigs([])).toThrow('Must specify at least one config');
-      // @ts-ignore
-      expect(() => getConfigs([null, undefined, ''])).toThrow('Must specify at least one config');
+      expect(() => getConfigs([null, undefined, ''] as any)).toThrow('Must specify at least one config');
     });
     it('should support a single config file returning an object', () => {
       const configPath = resolve('../../fixtures/webpack/mini');

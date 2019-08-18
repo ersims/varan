@@ -19,7 +19,6 @@ interface TaskListContext {
   client?: {
     compiler: webpack.Compiler;
     runner: WebpackDevServer;
-    app: { stop: () => Promise<void> } | null;
     warnings: string[];
     errors: string[];
     stats: webpack.Stats;
@@ -137,7 +136,8 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
                 enabled: () => !!clientConfig,
                 task: async ctx => {
                   opts.devServerProxy = !!serverConfig;
-                  const devServerOpts = Object.assign({}, opts, {
+                  const devServerOpts = {
+                    ...opts,
                     waitForPromise: new Promise((resolve, reject) => {
                       if (opts.waitForServer && !!serverConfig) {
                         waitOn(
@@ -151,7 +151,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
                         );
                       } else resolve();
                     }),
-                  });
+                  };
                   ctx.client = await buildAndRunDevServer(
                     clientConfig,
                     opts.devServerHost,
@@ -165,13 +165,12 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
                 title: 'Build server',
                 enabled: () => !!serverConfig,
                 task: async ctx => {
-                  const serverOpts = Object.assign({}, opts);
+                  const serverOpts = { ...opts };
                   ctx.server = await buildServer(serverConfig, serverOpts);
                   return `${chalk.green(emojis.success)} Server built successfully!`;
                 },
               },
             ],
-            // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
             {
               showSubtasks: true,
               concurrent: true,
@@ -195,7 +194,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
           const rootPath = get(ctx, 'server.compiler.options.output.path', null);
           const entryFile = get(ctx, 'server.compiler.options.output.filename', null);
           if (rootPath && entryFile) {
-            const serverOpts = Object.assign({}, opts, { entry: path.resolve(rootPath, entryFile) });
+            const serverOpts = { ...opts, entry: path.resolve(rootPath, entryFile) };
             const { server } = (await runServer(serverOpts)) as { server: ChildProcess };
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             ctx.server!.runner = server;

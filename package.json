@@ -63,18 +63,21 @@
     "@commitlint/cli": "^8.1.0",
     "@commitlint/config-conventional": "^8.1.0",
     "@commitlint/config-lerna-scopes": "^8.1.0",
+    "@types/fs-extra": "^8.0.0",
     "@types/jest": "^24.0.15",
     "@types/node": "^12.6.9",
-    "@typescript-eslint/eslint-plugin": "^1.13.0",
-    "@typescript-eslint/parser": "^1.13.0",
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
     "del-cli": "^2.0.0",
     "eslint": "^6.0.0",
-    "eslint-config-airbnb": "^17.1.1",
+    "eslint-config-airbnb": "^18.0.1",
     "eslint-config-prettier": "^6.0.0",
     "eslint-plugin-import": "^2.18.0",
     "eslint-plugin-jest": "^22.7.2",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.14.2",
+    "execa": "^2.0.0",
+    "fs-extra": "^8.1.0",
     "husky": "^3.0.0",
     "jest": "^24.8.0",
     "lerna": "^3.15.0",
@@ -95,14 +98,19 @@
     "coverageThreshold": {
       "global": {
         "branches": 30,
-        "functions": 50,
-        "lines": 50,
-        "statements": 50
+        "functions": 45,
+        "lines": 45,
+        "statements": 45
       }
     },
     "projects": [
-      "examples/*",
-      "packages/*"
+      "<rootDir>",
+      "<rootDir>/packages/*",
+      "<rootDir>/examples/*"
+    ],
+    "testEnvironment": "node",
+    "testMatch": [
+      "<rootDir>/test/__tests__/**/*.{ts,js}?(x)"
     ],
     "transform": {
       "\\.tsx?$": "ts-jest"
