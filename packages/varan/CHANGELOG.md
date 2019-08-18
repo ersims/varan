@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.13.2](https://github.com/ersims/varan/compare/varan@0.13.1...varan@0.13.2) (2019-08-18)
+
+### Bug Fixes
+
+- make fibers optional to improve reliability on various platforms ([51901b1](https://github.com/ersims/varan/commit/51901b1))
+
 ## [0.13.1](https://github.com/ersims/varan/compare/varan@0.13.0...varan@0.13.1) (2019-08-13)
 
 ### Bug Fixes
