@@ -2,9 +2,9 @@ const { DefinePlugin, EnvironmentPlugin } = require('webpack');
 const merge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 const { StatsWriterPlugin } = require('webpack-stats-plugin');
 const WebpackPwaManifest = require('webpack-pwa-manifest');
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -131,8 +131,9 @@ module.exports = options => {
             }),
           ],
         }),
-      new ManifestPlugin({
-        fileName: 'asset-manifest.json',
+      new WebpackAssetsManifest({
+        output: 'asset-manifest.json',
+        // integrity: true,
       }),
       new StatsWriterPlugin({
         filename: 'stats-manifest.json',
