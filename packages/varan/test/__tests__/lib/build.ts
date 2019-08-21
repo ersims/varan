@@ -71,7 +71,7 @@ it('should keep webpack warnings', async done => {
 });
 it('should work with default values', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(13);
+  expect.assertions(14);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');
 
@@ -112,6 +112,10 @@ it('should work with default values', async done => {
   expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
   expect(hasFile(mfs, resolve('dist/client/service-worker.js'))).toBe(true);
 
+  // Asset Manifest
+  const assetManifest = JSON.parse(mfs.readFileSync(resolve('dist/client/asset-manifest.json')));
+  expect(Object.keys(assetManifest)).toHaveLength(3);
+
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
   expect(css).toHaveLength(1);
@@ -134,7 +138,7 @@ it('should work with default values', async done => {
 });
 it('should work with typescript', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(13);
+  expect.assertions(14);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic-typescript');
 
@@ -174,6 +178,10 @@ it('should work with typescript', async done => {
   expect(hasFile(mfs, resolve('dist/client/asset-manifest.json'))).toBe(true);
   expect(hasFile(mfs, resolve('dist/client/stats-manifest.json'))).toBe(true);
   expect(hasFile(mfs, resolve('dist/client/service-worker.js'))).toBe(true);
+
+  // Asset Manifest
+  const assetManifest = JSON.parse(mfs.readFileSync(resolve('dist/client/asset-manifest.json')));
+  expect(Object.keys(assetManifest)).toHaveLength(3);
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));

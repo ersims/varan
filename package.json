@@ -56,7 +56,7 @@
     "pretest": "npm run check",
     "release": "lerna version && lerna publish from-git --yes",
     "test": "jest",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watch"
   },
   "dependencies": {},
   "devDependencies": {
@@ -116,6 +116,14 @@
       "\\.tsx?$": "ts-jest"
     },
     "silent": true,
-    "verbose": true
+    "verbose": true,
+    "modulePathIgnorePatterns": [
+      "build",
+      "dist"
+    ],
+    "watchPathIgnorePatterns": [
+      "build",
+      "dist"
+    ]
   }
 }

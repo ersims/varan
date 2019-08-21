@@ -3,7 +3,7 @@
 const { DefinePlugin, NoEmitOnErrorsPlugin } = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
+const WebpackAssetsManifest = require('webpack-assets-manifest');
 const path = require('path');
 const babelConfig = require('babel-preset-varan');
 
@@ -81,8 +81,9 @@ module.exports = {
       filename: 'static/css/[name].[hash:8].css',
       chunkFilename: 'static/css/[name].[hash:8].chunk.css',
     }),
-    new ManifestPlugin({
-      fileName: 'asset-manifest.json',
+    new WebpackAssetsManifest({
+      output: 'asset-manifest.json',
+      integrity: true,
     }),
   ],
   optimization: {
