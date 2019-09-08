@@ -71,7 +71,7 @@ it('should keep webpack warnings', async done => {
 });
 it('should work with default values', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(14);
+  expect.assertions(15);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');
 
@@ -123,10 +123,11 @@ it('should work with default values', async done => {
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js).toHaveLength(3);
+  expect(js).toHaveLength(4);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+  expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
@@ -138,7 +139,7 @@ it('should work with default values', async done => {
 });
 it('should work with typescript', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(14);
+  expect.assertions(15);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic-typescript');
 
@@ -190,10 +191,11 @@ it('should work with typescript', async done => {
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js).toHaveLength(3);
+  expect(js).toHaveLength(4);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
   expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+  expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);

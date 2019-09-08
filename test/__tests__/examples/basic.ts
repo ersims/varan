@@ -58,7 +58,7 @@ it('watches successfully', async done => {
 });
 it('builds successfully', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(26);
+  expect.assertions(27);
 
   // Assertions
   const runner = execa.node('../../packages/varan/varan', ['build'], { timeout: slowTimeout - 10000 });
@@ -90,11 +90,12 @@ it('builds successfully', async done => {
 
     // JS
     const js = listFiles('dist/client/static/js');
-    expect(js).toHaveLength(4);
+    expect(js).toHaveLength(5);
     expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
     expect(js[1].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js.gz/);
     expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
     expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+    expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
     expect(js[0].size).toBeGreaterThan(0);
     expect(js[0].size).toBeLessThan(5 * 1024);
     expect(js[1].size).toBeGreaterThan(0);
