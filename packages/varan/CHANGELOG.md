@@ -3,6 +3,19 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/ersims/varan/compare/varan@0.13.3...varan@0.14.0) (2019-09-08)
+
+### Bug Fixes
+
+- **deps:** update dependency sass-loader to v8 ([e6674f4](https://github.com/ersims/varan/commit/e6674f4))
+- **deps:** update dependency terser-webpack-plugin to v2 ([19f455c](https://github.com/ersims/varan/commit/19f455c))
+- always use terser source maps to ensure proper file resolving ([2485b17](https://github.com/ersims/varan/commit/2485b17))
+
+### Features
+
+- add brotli compression by default ([920bad6](https://github.com/ersims/varan/commit/920bad6))
+- add support for custom build time variables ([27b0bcf](https://github.com/ersims/varan/commit/27b0bcf))
+
 ## [0.13.3](https://github.com/ersims/varan/compare/varan@0.13.2...varan@0.13.3) (2019-08-21)
 
 ### Bug Fixes
