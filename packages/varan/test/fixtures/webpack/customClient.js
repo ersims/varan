@@ -76,7 +76,6 @@ module.exports = {
     new DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
     }),
-    new NoEmitOnErrorsPlugin(),
     new MiniCssExtractPlugin({
       filename: 'static/css/[name].[hash:8].css',
       chunkFilename: 'static/css/[name].[hash:8].chunk.css',
@@ -87,10 +86,11 @@ module.exports = {
     }),
   ],
   optimization: {
+    noEmitOnErrors: true,
     minimizer: [
       new TerserPlugin({
-        cache: true,
-        parallel: true,
+        cache: false,
+        parallel: false,
         terserOptions: {
           compress: true,
           output: {
