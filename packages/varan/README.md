@@ -210,7 +210,6 @@ Make sure the `client.js` file exports a function that returns the webpack confi
 `client.js` with a Progressive Web App manifest while still using the default config in `varan`:
 
 ```javascript
-// Dependencies
 const path = require('path');
 const client = require('varan/webpack/client');
 const pwaManifest = {

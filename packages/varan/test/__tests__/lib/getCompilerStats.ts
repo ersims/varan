@@ -1,4 +1,3 @@
-// Dependencies
 import getCompilerStats from '../../../src/lib/getCompilerStats';
 
 // Tests

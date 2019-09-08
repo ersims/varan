@@ -1,4 +1,3 @@
-// Dependencies
 import path from 'path';
 import MemoryFileSystem from 'memory-fs';
 
