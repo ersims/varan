@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-// Dependencies
-const { DefinePlugin, NoEmitOnErrorsPlugin } = require('webpack');
+const { DefinePlugin } = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const WebpackAssetsManifest = require('webpack-assets-manifest');
