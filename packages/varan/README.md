@@ -30,6 +30,9 @@ Disclaimer: There will be breaking changes and outdated documentation during the
   - [Webpack](#customization-webpack)
     - [Progressive web apps](#customization-webpack-pwa)
     - [Static client side apps (create-react-app)](#customization-webpack-static)
+- [API](#api)
+  - [build([options])](#api-build)
+  - [Default webpack configs](#api-default-webpack-configs)
 - [Contributing](#contributing)
 - [License](#license)
 
@@ -138,6 +141,77 @@ The default entry points in varan are as follows:
 | Client | `src/client/index`                  |
 | Server | `src/server/bin/web`                |
 
+<a id="customization-webpack"></a>
+
+### Custom webpack config
+
+Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
+It is recommended to create your own `webpack` directory with your custom client and server files, and specifying these when using `varan build` and `varan watch`.
+Whenever possible, extend the default webpack configs provided in `varan/webpack/client` and `varan/webpack/server` respectively instead of creating your own from scratch.
+See [extending webpack config](#customization-extending-config) for more information on how to extend the config.
+
+Note that development mode (`varan watch`) only supports up to two config files, one with `target: 'browser'` and one with `target: 'node'`, while production mode (`varan build`) supports any number of configs.
+
+To use your new local configs in development mode you can provide the path to your config files directly.
+If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config.
+
+To override only the client config for development mode, run:
+
+```bash
+varan watch ./webpack/client varan/webpack/server
+```
+
+For production build you can specify a list of config files to build like so:
+
+```bash
+varan build ./webpack/client ./webpack/server
+```
+
+Remember to update your npm scripts to use the new config files as shown above.
+
+<a id="customization-extending-config"></a>
+
+### Extending webpack config
+
+When you create your own webpack configuration it is highly recommended to extend the existing config and only make the necessary changes to fit your use case.
+The built in configs contain many useful defaults and are kept up to date as best practices and plugins change.
+
+The built in configs are available at `varan/webpack/client` and `varan/webpack/server` for the client and server config respectively.
+The configs exports a function where you can set some options without having to revert to overriding the exported webpack config object.
+
+For available options see [default webpack configs](#api-default-webpack-configs).
+
+#### Example: Adding some build variables (global variables that are swapped in place during build).
+
+For more information see [DefinePlugin](https://webpack.js.org/plugins/define-plugin/).
+
+```javascript
+// my-project/webpack/client.js
+const client = require('varan/webpack/client');
+const myVars = {
+  BUILD_DATE: JSON.stringify(new Date().toISOString()),
+};
+
+// Exports
+module.exports = options => client({ ...options, buildVars: myVars });
+```
+
+Built using
+
+```bash
+$ varan build ./webpack/client ./webpack/server
+```
+
+<a id="customization-build-variables"></a>
+
+### Build time variables
+
+By default, all environment variables starting with `APP_` or `REACT_APP_` are exchanged in place during build time.
+This also includes the `process.env.NODE_ENV` environment variable.
+If you are using the default webpack configs, then you can also pass in an object to the `buildVars` property (see [API](#api) for more information) with variables to replace at build time.
+
+This is useful if you want to have different builds depending on some build parameters, e.g. different backend API urls depending on your environment.
+
 <a id="customization-performance"></a>
 
 ### Performance
@@ -166,32 +240,6 @@ Note that it is expected that you have `@babel/runtime` and, `core-js@3` or `cor
 ### Browserslist
 
 Varan supports [browserslist](https://github.com/browserslist/browserslist) for polyfilling. Refer to [browserslist](https://github.com/browserslist/browserslist) for more information on how to use it. Varan supports both `.browserslistrc` files and the `browserslist` property in `package.json`.
-
-<a id="customization-webpack"></a>
-
-### Custom webpack config
-
-Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
-It is recommended to create your own `webpack` directory with your custom client and server files, and specifying these when using `varan build` and `varan watch`.
-
-Note that development mode only supports up to two config files, one with `target: 'browser'` and one with `target: 'node'`, while production mode supports any number of configs.
-
-To use your new local configs in development mode you can provide the path to your config files directly.
-If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config.
-
-To override only the client config for development mode, run:
-
-```bash
-varan watch ./webpack/client varan/webpack/server
-```
-
-For production build you can specify a list of config files to build like so:
-
-```bash
-varan build ./webpack/client ./webpack/server
-```
-
-Remember to update your npm scripts to use the new config files as shown above.
 
 <a id="customization-webpack-pwa"></a>
 
@@ -325,6 +373,65 @@ const server = require('varan/webpack/server');
 
 module.exports = options => server({ ...options, whitelistExternals: ['aws-amplify-react'] });
 ```
+
+<a id="api"></a>
+
+## API
+
+<a id="api-build"></a>
+
+### `build([options])`
+
+Create a production build using any number of webpack configurations.
+
+```javascript
+import { build } from 'varan';
+```
+
+- `options` (object): Object with options
+  - `appDir` (string): The working directory to use. Default: `process.cwd()`
+  - `configs` ((string|function|object)[]): An array of valid webpack configurations. Either paths to a file, functions or actual webpack config object are supported, or a mix. All functions provided here will also receive these options. Default: `['varan/webpack/client', 'varan/webpack/server']`
+  - `verbose` (boolean): Verbose logging? Default: `false`
+  - `env` (string): Build environment to use. Either `development` or `production`. Default: `process.env.NODE_ENV`
+  - `warnAssetSize` (number): Warn when an asset exceeds this size in bytes. Default: `512 * 1024` (512kb)
+  - `warnChunkSize` (number): Warn when a chunk exceeds this size in bytes. Default: `1024 * 1024` (1mb)
+
+<a id="api-default-webpack-configs"></a>
+
+### Default webpack configs
+
+Varan provides a default webpack config for client applications and server applications.
+These are exported as functions that take some options (see below) and returns a valid webpack configuration object.
+
+#### `varan/webpack/client`
+
+`client([options])`
+
+- `options` (object): Object with options
+  - `analyze` (boolean): Analyze the bundle? Opens a browser window with a breakdown on bundle sizes. Default: false
+  - `appDir` (string): The working directory to use. Default: `process.cwd()`
+  - `buildVars` (object): A key => value object with global variables to substitute during build time. Default: `{}`
+  - `entry` (string): The bundle entry file relative to the `sourceDir`. Default: `index`
+  - `env` (string): Current environment as in `NODE_ENV`. Should be `development` or `production`. Default: `process.env.NODE_ENV`
+  - `name` (string): The name of the application. Default: name of entry file
+  - `targetDir` (string): The directory to output the build relative to the working directory. Default: `dist/client`
+  - `sourceDir` (string): The directory of the source files relative to the working directory. Default: `src/client`
+  - `devServerPort` (number): The port number to use for the development server used when running `varan watch`. Default `3000`
+
+#### `varan/webpack/server`
+
+`server([options])`
+
+- `options` (object): Object with options
+  - `appDir` (string): The working directory to use. Default: `process.cwd()`
+  - `buildVars` (object): A key => value object with global variables to substitute during build time. Default: `{}`
+  - `entry` (string): The bundle entry file relative to the `sourceDir`. Default: `index`
+  - `env` (string): Current environment as in `NODE_ENV`. Should be `development` or `production`. Default: `process.env.NODE_ENV`
+  - `name` (string): The name of the application. Default: name of entry file
+  - `targetDir` (string): The directory to output the build relative to the working directory. Default: `dist/server`
+  - `sourceDir` (string): The directory of the source files relative to the working directory. Default: `src/server`
+  - `clientTargetDir` (string): The directory of the client build files relative to the working directory. Default: `dist/client`
+  - `whitelistExternals` (string[]): List of `node_modules` to include in the server bundle. Use this if you are using modules that requires to be processed through webpack (e.g. if you get syntax errors because of non-javascript files or because your node version does not support the required featureset) . Default: `[]`
 
 <a id="contributing"></a>
 

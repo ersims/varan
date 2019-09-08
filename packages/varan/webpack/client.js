@@ -22,9 +22,11 @@ const getOpts = options => {
   const appDir = options.appDir || process.cwd();
   const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
-    appDir: resolve('./'),
-    env: process.env.NODE_ENV,
     analyze: false,
+    appDir: resolve('./'),
+    buildVars: {},
+    entry: 'index',
+    env: process.env.NODE_ENV,
     target: 'web',
     name: undefined,
     // See https://github.com/arthurbergmz/webpack-pwa-manifest for more information on how to specify manifest
@@ -38,14 +40,18 @@ const getOpts = options => {
     pwaManifest: false,
     targetDir: resolve('dist/client'),
     sourceDir: resolve('src/client'),
-    entry: 'index',
     devServerPort: process.env.DEV_PORT || 3000,
     serverPort: process.env.PORT || 3001,
   });
 };
 
-// Exports
-module.exports = options => {
+/**
+ * Create a webpack configuration optimized for client (browser) applications
+ *
+ * @param {{ analyze: boolean=, appDir: string=, buildVars: object=, entry: string=, env: 'development' | 'test' | 'production'=, target: 'web' | 'node'=, name: string=, pwaManifest: object=, targetDir: string=, sourceDir: string=, devServerPort: number=, serverPort: number= }=} options
+ * @returns {webpack.Configuration}
+ */
+module.exports = (options = {}) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const publicPath = isDev ? `http://localhost:${opts.devServerPort}/` : `/${path.dirname(opts.entry).substr(2)}`;
@@ -100,6 +106,13 @@ module.exports = options => {
         'process.env.BABEL_ENV': JSON.stringify(opts.env),
         'process.env.NODE_ENV': JSON.stringify(opts.env),
         'process.env.browser': JSON.stringify(true),
+        ...Object.entries(process.env)
+          .filter(([key]) => key.startsWith('APP_') || key.startsWith('REACT_APP_'))
+          .reduce((acc, [key, value]) => {
+            acc[`process.env.${key}`] = value;
+            return acc;
+          }, {}),
+        ...opts.buildVars,
       }),
       new EnvironmentPlugin({
         DEBUG: false,

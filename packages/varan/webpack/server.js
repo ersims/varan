@@ -13,19 +13,25 @@ const getOpts = options => {
   const resolve = relativePath => path.resolve(appDir, relativePath);
   return defaults({}, options, {
     appDir: resolve('./'),
+    buildVars: {},
+    entry: 'bin/web',
     env: process.env.NODE_ENV,
     target: 'node',
     name: undefined,
     targetDir: resolve('dist/server'),
     sourceDir: resolve('src/server'),
-    entry: 'bin/web',
     clientTargetDir: resolve('dist/client'),
     whitelistExternals: [],
   });
 };
 
-// Exports
-module.exports = options => {
+/**
+ * Create a webpack configuration optimized for server (node) applications
+ *
+ * @param {{ appDir: string=, buildVars: object=, entry: string=, env: 'development' | 'test' | 'production'=, target: 'web' | 'node'=, name: string=, targetDir: string=, sourceDir: string=, clientSourceDir: string=, whitelistExternals: string[]= }=} options
+ * @returns {webpack.Configuration}
+ */
+module.exports = (options = {}) => {
   const opts = getOpts(options);
   const isDev = opts.env !== 'production';
   const outputPath = path.resolve(opts.targetDir, path.dirname(opts.entry));
@@ -66,6 +72,13 @@ module.exports = options => {
         'process.env.VARAN_ASSETS_MANIFEST': JSON.stringify(
           path.relative(outputPath, path.resolve(opts.clientTargetDir, 'asset-manifest.json')),
         ),
+        ...Object.entries(process.env)
+          .filter(([key]) => key.startsWith('APP_') || key.startsWith('REACT_APP_'))
+          .reduce((acc, [key, value]) => {
+            acc[`process.env.${key}`] = value;
+            return acc;
+          }, {}),
+        ...opts.buildVars,
       }),
       new EnvironmentPlugin({
         DEBUG: false,
