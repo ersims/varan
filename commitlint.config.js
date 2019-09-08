@@ -3,6 +3,6 @@ const { getPackages } = require('@commitlint/config-lerna-scopes').utils;
 module.exports = {
   extends: ['@commitlint/config-conventional', '@commitlint/config-lerna-scopes'],
   rules: {
-    'scope-enum': async ctx => [2, 'always', [...(await getPackages(ctx)), 'deps', 'release']],
+    'scope-enum': async ctx => [2, 'always', [...(await getPackages(ctx)), 'deps', 'release', 'circleci', 'github']],
   },
 };
