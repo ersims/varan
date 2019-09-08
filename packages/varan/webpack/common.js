@@ -5,14 +5,6 @@ const { defaults } = require('lodash');
 const path = require('path');
 const babelPreset = require('babel-preset-varan');
 
-// Try to load fibers if available
-let Fiber;
-try {
-  // eslint-disable-next-line import/no-unresolved
-  Fiber = require('fibers');
-  // eslint-disable-next-line no-empty
-} catch (e) {}
-
 // Init
 const getOpts = options => {
   const appDir = options.appDir || process.cwd();
@@ -103,9 +95,9 @@ module.exports = options => {
             {
               loader: require.resolve('sass-loader'),
               options: {
-                sourceMap: true,
-                implementation: require('sass'),
-                fiber: Fiber,
+                sassOptions: {
+                  implementation: require('sass'),
+                },
               },
             },
           ].filter(Boolean),
