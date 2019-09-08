@@ -9,7 +9,6 @@ const render = () => {
     <div className="App">
       <p>Success</p>
     </div>,
-    // eslint-disable-next-line no-undef
     document.getElementById('root'),
   );
 };

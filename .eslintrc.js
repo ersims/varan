@@ -8,7 +8,7 @@ module.exports = {
   overrides: [
     // Browser environments
     {
-      files: ['examples/**/src/client/**'],
+      files: ['**/src/client/**'],
       env: {
         browser: true,
       },
