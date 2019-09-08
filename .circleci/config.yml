@@ -16,7 +16,7 @@ x-save-cache: &save-cache
 x-build: &build
   run: npm run build
 x-run-tests: &run-tests
-  run: npm test
+  run: npm test -- --runInBand
 x-coverage: &coverage
   run:
     name: Upload Coverage
