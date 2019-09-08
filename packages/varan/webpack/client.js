@@ -219,7 +219,6 @@ module.exports = options => {
                   ascii_only: true,
                 },
               },
-              sourceMap: true,
             }),
           ],
           splitChunks: {
