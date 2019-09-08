@@ -1,4 +1,5 @@
 const { DefinePlugin, EnvironmentPlugin } = require('webpack');
+const zlib = require('zlib');
 const merge = require('webpack-merge');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -121,6 +122,15 @@ module.exports = (options = {}) => {
         new CompressionPlugin({
           filename: '[path].gz[query]',
           algorithm: 'gzip',
+          test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
+          threshold: 3 * 1024,
+          minRatio: 0.8,
+        }),
+      !isDev &&
+        zlib.brotliCompress &&
+        new CompressionPlugin({
+          filename: '[path].br[query]',
+          algorithm: 'brotliCompress',
           test: /(\.js|\.json|\.html|\.css|\.svg|\.eot)$/,
           threshold: 3 * 1024,
           minRatio: 0.8,

@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import execa from 'execa';
+import zlib from 'zlib';
 import { listFiles } from '../../fixtures/utils';
 
 // Init
@@ -60,6 +61,10 @@ it('builds successfully', async done => {
   jest.setTimeout(slowTimeout);
   expect.assertions(27);
 
+  // TODO: Remove when support for node v8 is dropped on 31.12.2019
+  const isBrotliSupported = !!zlib.brotliCompress;
+  if (isBrotliSupported) expect.assertions(35);
+
   // Assertions
   const runner = execa.node('../../packages/varan/varan', ['build'], { timeout: slowTimeout - 10000 });
 
@@ -90,20 +95,64 @@ it('builds successfully', async done => {
 
     // JS
     const js = listFiles('dist/client/static/js');
-    expect(js).toHaveLength(5);
+    expect(js).toHaveLength(isBrotliSupported ? 7 : 5);
     expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
-    expect(js[1].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js.gz/);
-    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
-    expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-    expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
-    expect(js[0].size).toBeGreaterThan(0);
-    expect(js[0].size).toBeLessThan(5 * 1024);
-    expect(js[1].size).toBeGreaterThan(0);
-    expect(js[1].size).toBeLessThan(2 * 1024);
-    expect(js[2].size).toBeGreaterThan(0);
-    expect(js[2].size).toBeLessThan(200 * 1024);
-    expect(js[3].size).toBeGreaterThan(0);
-    expect(js[3].size).toBeLessThan(70 * 1024);
+
+    if (isBrotliSupported) {
+      expect(js[1].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js.br/);
+      expect(js[2].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js.gz/);
+      expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
+      expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.br/);
+      expect(js[5].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+      expect(js[6].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
+
+      // main.js
+      expect(js[0].size).toBeGreaterThan(0);
+      expect(js[0].size).toBeLessThan(5 * 1024);
+
+      // main.js - Brotli
+      expect(js[1].size).toBeGreaterThan(0);
+      expect(js[1].size).toBeLessThan(2 * 1024);
+      expect(js[1].size).toBeLessThan(js[2].size);
+
+      // main.js - Gzip
+      expect(js[2].size).toBeGreaterThan(0);
+      expect(js[2].size).toBeLessThan(2 * 1024);
+
+      // vendor.js
+      expect(js[3].size).toBeGreaterThan(0);
+      expect(js[3].size).toBeLessThan(200 * 1024);
+
+      // vendor.js - Brotli
+      expect(js[4].size).toBeGreaterThan(0);
+      expect(js[4].size).toBeLessThan(70 * 1024);
+      expect(js[4].size).toBeLessThan(js[5].size);
+
+      // vendor.js - Gzip
+      expect(js[5].size).toBeGreaterThan(0);
+      expect(js[5].size).toBeLessThan(70 * 1024);
+    } else {
+      expect(js[1].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js.gz/);
+      expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
+      expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+      expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
+
+      // main.js
+      expect(js[0].size).toBeGreaterThan(0);
+      expect(js[0].size).toBeLessThan(5 * 1024);
+
+      // main.js - Gzip
+      expect(js[1].size).toBeGreaterThan(0);
+      expect(js[1].size).toBeLessThan(2 * 1024);
+
+      // vendor.js
+      expect(js[2].size).toBeGreaterThan(0);
+      expect(js[2].size).toBeLessThan(200 * 1024);
+
+      // vendor.js - Gzip
+      expect(js[3].size).toBeGreaterThan(0);
+      expect(js[3].size).toBeLessThan(70 * 1024);
+    }
 
     // Server
     expect(fs.existsSync('dist/server/bin/web.js')).toBe(true);
