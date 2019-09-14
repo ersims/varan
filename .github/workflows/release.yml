@@ -11,9 +11,18 @@ jobs:
         with:
           node-version: 10
 
-      - name: Run release
+      - name: Prepare NPM
         if: github.event.action == 'PUBLISH_RELEASE'
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
+
+      - name: Run release
+        if: github.event.action == 'PUBLISH_RELEASE2'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm run release
+
+      - name: Cleanup
+        if: github.event.action == 'PUBLISH_RELEASE'
+        run: npm whoami && rm .npmrc
