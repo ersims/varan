@@ -23,13 +23,19 @@ Disclaimer: There will be breaking changes and outdated documentation during the
   - [Development](#usage-development)
   - [Production](#usage-production)
 - [Customization and Setup](#customization)
+  - [Hot Reloading](#customization-hotreload)
   - [Performance](#customization-performance)
     - [Fibers](#customization-performance-fibers)
-  - [Polyfill and browser support](#customization-polyfill)
+  - [Polyfill and Browser Support](#customization-polyfill)
   - [Browserslist](#customization-browserslist)
-  - [Webpack](#customization-webpack)
-    - [Progressive web apps](#customization-webpack-pwa)
+  - [Customizing Webpack](#customization-webpack)
+    - [Build-time Variables](#customization-webpack-pwa)
+    - [Progressive Web Apps](#customization-webpack-pwa)
     - [Static client side apps (create-react-app)](#customization-webpack-static)
+  - [Use Your Own Webpack Configuration](#customization-use-own-webpack)
+- [Troubleshooting](#troubleshooting)
+  - [`varan watch` gives 404](#troubleshooting-watch-404)
+  - [Syntax errors in dependencies](#troubleshooting-syntax-errors-dependencies)
 - [API](#api)
   - [build([options])](#api-build)
   - [Default webpack configs](#api-default-webpack-configs)
@@ -141,76 +147,24 @@ The default entry points in varan are as follows:
 | Client | `src/client/index`                  |
 | Server | `src/server/bin/web`                |
 
-<a id="customization-webpack"></a>
+<a id="customization-hotreload"></a>
 
-### Custom webpack config
+### Hot Reloading
 
-Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
-It is recommended to create your own `webpack` directory with your custom client and server files, and specifying these when using `varan build` and `varan watch`.
-Whenever possible, extend the default webpack configs provided in `varan/webpack/client` and `varan/webpack/server` respectively instead of creating your own from scratch.
-See [extending webpack config](#customization-extending-config) for more information on how to extend the config.
+You can use [react-hot-loader](https://github.com/gaearon/react-hot-loader) to get hot reloading (of react components) in your project.
+If you also use hooks you can install `@hot-loader/react-dom` and follow the [customizing webpack](#customization-webpack) chapter to add it to your webpack config.
+No need to customize your webpack config.
 
-Note that development mode (`varan watch`) only supports up to two config files, one with `target: 'browser'` and one with `target: 'node'`, while production mode (`varan build`) supports any number of configs.
+Remember to follow all the steps as described in the link above and create a `.babelrc.js` file in your project with the `react-hot-loader/babel` babel plugin.
 
-To use your new local configs in development mode you can provide the path to your config files directly.
-If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config.
-
-To override only the client config for development mode, run:
-
-```bash
-varan watch ./webpack/client varan/webpack/server
-```
-
-For production build you can specify a list of config files to build like so:
-
-```bash
-varan build ./webpack/client ./webpack/server
-```
-
-Remember to update your npm scripts to use the new config files as shown above.
-
-<a id="customization-extending-config"></a>
-
-### Extending webpack config
-
-When you create your own webpack configuration it is highly recommended to extend the existing config and only make the necessary changes to fit your use case.
-The built in configs contain many useful defaults and are kept up to date as best practices and plugins change.
-
-The built in configs are available at `varan/webpack/client` and `varan/webpack/server` for the client and server config respectively.
-The configs exports a function where you can set some options without having to revert to overriding the exported webpack config object.
-
-For available options see [default webpack configs](#api-default-webpack-configs).
-
-#### Example: Adding some build variables (global variables that are swapped in place during build).
-
-For more information see [DefinePlugin](https://webpack.js.org/plugins/define-plugin/).
+Example `.babelrc.js` file
 
 ```javascript
-// my-project/webpack/client.js
-const client = require('varan/webpack/client');
-const myVars = {
-  BUILD_DATE: JSON.stringify(new Date().toISOString()),
+module.exports = {
+  presets: ['varan'],
+  plugins: ['react-hot-loader/babel'],
 };
-
-// Exports
-module.exports = options => client({ ...options, buildVars: myVars });
 ```
-
-Built using
-
-```bash
-$ varan build ./webpack/client ./webpack/server
-```
-
-<a id="customization-build-variables"></a>
-
-### Build time variables
-
-By default, all environment variables starting with `APP_` or `REACT_APP_` are exchanged in place during build time.
-This also includes the `process.env.NODE_ENV` environment variable.
-If you are using the default webpack configs, then you can also pass in an object to the `buildVars` property (see [API](#api) for more information) with variables to replace at build time.
-
-This is useful if you want to have different builds depending on some build parameters, e.g. different backend API urls depending on your environment.
 
 <a id="customization-performance"></a>
 
@@ -230,7 +184,7 @@ This may significantly improve build performance for sass heavy projects.
 
 <a id="customization-polyfill"></a>
 
-### Polyfills and browser support
+### Polyfills and Browser Support
 
 Varan automatically adds basic polyfills for IE11 (to be removed at some point) and injects any other necessary polyfills using [@babel/preset-env](https://babeljs.io/docs/en/babel-preset-env.html) and [@babel/plugin-transform-runtime](https://babeljs.io/docs/en/babel-plugin-transform-runtime.html) based on your [browserslist](#browserslist).
 Note that it is expected that you have `@babel/runtime` and, `core-js@3` or `core-js-pure@3` package as a production dependency to provide polyfills.
@@ -240,6 +194,28 @@ Note that it is expected that you have `@babel/runtime` and, `core-js@3` or `cor
 ### Browserslist
 
 Varan supports [browserslist](https://github.com/browserslist/browserslist) for polyfilling. Refer to [browserslist](https://github.com/browserslist/browserslist) for more information on how to use it. Varan supports both `.browserslistrc` files and the `browserslist` property in `package.json`.
+
+<a id="customization-webpack"></a>
+
+### Customizing Webpack
+
+When you create your own webpack configuration it is highly recommended to extend the existing config and only make the necessary changes to fit your use case.
+The built in configs contain many useful defaults and are kept up to date as best practices and plugins change.
+
+The built in configs are available at `varan/webpack/client` and `varan/webpack/server` for the client and server config respectively.
+The configs exports a function where you can set some options without having to revert to overriding the exported webpack config object.
+
+For available options see [default webpack configs](#api-default-webpack-configs).
+
+<a id="customization-build-variables"></a>
+
+#### Build-time Variables
+
+By default, all environment variables starting with `APP_` or `REACT_APP_` are exchanged in place during build time.
+This also includes the `process.env.NODE_ENV` environment variable.
+If you are using the default webpack configs, then you can also pass in an object to the `buildVars` property (see [API](#api) for more information) with variables to replace at build time.
+
+This is useful if you want to have different builds depending on some build parameters, e.g. different backend API urls depending on your environment.
 
 <a id="customization-webpack-pwa"></a>
 
@@ -326,9 +302,53 @@ module.exports = options =>
   });
 ```
 
-<a id="dependency-errors"></a>
+<a id="customization-use-own-webpack"></a>
 
-### Syntax errors in dependencies
+### Use Your Own Webpack Configuration
+
+Customizations are supported through specifying your own webpack config files for `varan build` and/or `varan watch`.
+It is recommended to create your own `webpack` directory with your custom client and server files, and specifying these when using `varan build` and `varan watch`.
+Whenever possible, extend the default webpack configs provided in `varan/webpack/client` and `varan/webpack/server` respectively instead of creating your own from scratch.
+See [extending webpack config](#customization-extending-config) for more information on how to extend the config.
+
+Note that development mode (`varan watch`) only supports up to two config files, one with `target: 'browser'` and one with `target: 'node'`, while production mode (`varan build`) supports any number of configs.
+
+To use your new local configs in development mode you can provide the path to your config files directly.
+If you only want to override client or server you can use `varan/webpack/server` or `varan/webpack/client` respectively to use the default config for the non-overridden config.
+
+To override only the client config for development mode, run:
+
+```bash
+varan watch ./webpack/client varan/webpack/server
+```
+
+For production build you can specify a list of config files to build like so:
+
+```bash
+varan build ./webpack/client ./webpack/server
+```
+
+Remember to update your npm scripts to use the new config files as shown above.
+
+<a id="troubleshooting"></a>
+
+### Troubleshooting
+
+Sometimes stuff go wrong and with the complexity that Webpack brings it may be difficult to find a root cause and solution.
+Here are some common issues you might encounter and some suggestions on how to fix them.
+If you encounter other issues not mentioned here, please leave an issue and a simple reproduction repository (and a fix if you have it) and we can add it here for the benefit of others.
+
+<a id="troubleshooting-watch-404"></a>
+
+#### `varan watch` gives 404
+
+Sometimes it might seem that `varan watch` is working fine - no issues encountered - but your browser gives you 404.
+Try running `varan build` as some errors might be swallowed by the watcher, but will surface when building.
+This should give you a better indication of the actual issue and allow you to solve it.
+
+<a id="troubleshooting-syntax-errors-dependencies"></a>
+
+#### Syntax errors in dependencies
 
 Sometimes you may encounter dependencies that require special care or a custom webpack config.
 This is usually because the dependency is built for a different environment than you have, either it is browser vs Node.js or different version of Node.js.
