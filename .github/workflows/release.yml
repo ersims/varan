@@ -11,6 +11,10 @@ jobs:
         with:
           node-version: 10
 
+      - name: npm install
+        if: github.event.action == 'PUBLISH_RELEASE'
+        run: npm install
+
       - name: Prepare NPM
         if: github.event.action == 'PUBLISH_RELEASE'
         env:
