@@ -9,7 +9,7 @@ jobs:
       - name: Use Node.js v10
         uses: actions/setup-node@v1
         with:
-          version: 10
+          node-version: 10
 
       - name: Run release
         if: github.event.action == 'PUBLISH_RELEASE'
