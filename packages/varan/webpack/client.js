@@ -65,6 +65,7 @@ module.exports = (options = {}) => {
       proxy: {
         '/': `http://localhost:${opts.serverPort}/`,
       },
+      historyApiFallback: true,
       compress: true,
       clientLogLevel: 'warn',
       quiet: true,
