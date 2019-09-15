@@ -120,7 +120,7 @@ it('should work with default values', async done => {
 
   // Asset Manifest
   const assetManifest = JSON.parse(mfs.readFileSync(resolve('dist/client/asset-manifest.json')));
-  expect(Object.keys(assetManifest)).toHaveLength(3);
+  expect(Object.keys(assetManifest)).toHaveLength(4);
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
@@ -200,7 +200,7 @@ it('should work with typescript', async done => {
 
   // Asset Manifest
   const assetManifest = JSON.parse(mfs.readFileSync(resolve('dist/client/asset-manifest.json')));
-  expect(Object.keys(assetManifest)).toHaveLength(3);
+  expect(Object.keys(assetManifest)).toHaveLength(4);
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));

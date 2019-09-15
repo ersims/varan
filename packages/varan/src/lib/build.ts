@@ -11,6 +11,8 @@ import getBuildStatsFromManifest, { BuildStats } from './getBuildStatsFromManife
 import getCompilerStats, { CompilerStats } from './getCompilerStats';
 import getConfigs, { ValidConfiguration } from './getConfigs';
 import BuildError from './BuildError';
+import createServerConfig from '../webpack/createServerConfig';
+import createClientConfig from '../webpack/createClientConfig';
 
 // Types
 interface TaskContext {
@@ -45,11 +47,8 @@ export interface Options {
 // Init
 const getOpts = (options: Partial<Options>): Options =>
   defaults({}, options, {
-    verbose: false,
-    configs: [
-      path.resolve(__dirname, '..', '..', 'webpack', 'server'),
-      path.resolve(__dirname, '..', '..', 'webpack', 'client'),
-    ],
+    verbose: true,
+    configs: [createServerConfig, createClientConfig],
     warnAssetSize: 512 * 1024,
     warnChunkSize: 1024 * 1024,
     env: 'production',

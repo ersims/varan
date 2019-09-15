@@ -4,6 +4,10 @@
 declare module 'webpack-stats-plugin' {
   import webpack from 'webpack';
 
+  export interface StatsWriterOptions {
+    filename: string;
+    fields: string[];
+  }
   export interface StatsWriterManifest {
     assetsByChunkName?: {
       [chunkName: string]: string | string[];
@@ -16,8 +20,7 @@ declare module 'webpack-stats-plugin' {
     }>;
   }
   export class StatsWriterPlugin extends webpack.Plugin {
-    public opts: {
-      filename: string;
-    };
+    public opts: StatsWriterOptions;
+    public constructor(opts: StatsWriterOptions);
   }
 }
