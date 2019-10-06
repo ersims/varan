@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.1](https://github.com/ersims/varan/compare/varan@0.15.0...varan@0.15.1) (2019-10-06)
+
+### Bug Fixes
+
+- enable stdin while showing watcher spinner ([acdb9dd](https://github.com/ersims/varan/commit/acdb9dd))
+- remove hot update assets from manifest ([0e525ce](https://github.com/ersims/varan/commit/0e525ce))
+
 # [0.15.0](https://github.com/ersims/varan/compare/varan@0.14.0...varan@0.15.0) (2019-10-06)
 
 ### Bug Fixes
