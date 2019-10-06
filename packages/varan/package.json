@@ -103,7 +103,6 @@
     "@types/compression-webpack-plugin": "^2.0.1",
     "@types/cssnano": "^4.0.0",
     "@types/express": "^4.17.0",
-    "@types/filesize": "^4.2.0",
     "@types/fs-extra": "^8.0.0",
     "@types/listr": "^0.14.2",
     "@types/lodash": "^4.14.136",
