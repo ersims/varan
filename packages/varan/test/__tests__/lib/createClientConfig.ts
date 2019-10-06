@@ -14,8 +14,9 @@ jest.mock('webpack', () => ({
 beforeEach(() => {
   ClientDefinePluginMock.mockReset();
 });
-it('should automatically add `APP_` and `REACT_APP_` environment variables to `DefinePlugin`', () => {
-  process.env.APP_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-APP-AUTO-REPLACE');
+it('should automatically add `APP_BUILD_VAR_` and `REACT_APP_` environment variables to `DefinePlugin`', () => {
+  process.env.APP_NOT_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-APP-NOT-AUTO-REPLACE');
+  process.env.APP_BUILD_VAR_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-APP-BUILD-VAR-AUTO-REPLACE');
   process.env.REACT_APP_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-REACT-APP-AUTO-REPLACE');
   process.env.NOT_REPLACED = JSON.stringify('DEFINE-VAR-NOT-REPLACE');
 
@@ -31,13 +32,14 @@ it('should automatically add `APP_` and `REACT_APP_` environment variables to `D
   expect(DefinePlugin).toHaveBeenCalledWith(
     expect.objectContaining({
       'process.env.NODE_ENV': JSON.stringify('test'),
-      'process.env.APP_AUTO_DEFINE_VAR': JSON.stringify('DEFINE-VAR-APP-AUTO-REPLACE'),
+      'process.env.APP_BUILD_VAR_AUTO_DEFINE_VAR': JSON.stringify('DEFINE-VAR-APP-BUILD-VAR-AUTO-REPLACE'),
       'process.env.REACT_APP_AUTO_DEFINE_VAR': JSON.stringify('DEFINE-VAR-REACT-APP-AUTO-REPLACE'),
     }),
   );
   const args = ClientDefinePluginMock.mock.calls[0][0];
   expect(args).toHaveProperty(['process.env.NODE_ENV']);
   expect(args).not.toHaveProperty(['process.env.NOT_REPLACED']);
+  expect(args).not.toHaveProperty(['process.env.APP_NOT_AUTO_DEFINE_VAR']);
 });
 it('should respect the `buildVars` property', () => {
   // Create the config

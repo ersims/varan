@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 import 'source-map-support/register';
+import dotenv from 'dotenv';
+
+dotenv.config();
+
+/* eslint-disable import/first */
 import program from 'commander';
 import path from 'path';
 import updateNotifier from 'update-notifier';
@@ -14,6 +19,7 @@ import emojis from '../lib/emojis';
 import { build, watch } from '../index';
 import getCompilerStats from '../lib/getCompilerStats';
 import { BuildStats } from '../lib/getBuildStatsFromManifest';
+/* eslint-enable import/first */
 
 // eslint-disable-next-line
 const pkg = require('../../package.json');
