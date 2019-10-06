@@ -227,5 +227,5 @@ export default async function build(options: Partial<Options>) {
   /**
    * Build project
    */
-  return tasks.run() as Promise<TaskListContext>;
+  return { result: await tasks.run(), options: opts };
 }
