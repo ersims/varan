@@ -129,7 +129,7 @@ export default (options: Partial<ClientOptions> = {}): webpack.Configuration => 
         'process.env.NODE_ENV': JSON.stringify(opts.env),
         'process.env.browser': JSON.stringify(true),
         ...Object.entries(process.env)
-          .filter(([key]) => key.startsWith('APP_') || key.startsWith('REACT_APP_'))
+          .filter(([key]) => key.startsWith('APP_BUILD_VAR_') || key.startsWith('REACT_APP_'))
           .reduce<{ [key: string]: string | undefined }>((acc, [key, value]) => {
             acc[`process.env.${key}`] = value;
             return acc;

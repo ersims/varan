@@ -230,8 +230,12 @@ For available options see [default webpack configs](#api-default-webpack-configs
 
 #### Build-time Variables
 
-By default, all environment variables starting with `APP_` or `REACT_APP_` are exchanged in place during build time.
+By default, all environment variables starting with `APP_BUILD_VAR_` or `REACT_APP_` (for compatibility reasons) are exchanged in place during build time.
 This also includes the `process.env.NODE_ENV` environment variable.
+Only use this for non-sensitive variables for use in the front-end.
+
+**Note: Be careful with what you put in those environment variables as any (even sensitive) information can be exposed to all users!**
+
 If you are using the default webpack configs, then you can also pass in an object to the `buildVars` property (see [API](#api) for more information) with variables to replace at build time.
 
 This is useful if you want to have different builds depending on some build parameters, e.g. different backend API urls depending on your environment.
