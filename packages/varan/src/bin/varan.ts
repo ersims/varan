@@ -49,7 +49,7 @@ program
   .option('--env <environment>', 'Environment to use.', 'production')
   .option('-a, --analyze', 'Analyze build')
   .option('-s, --silent', 'Disable output')
-  .action(async (files: string[], opts) => {
+  .action(async (files: string[], opts: { analyze?: boolean; env: 'development' | 'production'; silent?: boolean }) => {
     const log = createLogger({ silent: opts.silent });
     const env = (opts && opts.env) || 'production';
     const configs = (files.length > 0 && files.map(resolve)) || [
@@ -68,7 +68,7 @@ program
       /**
        * Run build
        */
-      const result = await build({
+      const { result, options } = await build({
         ...opts,
         verbose: !opts.silent,
         configs,
@@ -137,11 +137,12 @@ program
             ): null | string => {
               if (!current[key]) return null;
               let out = fileSize(current[key] as number);
-              if (warnSize && current[key] > warnSize) out = chalk.red(out);
+              if (warnSize && current[key] > warnSize) out = chalk.yellow(out);
               if (comparisonObject && comparisonObject[current.name]) {
                 const previous = comparisonObject[current.name] as typeof current;
                 if (previous[key]) {
-                  if (current[key] > previous[key]) out += `  + ${chalk.red(fileSize(current[key] - previous[key]))}`;
+                  if (current[key] > previous[key])
+                    out += `  + ${chalk.yellow(fileSize(current[key] - previous[key]))}`;
                   else if (current[key] === previous[key])
                     out += `  + ${chalk.yellow(fileSize(current[key] - previous[key]))}`;
                   else out += `  - ${chalk.green(fileSize(previous[key] - current[key]))}`;
@@ -154,29 +155,32 @@ program
                 key,
                 current,
                 (stat.previousBuild && stat.previousBuild[chunk ? 'chunks' : 'assets']) || undefined,
-                chunk ? opts.warnChunkSize : opts.warnAssetSize,
+                chunk ? options.warnChunkSize : options.warnAssetSize,
               );
+            const ignoreExtensions = ['.br', '.gz'];
             const tableRows = [
               ...Object.values(stat.currentBuild.chunks),
-              ...Object.values(stat.currentBuild.assets).filter(asset => Object.keys(asset.chunks).length === 0),
+              ...Object.values(stat.currentBuild.assets)
+                .filter(asset => !ignoreExtensions.includes(path.extname(asset.name).toLocaleLowerCase()))
+                .filter(asset => Object.keys(asset.chunks).length === 0),
             ]
               .sort((a, b) => b.size - a.size)
               .reduce<(string | number | null | undefined)[][]>((acc, cur) => {
                 if (isChunk(cur)) {
-                  const chunkTooBig = opts.warnChunkSize && cur.size > opts.warnChunkSize;
-                  const name = chunkTooBig ? chalk.red(`[${cur.name}]`) : `[${cur.name}]`;
+                  const chunkTooBig = options.warnChunkSize && cur.size > options.warnChunkSize;
+                  const name = chunkTooBig ? chalk.yellow(`[${cur.name}]`) : chalk.gray(`[${cur.name}]`);
                   acc.push([
                     name,
-                    printSize('size', cur, true),
-                    printSize('gzip', cur, true),
-                    printSize('brotli', cur, true),
+                    chalk.gray(printSize('size', cur, true) || ''),
+                    chalk.gray(printSize('gzip', cur, true) || ''),
+                    chalk.gray(printSize('brotli', cur, true) || ''),
                   ]);
                   Object.values(cur.assets)
                     .sort((a, b) => b.size - a.size)
                     .forEach(asset => {
                       let assetName;
-                      if (opts.warnAssetSize && asset.size > opts.warnAssetSize) assetName = chalk.red(asset.name);
-                      else if (chunkTooBig) assetName = chalk.yellow(asset.name);
+                      if (options.warnAssetSize && asset.size > options.warnAssetSize)
+                        assetName = chalk.yellow(asset.name);
                       else assetName = asset.name;
                       acc.push([
                         `  ${assetName}${Object.keys(asset.chunks).length > 1 ? ' +' : ''}`,
@@ -186,7 +190,8 @@ program
                       ]);
                     });
                 } else {
-                  const name = opts.warnAssetSize && cur.size > opts.warnAssetSize ? chalk.red(cur.name) : cur.name;
+                  const name =
+                    options.warnAssetSize && cur.size > options.warnAssetSize ? chalk.yellow(cur.name) : cur.name;
                   acc.push([name, printSize('size', cur), printSize('gzip', cur), printSize('brotli', cur)]);
                 }
                 return acc;

@@ -49,7 +49,7 @@ it('should keep webpack warnings', async done => {
   /**
    * Assertions
    */
-  const result = await build({
+  const { result } = await build({
     appDir: resolve(),
     configs: ['../../fixtures/webpack/customClientExtends.js'].map(p => path.resolve(__dirname, p)),
     outputFileSystem: mfs as any,

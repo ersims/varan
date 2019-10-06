@@ -66,6 +66,7 @@ export interface VaranWatcher {
     compiler: webpack.Compiler;
     warnings: string[];
   } | null;
+  options: Options;
 }
 
 // Init
@@ -246,5 +247,5 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     : null;
   const close = async () =>
     Promise.all([serverWatcher && serverWatcher.close(), clientWatcher && clientWatcher.close()].filter(Boolean));
-  return { close, client: clientWatcher, server: serverWatcher, totals: result.totals };
+  return { close, client: clientWatcher, server: serverWatcher, totals: result.totals, options: opts };
 }
