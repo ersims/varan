@@ -341,6 +341,7 @@ program
         const serverCompileSpinner = ora({
           spinner: 'circleHalves',
           text: chalk.bold('Server recompiling'),
+          discardStdin: false,
         });
 
         // Begin recompile
@@ -388,6 +389,7 @@ program
         const clientCompileSpinner = ora({
           spinner: 'hearts',
           text: chalk.bold('Client recompiling'),
+          discardStdin: false,
         });
 
         // Begin recompile
