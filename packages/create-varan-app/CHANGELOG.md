@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/ersims/varan/compare/create-varan-app@0.1.2...create-varan-app@0.2.0) (2019-10-06)
+
+### Bug Fixes
+
+- **deps:** update dependency tar to v5 ([351a5bc](https://github.com/ersims/varan/commit/351a5bc))
+
+### Features
+
+- add integrity to asset-manifest.json ([02a4d78](https://github.com/ersims/varan/commit/02a4d78))
+
+### BREAKING CHANGES
+
+- asset-manifest.json now contains an object with src and
+  integrity for each asset instead of previous src string.
+
+Previous: { "asset.js": "asset.hash.js" }
+New: { "asset.js": { src: "asset.hash.js", integrity: "sha256..." }
+
 ## [0.1.2](https://github.com/ersims/varan/compare/create-varan-app@0.1.1...create-varan-app@0.1.2) (2019-08-18)
 
 ### Bug Fixes

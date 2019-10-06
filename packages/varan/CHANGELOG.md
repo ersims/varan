@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/ersims/varan/compare/varan@0.14.0...varan@0.15.0) (2019-10-06)
+
+### Bug Fixes
+
+- **deps:** update dependency filesize to v5 ([2c87541](https://github.com/ersims/varan/commit/2c87541))
+- change auto injected build env vars from APP* to APP_BUILD_VAR* ([db92546](https://github.com/ersims/varan/commit/db92546))
+- remove compressed assets from asset build list ([001a735](https://github.com/ersims/varan/commit/001a735))
+
+### Features
+
+- add integrity to asset-manifest.json ([02a4d78](https://github.com/ersims/varan/commit/02a4d78))
+- add support for css and sass modules ([2661d2c](https://github.com/ersims/varan/commit/2661d2c))
+- enable historyApiFallback as default ([e7ec779](https://github.com/ersims/varan/commit/e7ec779))
+
+### BREAKING CHANGES
+
+- APP* environment variables are no longer automatically
+  injected during build time. This is to prevent accidental leak of
+  sensitive information. Use APP_BUILD_VAR* instead - or use the
+  "buildVars" option.
+
+Previous: APP*
+New: APP_BUILD_VAR*
+
+- asset-manifest.json now contains an object with src and
+  integrity for each asset instead of previous src string.
+
+Previous: { "asset.js": "asset.hash.js" }
+New: { "asset.js": { src: "asset.hash.js", integrity: "sha256..." }
+
 # [0.14.0](https://github.com/ersims/varan/compare/varan@0.13.3...varan@0.14.0) (2019-09-08)
 
 ### Bug Fixes
