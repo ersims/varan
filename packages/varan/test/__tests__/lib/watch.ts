@@ -37,7 +37,6 @@ it('should work with default values', async done => {
   const watcher = await watch({
     appDir: resolve(),
     outputFileSystem: mfs as any,
-    silent: true,
     waitForServer: false,
   });
 

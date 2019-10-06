@@ -79,10 +79,13 @@ it('builds successfully', async done => {
 
     // Asset Manifest
     const assetManifest = fs.readJSONSync('dist/client/asset-manifest.json');
-    expect(Object.keys(assetManifest)).toHaveLength(4);
+    expect(Object.keys(assetManifest)).toHaveLength(5);
     expect(assetManifest).toEqual(
       expect.objectContaining({
-        'static/media/favicon.ico': expect.stringMatching(/static\/media\/favicon\.[a-f0-9]{8}\.ico/i),
+        'static/media/favicon.ico': expect.objectContaining({
+          src: expect.stringMatching(/static\/media\/favicon\.[a-f0-9]{8}\.ico/i),
+          integrity: expect.stringMatching(/sha512-(.){32}/i),
+        }),
       }),
     );
 

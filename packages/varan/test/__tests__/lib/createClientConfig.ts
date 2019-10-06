@@ -1,12 +1,14 @@
+import { DefinePlugin } from 'webpack';
+import createClientConfig from '../../../src/webpack/createClientConfig';
+
+// Init
+const ClientDefinePluginMock = DefinePlugin as jest.Mock;
+
 // Mocks
-const ClientDefinePluginMock = jest.fn();
 jest.mock('webpack', () => ({
   ...jest.requireActual('webpack'),
-  DefinePlugin: ClientDefinePluginMock,
+  DefinePlugin: jest.fn(),
 }));
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const createClientConfig = require('../../../webpack/client');
 
 // Tests
 beforeEach(() => {
@@ -26,7 +28,7 @@ it('should automatically add `APP_` and `REACT_APP_` environment variables to `D
   delete process.env.NOT_REPLACED;
 
   // Assertions
-  expect(ClientDefinePluginMock).toHaveBeenCalledWith(
+  expect(DefinePlugin).toHaveBeenCalledWith(
     expect.objectContaining({
       'process.env.NODE_ENV': JSON.stringify('test'),
       'process.env.APP_AUTO_DEFINE_VAR': JSON.stringify('DEFINE-VAR-APP-AUTO-REPLACE'),
@@ -47,7 +49,7 @@ it('should respect the `buildVars` property', () => {
   });
 
   // Assertions
-  expect(ClientDefinePluginMock).toHaveBeenCalledWith(
+  expect(DefinePlugin).toHaveBeenCalledWith(
     expect.objectContaining({
       'process.env.NODE_ENV': JSON.stringify('test'),
       var1: JSON.stringify('value1'),

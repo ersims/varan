@@ -1,12 +1,14 @@
+import { DefinePlugin } from 'webpack';
+import createServerConfig from '../../../src/webpack/createServerConfig';
+
+// Init
+const ServerDefinePluginMock = DefinePlugin as jest.Mock;
+
 // Mocks
-const ServerDefinePluginMock = jest.fn();
 jest.mock('webpack', () => ({
   ...jest.requireActual('webpack'),
-  DefinePlugin: ServerDefinePluginMock,
+  DefinePlugin: jest.fn(),
 }));
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const createServerConfig = require('../../../webpack/server');
 
 // Tests
 beforeEach(() => {

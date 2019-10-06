@@ -1,14 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 const merge = require('webpack-merge');
-const clientConfig = require('../../../webpack/client');
+const createClientConfig = require('../../../src/webpack/createClientConfig').default;
 
 // Exports
 module.exports = options =>
-  merge.smartStrategy({ plugins: 'replace' })(clientConfig(options), {
+  merge.smartStrategy({ plugins: 'replace' })(createClientConfig(options), {
     devtool: 'cheap-module-source-map',
     output: {
       filename: 'customExtendsFileName.js',
       chunkFilename: 'customExtendsFileName.[name].[chunkhash:8].chunk.js',
     },
-    plugins: clientConfig(options).plugins.slice(0, -1),
+    plugins: createClientConfig(options).plugins.slice(0, -1),
   });

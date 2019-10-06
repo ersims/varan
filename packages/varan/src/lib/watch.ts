@@ -13,6 +13,8 @@ import buildAndRunDevServer from './buildAndRunDevServer';
 import buildServer from './buildServer';
 import getCompilerStats, { CompilerStats } from './getCompilerStats';
 import runServer from './runServer';
+import createServerConfig from '../webpack/createServerConfig';
+import createClientConfig from '../webpack/createClientConfig';
 
 // Types
 interface TaskListContext {
@@ -70,10 +72,7 @@ export interface VaranWatcher {
 const getOpts = (options: Partial<Options>): Options =>
   defaults({}, options, {
     verbose: false,
-    configs: [
-      path.resolve(__dirname, '..', '..', 'webpack', 'server'),
-      path.resolve(__dirname, '..', '..', 'webpack', 'client'),
-    ],
+    configs: [createServerConfig, createClientConfig],
     devServerProtocol: 'http',
     devServerHost: process.env.HOST || 'localhost',
     devServerPort: process.env.DEV_PORT ? parseInt(process.env.DEV_PORT, 10) : 3000,
