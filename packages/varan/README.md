@@ -24,6 +24,7 @@ Disclaimer: There will be breaking changes and outdated documentation during the
   - [Production](#usage-production)
 - [Customization and Setup](#customization)
   - [Hot Reloading](#customization-hotreload)
+  - [CSS and SASS](#customization-css-and-sass)
   - [Performance](#customization-performance)
     - [Fibers](#customization-performance-fibers)
   - [Polyfill and Browser Support](#customization-polyfill)
@@ -78,7 +79,7 @@ $ npm i --save-dev varan
   "scripts": {
     "build": "varan build",
     "build:analyze": "varan build --analyze",
-    "watch": "varan watch -- --inspect"
+    "start:watch": "varan watch -- --inspect"
   }
 ```
 
@@ -114,7 +115,7 @@ $ varan
 Start the development server with hot reloading by running
 
 ```bash
-npm run watch
+npm run start:watch
 ```
 
 <a id="usage-production"></a>
@@ -164,6 +165,24 @@ module.exports = {
   presets: ['varan'],
   plugins: ['react-hot-loader/babel'],
 };
+```
+
+<a id="customization-css-and-sass"></a>
+
+### CSS and SASS
+
+Varan comes with full CSS and SASS support out of the box so you don't need to do anything, even if you want to use CSS/SASS modules.
+By default class names are only hashed for CSS and SASS modules (e.g. `*.module.css` and `*.module.sass`).
+If you are using modules you need to import them directly in your components like this:
+
+```typescript jsx
+import classes from './Header.module.scss';
+
+export const Header = () => (
+  <header className={classes.header}>
+    <h1>A heading</h1>
+  </header>
+);
 ```
 
 <a id="customization-performance"></a>

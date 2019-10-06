@@ -14,7 +14,6 @@ export interface CommonOptions {
   appDir: string;
   env: Configuration['mode'];
   target: Configuration['target'];
-  cssModulesIdent: string;
 }
 
 // Init
@@ -25,8 +24,41 @@ const getOpts = (options: Partial<CommonOptions>): CommonOptions => {
     appDir: resolve('./'),
     env: process.env.NODE_ENV,
     target: 'web',
-    cssModulesIdent: '[local]',
   });
+};
+const getStyleLoaders = (
+  { isDev, isNode }: { isDev: boolean; isNode: boolean },
+  cssOptions: { [key: string]: any },
+  preProcessor?: { [key: string]: any },
+) => {
+  return [
+    !isNode && (isDev ? { loader: require.resolve('style-loader') } : { loader: MiniCssExtractPlugin.loader }),
+    {
+      loader: require.resolve('css-loader'),
+      options: {
+        onlyLocals: isNode,
+        importLoaders: preProcessor ? 3 : 1,
+        sourceMap: isDev,
+        localsConvention: 'camelCase',
+        ...cssOptions,
+      },
+    },
+    {
+      loader: require.resolve('postcss-loader'),
+      options: {
+        ident: 'postcss',
+        plugins: [postcssPresetEnv(), !isNode && !isDev && cssNano({ preset: 'default' })].filter(Boolean),
+        sourceMap: isDev,
+      },
+    },
+    !!preProcessor && {
+      loader: require.resolve('resolve-url-loader'),
+      options: {
+        keepQuery: true,
+      },
+    },
+    preProcessor,
+  ].filter(Boolean);
 };
 
 // Exports
@@ -73,36 +105,59 @@ export default (options: Partial<CommonOptions>): Configuration => {
         },
 
         /**
-         * Styles
-         * SASS, SCSS and CSS
+         * CSS Styles
          */
         {
-          test: /\.(sa|sc|c)ss$/,
-          use: [
-            !isNode && (isDev ? { loader: require.resolve('style-loader') } : { loader: MiniCssExtractPlugin.loader }),
+          test: /\.css$/,
+          exclude: /\.module\.css$/,
+          use: getStyleLoaders({ isDev, isNode }, { modules: false }),
+        },
+
+        /**
+         * CSS Modules
+         */
+        {
+          test: /\.module\.css$/,
+          use: getStyleLoaders(
+            { isDev, isNode },
             {
-              loader: require.resolve('css-loader'),
+              modules: {
+                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64]',
+              },
+            },
+          ),
+        },
+
+        /**
+         * SASS & SCSS Styles
+         */
+        {
+          test: /\.(sa|sc)ss$/,
+          exclude: /\.module\.(sa|sc)ss$/,
+          use: getStyleLoaders(
+            { isDev, isNode },
+            { modules: false },
+            {
+              loader: require.resolve('sass-loader'),
               options: {
-                onlyLocals: isNode,
-                importLoaders: 3,
-                sourceMap: isDev,
-                modules: {
-                  localIdentName: opts.cssModulesIdent,
+                sassOptions: {
+                  implementation: require('sass'),
                 },
               },
             },
+          ),
+        },
+
+        /**
+         * SASS & SCSS Modules
+         */
+        {
+          test: /\.module\.(sa|sc)ss$/,
+          use: getStyleLoaders(
+            { isDev, isNode },
             {
-              loader: require.resolve('postcss-loader'),
-              options: {
-                ident: 'postcss',
-                plugins: [postcssPresetEnv(), !isNode && !isDev && cssNano({ preset: 'default' })].filter(Boolean),
-                sourceMap: isDev,
-              },
-            },
-            {
-              loader: require.resolve('resolve-url-loader'),
-              options: {
-                keepQuery: true,
+              modules: {
+                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64]',
               },
             },
             {
@@ -113,7 +168,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
                 },
               },
             },
-          ].filter(Boolean),
+          ),
         },
 
         /**
