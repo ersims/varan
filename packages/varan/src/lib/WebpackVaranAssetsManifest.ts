@@ -56,12 +56,19 @@ export default class WebpackVaranAssetsManifest extends WebpackAssetsManifest {
     // Add missing assets
     if (stats.assets) {
       stats.assets
-        // Ignore self
-        .filter(asset => asset.name !== this.options.output)
-        // Ignore already processed files
-        .filter(asset => !this.assetNames.has(asset.name))
-        // Ignore based on file extension
-        .filter(asset => !ignoreExtension.includes(path.extname(asset.name).toLocaleLowerCase()))
+        .filter(asset => {
+          // Ignore self
+          if (asset.name === this.options.output) return false;
+
+          // Ignore HMR files
+          if (!/^(?!.*(\.hot-update\.)).*/.test(asset.name)) return false;
+
+          // Ignore already processed files
+          if (this.assetNames.has(asset.name)) return false;
+
+          // Ignore based on file extension
+          return !ignoreExtension.includes(path.extname(asset.name).toLocaleLowerCase());
+        })
         // Add to manifest
         .forEach(asset => {
           this.currentAsset = compilerCompilation.assets[asset.name];
