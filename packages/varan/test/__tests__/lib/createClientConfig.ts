@@ -15,10 +15,10 @@ beforeEach(() => {
   ClientDefinePluginMock.mockReset();
 });
 it('should automatically add `APP_BUILD_VAR_` and `REACT_APP_` environment variables to `DefinePlugin`', () => {
-  process.env.APP_NOT_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-APP-NOT-AUTO-REPLACE');
-  process.env.APP_BUILD_VAR_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-APP-BUILD-VAR-AUTO-REPLACE');
-  process.env.REACT_APP_AUTO_DEFINE_VAR = JSON.stringify('DEFINE-VAR-REACT-APP-AUTO-REPLACE');
-  process.env.NOT_REPLACED = JSON.stringify('DEFINE-VAR-NOT-REPLACE');
+  process.env.APP_NOT_AUTO_DEFINE_VAR = 'DEFINE-VAR-APP-NOT-AUTO-REPLACE';
+  process.env.APP_BUILD_VAR_AUTO_DEFINE_VAR = 'DEFINE-VAR-APP-BUILD-VAR-AUTO-REPLACE';
+  process.env.REACT_APP_AUTO_DEFINE_VAR = 'DEFINE-VAR-REACT-APP-AUTO-REPLACE';
+  process.env.NOT_REPLACED = 'DEFINE-VAR-NOT-REPLACE';
 
   // Create the config
   createClientConfig();
