@@ -131,7 +131,7 @@ export default (options: Partial<ClientOptions> = {}): webpack.Configuration => 
         ...Object.entries(process.env)
           .filter(([key]) => key.startsWith('APP_BUILD_VAR_') || key.startsWith('REACT_APP_'))
           .reduce<{ [key: string]: string | undefined }>((acc, [key, value]) => {
-            acc[`process.env.${key}`] = value;
+            acc[`process.env.${key}`] = JSON.stringify(value);
             return acc;
           }, {}),
         ...opts.buildVars,
