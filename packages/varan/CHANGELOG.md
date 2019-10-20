@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.2](https://github.com/ersims/varan/compare/varan@0.15.1...varan@0.15.2) (2019-10-20)
+
+### Bug Fixes
+
+- **deps:** update dependency execa to v3 ([4212732](https://github.com/ersims/varan/commit/4212732))
+- json stringify env vars ([179a3d8](https://github.com/ersims/varan/commit/179a3d8))
+
 ## [0.15.1](https://github.com/ersims/varan/compare/varan@0.15.0...varan@0.15.1) (2019-10-06)
 
 ### Bug Fixes
