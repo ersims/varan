@@ -61,7 +61,7 @@ export default async function buildAndRunDevServer(
         devServerConfig.before = function devServerBefore(app, server) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           app.use((req, res, next) => opts.waitForPromise!.then(next));
-          if (config.devServer && config.devServer.before) config.devServer.before(app, server);
+          if (config.devServer && config.devServer.before) config.devServer.before(app, server, compiler);
         };
       }
 

@@ -181,7 +181,7 @@ export default (options: Partial<ClientOptions> = {}): webpack.Configuration => 
       }),
       new WebpackVaranAssetsManifest({
         output: 'asset-manifest.json',
-        integrity: true,
+        integrity: !isDev,
         integrityHashes: ['sha512'],
       }),
       opts.pwaManifest &&
