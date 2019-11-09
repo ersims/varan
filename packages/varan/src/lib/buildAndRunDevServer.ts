@@ -58,10 +58,10 @@ export default async function buildAndRunDevServer(
 
       // Add wait for promise middleware?
       if (opts.waitForPromise) {
-        devServerConfig.before = function devServerBefore(app, server) {
+        devServerConfig.before = function devServerBefore(app, server, devServerCompiler) {
           // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           app.use((req, res, next) => opts.waitForPromise!.then(next));
-          if (config.devServer && config.devServer.before) config.devServer.before(app, server, compiler);
+          if (config.devServer && config.devServer.before) config.devServer.before(app, server, devServerCompiler);
         };
       }
 
