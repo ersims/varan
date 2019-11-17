@@ -8,7 +8,7 @@ module.exports = {
   overrides: [
     // Browser environments
     {
-      files: ['**/src/client/**'],
+      files: ['**/src/client/**', 'examples/basic-static/src/**'],
       env: {
         browser: true,
       },
@@ -43,6 +43,14 @@ module.exports = {
       ],
       rules: {
         'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
+      },
+    },
+
+    // JS Config
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
   ],

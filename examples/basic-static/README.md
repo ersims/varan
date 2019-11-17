@@ -1,7 +1,8 @@
-# Varan basic example with server side rendering
+# Varan basic example for static apps
 
-This example contains a basic `server` and `client` component.
-For most projects this is an ideal starting point as it allows maximum portability and flexibility.
+This example contains a basic static application.
+There are no server components in this example except for a development server for use during development.
+For some projects this is a simple starting point — similar to [create-react-app][create-react-app-url]
 
 ## Documentation
 
@@ -28,13 +29,8 @@ Here is an excerpt of the project directory structure with the most important di
 .
 ├── dist // (auto generated when running npm run build)
 ├── src // source code
-│   ├── assets
-│   │   └── favicon.ico
-│   ├── client // all client specific code - this runs in the browser (and during server side rendering)
-│   │   └── index.jsx
-│   └── server // all server code - this runs on the server and handles serving the client directory
-│       └── bin
-│           └── web.js
+|   ├── index.html
+│   └── index.jsx
 └── test
     └── __tests__
 ```
@@ -69,11 +65,7 @@ Analyze the production build.
 $ npm run build:analyze
 ```
 
-Deploy your application and start the production server.
-
-```bash
-$ npm start
-```
+Deploy your application to somewhere that can host a static application e.g. Heroku, Amazon S3, Azure App Service etc.
 
 <a id="customization"></a>
 
@@ -90,3 +82,4 @@ For more information on how to customize your build, development, browser suppor
 
 [varan-url]: https://github.com/ersims/varan
 [create-varan-app-url]: https://github.com/ersims/varan
+[create-react-app-url]: https://create-react-app.dev/

@@ -31,18 +31,5 @@ exports[`renders correctly 1`] = `
     </code>
     .
   </p>
-  <p
-    className="server"
-  >
-    The backend server is located in 
-    <code>
-      src/server
-    </code>
-    , with 
-    <code>
-      src/server/bin/web
-    </code>
-     being the webserver you are using to see this page.
-  </p>
 </div>
 `;
