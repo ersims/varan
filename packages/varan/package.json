@@ -51,6 +51,7 @@
     "@babel/core": "^7.5.5",
     "@types/wait-on": "^3.2.0",
     "@types/webpack": "^4.32.1",
+    "app-manifest-loader": "^2.4.1",
     "babel-loader": "^8.0.6",
     "babel-preset-varan": "^0.2.0",
     "chalk": "^3.0.0",
@@ -95,7 +96,6 @@
     "webpack-hot-client": "^4.1.2",
     "webpack-merge": "^4.2.1",
     "webpack-node-externals": "^1.7.2",
-    "webpack-pwa-manifest": "^4.0.0",
     "webpack-sources": "^1.4.3",
     "webpack-stats-plugin": "^0.3.0"
   },

@@ -25,12 +25,13 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 - [Customization and Setup](#customization)
   - [Hot Reloading](#customization-hotreload)
   - [CSS and SASS](#customization-css-and-sass)
+  - [Images](#customization-images)
   - [Performance](#customization-performance)
     - [Fibers](#customization-performance-fibers)
   - [Polyfill and Browser Support](#customization-polyfill)
   - [Browserslist](#customization-browserslist)
   - [Customizing Webpack](#customization-webpack)
-    - [Build-time Variables](#customization-webpack-pwa)
+    - [Build-time Variables](#customization-build-variables)
     - [Progressive Web Apps](#customization-webpack-pwa)
     - [Static client side apps (create-react-app)](#customization-webpack-static)
   - [Use Your Own Webpack Configuration](#customization-use-own-webpack)
@@ -185,6 +186,28 @@ export const Header = () => (
 );
 ```
 
+<a id="customization-images"></a>
+
+### Images
+
+Varan comes with support for auto resizing images (only for `jpeg` and `png`).
+You must manually opt-in by adding `?resize` query to the image filename you are importing.
+This enables automatic generation of srcSets that you can spread on your `img` tags.
+
+Css/Sass example:
+
+```css
+@media (max-width: 499px) {
+  background: url('../my-image.png?resize&size=500');
+}
+@media (min-width: 500px) {
+  background: url('../my-image.png?resize&size=1000');
+}
+@media (min-width: 1000px) {
+  background: url('../my-image.png?resize&size=1920');
+}
+```
+
 <a id="customization-performance"></a>
 
 ### Performance
@@ -244,42 +267,40 @@ This is useful if you want to have different builds depending on some build para
 
 #### Progressive Web Apps
 
-Create the following directory structure in the root of your project
+There are several methods for creating your asset manifest.
+Varan has [app-manifest-loader](https://github.com/sebastian-software/app-manifest-loader) built in and will automatically create manifests from `*.webmanifest` and `browserconfig.xml` files.
+You can also use other alternatives such as [webpack-pwa-manifest](https://github.com/arthurbergmz/webpack-pwa-manifest) if you [customize your configuration](#customization-extending-config).
 
-```bash
-my-project
-\--- webpack
-     +--- client.js - client customizations
-```
+Here is a simple example on how to create your own application manifest, but please, refer to [app-manifest-loader](https://github.com/sebastian-software/app-manifest-loader) for more information
 
-Make sure the `client.js` file exports a function that returns the webpack configuration object.
+```typescript jsx
+import Helmet from 'react-helmet-async';
 
-`client.js` with a Progressive Web App manifest while still using the default config in `varan`:
-
-```javascript
-const path = require('path');
-const client = require('varan/webpack/client');
-const pwaManifest = {
-  name: 'Varan Progressive Web App!!!',
-  short_name: 'VaranPWA',
-  description: 'My awesome Progressive Web App using Varan!',
-  background_color: '#ffffff',
-  theme_color: '#ffffff',
-  icons: [
-    {
-      src: path.resolve(__dirname, '../src/assets/favicon.ico'),
-      sizes: [96, 192, 512],
-    },
-  ],
-};
+// Import your handcrafted manifests
+import manifest from './manifest.webmanifest';
+import browserconfig from './browserconfig.xml';
 
 // Exports
-module.exports = options => client({ ...options, pwaManifest });
+export const App = () => (
+  <>
+    <Helmet>
+      <link rel="manifest" href={manifest} />
+      <meta name="msapplication-config" content={browserconfig} />
+    </Helmet>
+    <div className="App">
+      <p>My First PWA App!</p>
+    </div>
+  </>
+);
 ```
 
 <a id="customization-webpack-static"></a>
 
 #### Static client only applications (e.g. create-react-app)
+
+| Example project                                                                     |
+| ----------------------------------------------------------------------------------- |
+| [static-example](https://github.com/ersims/varan/tree/master/examples/basic-static) |
 
 Create the following directory structure in the root of your project
 

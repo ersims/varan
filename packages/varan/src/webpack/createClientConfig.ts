@@ -6,7 +6,6 @@ import TerserPlugin from 'terser-webpack-plugin';
 import SWPrecacheWebpackPlugin from 'sw-precache-webpack-plugin';
 import { BundleAnalyzerPlugin } from 'webpack-bundle-analyzer';
 import { StatsWriterPlugin } from 'webpack-stats-plugin';
-import WebpackPwaManifest from 'webpack-pwa-manifest';
 import CompressionPlugin from 'compression-webpack-plugin';
 import ImageminPlugin from 'imagemin-webpack-plugin';
 import imageminMozjpeg from 'imagemin-mozjpeg';
@@ -26,7 +25,6 @@ export interface ClientOptions {
   entry: string;
   env: Configuration['mode'];
   target: Configuration['target'];
-  pwaManifest: WebpackPwaManifest.ManifestOptions | false;
   targetDir: string;
   sourceDir: string;
   devServerPort: number;
@@ -49,15 +47,6 @@ const getOpts = (options: Partial<ClientOptions>): ClientOptions => {
     env: process.env.NODE_ENV,
     target: 'web',
     name: undefined,
-    // See https://github.com/arthurbergmz/webpack-pwa-manifest for more information on how to specify manifest
-    // pwaManifest: {
-    //   name: 'Varan Progressive Web App!',
-    //   short_name: 'VaranPWA',
-    //   description: 'My awesome Progressive Web App using Varan!',
-    //   background_color: '#ffffff',
-    //   icons: [],
-    // },
-    pwaManifest: false,
     targetDir: resolve('dist/client'),
     sourceDir: resolve('src/client'),
     devServerPort: process.env.DEV_PORT || 3000,
@@ -184,12 +173,6 @@ export default (options: Partial<ClientOptions> = {}): webpack.Configuration => 
         integrity: true,
         integrityHashes: ['sha512'],
       }),
-      opts.pwaManifest &&
-        new WebpackPwaManifest({
-          inject: false,
-          fingerprints: !isDev,
-          ...opts.pwaManifest,
-        }),
       !isDev &&
         new SWPrecacheWebpackPlugin({
           cacheId: name,

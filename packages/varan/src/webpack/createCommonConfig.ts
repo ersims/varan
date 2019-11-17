@@ -172,11 +172,26 @@ export default (options: Partial<CommonOptions>): Configuration => {
         },
 
         /**
+         * Fallback images
+         */
+        {
+          test: images.concat(responsiveImages),
+          loader: require.resolve('url-loader'),
+          // resourceQuery: /^((?!resize).)*$/,
+          options: {
+            limit: 10000,
+            name: 'static/media/[name].[hash:8].[ext]',
+            fallback: require.resolve('file-loader'),
+          },
+        },
+
+        /**
          * Responsive images
          */
         {
           test: responsiveImages,
           loader: require.resolve('url-loader'),
+          resourceQuery: /resize/,
           options: isDev
             ? {
                 limit: 10000,
@@ -192,16 +207,18 @@ export default (options: Partial<CommonOptions>): Configuration => {
         },
 
         /**
-         * Fallback images
+         * Generate app manifests
          */
         {
-          test: images,
-          loader: require.resolve('url-loader'),
-          options: {
-            limit: 10000,
-            name: 'static/media/[name].[hash:8].[ext]',
-            fallback: require.resolve('file-loader'),
-          },
+          test: /(\.webmanifest|browserconfig\.xml)$/,
+          use: [
+            {
+              loader: require.resolve('file-loader'),
+            },
+            {
+              loader: require.resolve('app-manifest-loader'),
+            },
+          ],
         },
 
         /**
@@ -215,8 +232,9 @@ export default (options: Partial<CommonOptions>): Configuration => {
             /\.(ejs|pug|hbs)$/,
             /\.(jsx?|mjs|tsx?)$/,
             /\.vue$/,
-            ...responsiveImages,
             ...images,
+            ...responsiveImages,
+            /(\.webmanifest|browserconfig\.xml)$/,
           ],
           loader: require.resolve('file-loader'),
           options: { name: 'static/media/[name].[hash:8].[ext]' },
