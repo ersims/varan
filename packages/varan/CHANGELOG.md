@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.16.1](https://github.com/ersims/varan/compare/varan@0.16.0...varan@0.16.1) (2019-11-18)
+
+### Bug Fixes
+
+- use file-loader unless the issuing file can support more ([a71f689](https://github.com/ersims/varan/commit/a71f689bd452e146cc8f9314cccd0077b21070e9))
+
 # [0.16.0](https://github.com/ersims/varan/compare/varan@0.15.2...varan@0.16.0) (2019-11-18)
 
 ### Bug Fixes
