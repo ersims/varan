@@ -18,7 +18,7 @@ it('watches successfully', async done => {
   expect.assertions(7);
 
   // Assertions
-  const runner = execa.node('../../packages/varan/varan', ['watch', './webpack.config.js'], {
+  const runner = execa.node('../../packages/varan/varan', ['watch', '--client-port=12345', './webpack.config.js'], {
     timeout: slowTimeout - 10000,
   });
 
@@ -28,7 +28,7 @@ it('watches successfully', async done => {
       if (!runner.stderr) reject(new Error('No stderr from watcher'));
       else if (!runner.stdout) reject(new Error('No stdout from watcher'));
       else {
-        runner.stderr.once('data', reject);
+        runner.stderr.once('data', e => reject(e.toString()));
         runner.stdout.on('data', async data => {
           if (data.includes('Development server is now ready and you can view your project in the browser')) {
             resolve();
