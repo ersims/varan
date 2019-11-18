@@ -209,7 +209,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
                 limit: 10000,
                 name: 'static/media/[name].[width].[hash:8].[ext]',
                 adapter: require('responsive-loader/sharp'),
-                fallback: require.resolve('responsive-loader/sharp'),
+                fallback: !isDev ? require.resolve('responsive-loader') : undefined,
               },
             },
             {
