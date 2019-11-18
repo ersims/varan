@@ -190,21 +190,20 @@ export const Header = () => (
 
 ### Images
 
-Varan comes with support for auto resizing images (only for `jpeg` and `png`).
-You must manually opt-in by adding `?resize` query to the image filename you are importing.
-This enables automatic generation of srcSets that you can spread on your `img` tags.
+Varan comes with support for automatically resizing images (only for `jpeg` and `png`).
+This enables automatic generation of srcSets that you can spread on your `img` tags or simple url references to smaller images.
 
-Css/Sass example:
+CSS/SASS example:
 
 ```css
 @media (max-width: 499px) {
-  background: url('../my-image.png?resize&size=500');
+  background: url('../my-image.png?size=500');
 }
 @media (min-width: 500px) {
-  background: url('../my-image.png?resize&size=1000');
+  background: url('../my-image.png?size=1000');
 }
 @media (min-width: 1000px) {
-  background: url('../my-image.png?resize&size=1920');
+  background: url('../my-image.png?size=1920');
 }
 ```
 

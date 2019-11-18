@@ -68,6 +68,9 @@ export default (options: Partial<CommonOptions>): Configuration => {
   const isNode = opts.target === 'node';
   const responsiveImages = [/\.jpe?g$/, /\.png$/];
   const images = [/\.bmp$/, /\.gif$/, /\.svg$/, /\.webp$/];
+  const manifests = [/(\.webmanifest|browserconfig\.xml)$/];
+  const sources = /\.(jsx?|mjs|tsx?)$/;
+  const safeIssuers = [/\.(le|sa|sc|c)ss$/, /\.styl$/, /\.styl$/].concat(sources);
   return {
     target: opts.target,
     mode: isDev ? 'development' : 'production',
@@ -95,7 +98,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
          * Transpile js files
          */
         {
-          test: /\.(jsx?|mjs|tsx?)$/,
+          test: sources,
           exclude: /node_modules/,
           loader: require.resolve('babel-loader'),
           options: {
@@ -175,14 +178,22 @@ export default (options: Partial<CommonOptions>): Configuration => {
          * Fallback images
          */
         {
-          test: images.concat(responsiveImages),
-          loader: require.resolve('url-loader'),
-          // resourceQuery: /^((?!resize).)*$/,
-          options: {
-            limit: 10000,
-            name: 'static/media/[name].[hash:8].[ext]',
-            fallback: require.resolve('file-loader'),
-          },
+          test: images,
+          oneOf: [
+            {
+              issuer: safeIssuers,
+              loader: require.resolve('url-loader'),
+              options: {
+                limit: 10000,
+                name: 'static/media/[name].[hash:8].[ext]',
+                fallback: require.resolve('file-loader'),
+              },
+            },
+            {
+              loader: require.resolve('file-loader'),
+              options: { name: 'static/media/[name].[hash:8].[ext]' },
+            },
+          ],
         },
 
         /**
@@ -190,27 +201,29 @@ export default (options: Partial<CommonOptions>): Configuration => {
          */
         {
           test: responsiveImages,
-          loader: require.resolve('url-loader'),
-          resourceQuery: /resize/,
-          options: isDev
-            ? {
+          oneOf: [
+            {
+              issuer: safeIssuers,
+              loader: require.resolve('url-loader'),
+              options: {
                 limit: 10000,
                 name: 'static/media/[name].[width].[hash:8].[ext]',
                 adapter: require('responsive-loader/sharp'),
-              }
-            : {
-                limit: 10000,
-                name: 'static/media/[name].[width].[hash:8].[ext]',
-                fallback: require.resolve('responsive-loader'),
-                adapter: require('responsive-loader/sharp'),
+                fallback: require.resolve('responsive-loader/sharp'),
               },
+            },
+            {
+              loader: require.resolve('file-loader'),
+              options: { name: 'static/media/[name].[hash:8].[ext]' },
+            },
+          ],
         },
 
         /**
          * Generate app manifests
          */
         {
-          test: /(\.webmanifest|browserconfig\.xml)$/,
+          test: manifests,
           use: [
             {
               loader: require.resolve('file-loader'),
@@ -234,7 +247,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
             /\.vue$/,
             ...images,
             ...responsiveImages,
-            /(\.webmanifest|browserconfig\.xml)$/,
+            ...manifests,
           ],
           loader: require.resolve('file-loader'),
           options: { name: 'static/media/[name].[hash:8].[ext]' },
