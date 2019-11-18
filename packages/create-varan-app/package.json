@@ -71,7 +71,7 @@
   },
   "jest": {
     "transform": {
-      "\\.tsx?$": "ts-jest"
+      "^.+\\.(j|t)sx?$": "ts-jest"
     }
   }
 }

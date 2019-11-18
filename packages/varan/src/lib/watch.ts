@@ -181,9 +181,9 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
       {
         title: 'Calculate statistics',
         task: (ctx: TaskListContext) => {
-          ctx.totals = getCompilerStats([ctx.server && ctx.server.stats, ctx.client && ctx.client.stats].filter(
-            Boolean,
-          ) as webpack.Stats[]);
+          ctx.totals = getCompilerStats(
+            [ctx.server && ctx.server.stats, ctx.client && ctx.client.stats].filter(Boolean) as webpack.Stats[],
+          );
           return `${chalk.green(emojis.success)} Build statistics calculated successfully`;
         },
       },
@@ -219,10 +219,12 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
         compiler: result.client.compiler,
         runner: result.client.runner,
         async close() {
-          return Promise.all([
-            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            result.client && result.client.runner && new Promise(resolve => result!.client!.runner.close(resolve)),
-          ].filter(Boolean) as Promise<any>[]) as Promise<any>;
+          return Promise.all(
+            [
+              // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+              result.client && result.client.runner && new Promise(resolve => result!.client!.runner.close(resolve)),
+            ].filter(Boolean) as Promise<any>[],
+          ) as Promise<any>;
         },
       }
     : null;

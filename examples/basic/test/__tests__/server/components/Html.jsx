@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import Html from '../../../../src/server/components/Html';
+import { Html } from '../../../../src/server/components/Html';
 
 // Tests
 test('should render correctly', () => {
@@ -53,8 +53,14 @@ test('should support integrity properties', () => {
       noscript={<noscript>javascript is required</noscript>}
       base={<base target="_blank" href="http://example.com/" />}
       body={<p>the html body</p>}
-      bundleJs={[{ src: 'main.js', integrity: 'my-integrity' }, { src: 'extra.js', integrity: 'my-integrity' }]}
-      bundleCss={[{ src: 'main.css', integrity: 'my-integrity' }, { src: 'extra.css', integrity: 'my-integrity' }]}
+      bundleJs={[
+        { src: 'main.js', integrity: 'my-integrity' },
+        { src: 'extra.js', integrity: 'my-integrity' },
+      ]}
+      bundleCss={[
+        { src: 'main.css', integrity: 'my-integrity' },
+        { src: 'extra.css', integrity: 'my-integrity' },
+      ]}
       manifest={{ src: 'manifest.json', integrity: 'my-integrity' }}
       preload={[
         { src: 'jsfile.js', integrity: 'my-integrity1' },

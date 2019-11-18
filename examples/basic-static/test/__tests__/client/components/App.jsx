@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { App } from '../../../../src/client/components/App';
+import { App } from '../../../../src/components/App';
 
 // Tests
 test('renders correctly', () => {

@@ -1,6 +1,6 @@
 {
-  "name": "varan-example-basic",
-  "description": "This is a varan example project showcasing how to do a basic app",
+  "name": "varan-example-basic-static",
+  "description": "This is a varan example project showcasing how to do a basic static app",
   "author": "ersims",
   "homepage": "https://github.com/ersims/varan#README.md",
   "private": true,
@@ -15,35 +15,33 @@
     "not ie < 11"
   ],
   "scripts": {
-    "build": "varan build",
-    "build:analyze": "varan build --analyze",
+    "build": "varan build ./webpack.config.js",
+    "build:analyze": "varan build ./webpack.config.js --analyze",
     "clean": "del-cli ./dist",
-    "start": "node dist/server/bin/web.js",
     "test": "jest",
     "prewatch": "npm run clean",
-    "start:watch": "varan watch -- --inspect"
+    "start:watch": "varan watch ./webpack.config.js -- --inspect"
   },
   "dependencies": {
     "@babel/runtime": "^7.5.5",
     "core-js-pure": "^3.2.1",
-    "express": "^4.17.1",
     "prop-types": "^15.6.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-helmet": "^5.2.1",
-    "react-hot-loader": "^4.12.10",
-    "serialize-javascript": "^1.4.0",
-    "source-map-support": "^0.5.13"
+    "react-hot-loader": "^4.12.10"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "babel-core": "^7.0.0-bridge.0",
     "del-cli": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
     "jest": "^24.8.0",
     "jest-transform-stub": "^2.0.0",
     "normalize.css": "^8.0.1",
     "react-test-renderer": "^16.8.6",
-    "varan": "*"
+    "varan": "*",
+    "webpack-merge": "^4.2.2"
   },
   "jest": {
     "collectCoverage": true,

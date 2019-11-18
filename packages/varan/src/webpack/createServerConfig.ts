@@ -89,9 +89,9 @@ export default (options: Partial<ServerOptions> = {}): Configuration => {
           path.relative(outputPath, path.resolve(opts.clientTargetDir, 'asset-manifest.json')),
         ),
         ...Object.entries(process.env)
-          .filter(([key]) => key.startsWith('APP_') || key.startsWith('REACT_APP_'))
+          .filter(([key]) => key.startsWith('APP_BUILD_VAR_') || key.startsWith('REACT_APP_'))
           .reduce<{ [key: string]: string | undefined }>((acc, [key, value]) => {
-            acc[`process.env.${key}`] = value;
+            acc[`process.env.${key}`] = JSON.stringify(value);
             return acc;
           }, {}),
         ...opts.buildVars,

@@ -7,7 +7,8 @@ function isAssetObject(asset) {
   return typeof asset === 'object';
 }
 
-class Html extends PureComponent {
+// Exports
+export class Html extends PureComponent {
   render() {
     const {
       htmlAttributes,
@@ -34,11 +35,12 @@ class Html extends PureComponent {
           {meta}
           {noscript}
           {base}
-          {manifest && isAssetObject(manifest) ? (
-            <link rel="manifest" href={manifest.src} integrity={manifest.integrity} crossOrigin="anonymous" />
-          ) : (
-            <link rel="manifest" href={manifest} crossOrigin="anonymous" />
-          )}
+          {manifest &&
+            (isAssetObject(manifest) ? (
+              <link rel="manifest" href={manifest.src} integrity={manifest.integrity} crossOrigin="anonymous" />
+            ) : (
+              <link rel="manifest" href={manifest} crossOrigin="anonymous" />
+            ))}
           {link}
           {preload.map(asset => {
             const { src, integrity = undefined } = isAssetObject(asset) ? asset : { src: asset };
@@ -155,5 +157,3 @@ Html.defaultProps = {
   bundleJs: [],
   bundleCss: [],
 };
-
-export default Html;

@@ -36,16 +36,32 @@ export default function getCompilerStats(rawStats: webpack.Stats | webpack.Stats
     },
     {
       get minEnd() {
-        return get(minBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.end), 'end', 0);
+        return get(
+          minBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.end),
+          'end',
+          0,
+        );
       },
       get maxEnd() {
-        return get(maxBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.end), 'end', 0);
+        return get(
+          maxBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.end),
+          'end',
+          0,
+        );
       },
       get minStart() {
-        return get(minBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.start), 'start', 0);
+        return get(
+          minBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.start),
+          'start',
+          0,
+        );
       },
       get maxStart() {
-        return get(maxBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.start), 'start', 0);
+        return get(
+          maxBy(this.perCompiler, (c: CompilerStats['timings']['perCompiler'][0]) => c.start),
+          'start',
+          0,
+        );
       },
       get duration() {
         return this.maxEnd - this.minStart;
