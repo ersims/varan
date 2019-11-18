@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/ersims/varan/compare/create-varan-app@0.2.1...create-varan-app@0.3.0) (2019-11-18)
+
+### Bug Fixes
+
+- **deps:** update dependency chalk to v3 ([e0f0c4f](https://github.com/ersims/varan/commit/e0f0c4fea63510509fcc5aa89bb59a3a6b713fbf))
+- **deps:** update dependency commander to v4 ([9e0caf0](https://github.com/ersims/varan/commit/9e0caf065a0d0676503f2e1888c24ce367b8d9a4))
+
 ## [0.2.1](https://github.com/ersims/varan/compare/create-varan-app@0.2.0...create-varan-app@0.2.1) (2019-10-20)
 
 ### Bug Fixes

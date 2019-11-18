@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/ersims/varan/compare/varan@0.15.2...varan@0.16.0) (2019-11-18)
+
+### Bug Fixes
+
+- use `APP_BUILD_VAR_` environment variables on server as well ([91b0e63](https://github.com/ersims/varan/commit/91b0e6359a0a7eeef6002976b43775e965694f62))
+- **deps:** update dependency chalk to v3 ([e0f0c4f](https://github.com/ersims/varan/commit/e0f0c4fea63510509fcc5aa89bb59a3a6b713fbf))
+- **deps:** update dependency commander to v4 ([9e0caf0](https://github.com/ersims/varan/commit/9e0caf065a0d0676503f2e1888c24ce367b8d9a4))
+- **deps:** update dependency filesize to v6 ([1f14f22](https://github.com/ersims/varan/commit/1f14f220e87759af2099a6d2f80517219c091694))
+
+### Features
+
+- replace webpack-pwa-manifest with app-manifest-loader ([750c1fc](https://github.com/ersims/varan/commit/750c1fca16e6f85154d5669c8aeb934a412d4658))
+
+### BREAKING CHANGES
+
+- removed support for webpack-pwa-manifest in default
+  varan webpack config in favor for app-manifest-loader to make manifest
+  a part of the app and not build configuration. Migration is as simple as
+  adding webpack-pwa-manifest as custom configuration or update your app
+  to use handcrafted manifest files as per app-manifest-loader docs
+
 ## [0.15.2](https://github.com/ersims/varan/compare/varan@0.15.1...varan@0.15.2) (2019-10-20)
 
 ### Bug Fixes
