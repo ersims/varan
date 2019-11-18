@@ -25,6 +25,7 @@ it('should automatically add `APP_BUILD_VAR_` and `REACT_APP_` environment varia
 
   // Unmock
   delete process.env.APP_AUTO_DEFINE_VAR;
+  delete process.env.APP_BUILD_VAR_AUTO_DEFINE_VAR;
   delete process.env.REACT_APP_AUTO_DEFINE_VAR;
   delete process.env.NOT_REPLACED;
 
