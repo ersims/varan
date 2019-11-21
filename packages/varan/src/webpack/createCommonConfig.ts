@@ -201,9 +201,11 @@ export default (options: Partial<CommonOptions>): Configuration => {
          */
         {
           test: responsiveImages,
-          oneOf: [
+          use: [
             {
-              issuer: safeIssuers,
+              loader: require.resolve('../lib/responsiveSourceOnlyLoader'),
+            },
+            {
               loader: require.resolve('url-loader'),
               options: {
                 limit: 10000,
@@ -211,10 +213,6 @@ export default (options: Partial<CommonOptions>): Configuration => {
                 adapter: require('responsive-loader/sharp'),
                 fallback: !isDev ? require.resolve('responsive-loader') : undefined,
               },
-            },
-            {
-              loader: require.resolve('file-loader'),
-              options: { name: 'static/media/[name].[hash:8].[ext]' },
             },
           ],
         },

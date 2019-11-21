@@ -193,7 +193,7 @@ export const Header = () => (
 Varan comes with support for automatically resizing images (only for `jpeg` and `png`).
 This enables automatic generation of srcSets that you can spread on your `img` tags or simple url references to smaller images.
 
-CSS/SASS example:
+CSS/SASS basic example:
 
 ```css
 @media (max-width: 499px) {
@@ -204,6 +204,37 @@ CSS/SASS example:
 }
 @media (min-width: 1000px) {
   background: url('../my-image.png?size=1920');
+}
+```
+
+Images handled by the automatic resizer should work without issues for most use cases.
+If it does not, it is often caused by a webpack loader not expecting the output format of the resizer.
+Varan has an escape hatch built-in for these scenarios, or if you prefer to have a single resized output image.
+You can append a query parameter `srcOnly` to indicate that you want a single resized image reference — a string.
+This is for instance used for the app manifest as it does not support multiple image references.
+
+App manifest example
+
+```json
+{
+  (...)
+  "icons": [
+    {
+      "src": "./images/icons/icon-512x512.png?size=72&srcOnly",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icons/icon-512x512.png?size=96&srcOnly",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/icons/icon-512x512.png?size=128&srcOnly",
+      "sizes": "128x128",
+      "type": "image/png"
+    },
+  ]
 }
 ```
 
