@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.16.3](https://github.com/ersims/varan/compare/varan@0.16.2...varan@0.16.3) (2019-11-21)
+
+### Features
+
+- add loader to only return the src property from responsive-loader ([a539640](https://github.com/ersims/varan/commit/a539640737f53530ea4e6925d76bea0ef674ae9f))
+
 ## [0.16.2](https://github.com/ersims/varan/compare/varan@0.16.1...varan@0.16.2) (2019-11-18)
 
 ### Bug Fixes
