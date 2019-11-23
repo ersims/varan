@@ -2,7 +2,7 @@
 
 A webpack starter-kit for production ready webpack applications. Includes full support for server side rendered React applications out of the box.
 
-Disclaimer: There will be breaking changes and outdated documentation during the pre-v1.0.0 cycles.
+Disclaimer: There will be breaking changes and outdated documentation for packages pre-v1.0.0.
 
 [![CircleCI][circleci-image]][circleci-url]
 [![Codecov branch][codecov-image]][codecov-url]
@@ -50,7 +50,9 @@ You likely want to check out [varan](packages/varan/README.md) documentation.
 
 ## License
 
-[MIT](LICENSE.md)
+Note that different packages within the repository might have a different license.
+
+[MIT][license-url]
 
 [npm-varan-url]: https://npmjs.org/package/varan
 [npm-varan-image]: https://img.shields.io/npm/v/varan.svg
@@ -70,5 +72,5 @@ You likely want to check out [varan](packages/varan/README.md) documentation.
 [renovate-image]: https://img.shields.io/badge/renovate-app-blue.svg
 [lerna-image]: https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg
 [lerna-url]: https://lerna.js.org
-[license-url]: https://github.com/ersims/varan/blob/master/LICENSE.md
+[license-url]: LICENSE.md
 [license-image]: https://img.shields.io/github/license/ersims/varan.svg
