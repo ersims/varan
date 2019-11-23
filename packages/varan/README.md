@@ -14,6 +14,8 @@ Disclaimer: There will be breaking changes and outdated documentation during the
 [![lerna][lerna-image]][lerna-url]
 [![license][license-image]][license-url]
 
+![varan terminal example](assets/varan.gif?raw=true 'varan terminal example')
+
 ## Documentation
 
 - [Installation](#installation)
@@ -560,5 +562,6 @@ Run `npm run release` to publish a new release and `npm run release --tag=next` 
 [lerna-image]: https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg
 [lerna-url]: https://lerna.js.org
 [create-varan-app-url]: https://npmjs.org/package/create-varan-app
+[varan-url]: https://github.com/ersims/varan
 [license-url]: https://github.com/ersims/varan/blob/master/LICENSE.md
 [license-image]: https://img.shields.io/github/license/ersims/varan.svg
