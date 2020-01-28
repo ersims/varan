@@ -37,8 +37,7 @@
   },
   "lint-staged": {
     "*.{css,less,sass,scss,html,md,graphql,gql,json,ts,tsx,js,jsx,yml,yaml}": [
-      "prettier --write",
-      "git add"
+      "prettier --write"
     ]
   },
   "scripts": {
@@ -118,7 +117,7 @@
       "^.+\\.(j|t)sx?$": "ts-jest",
       ".+\\.(styl|css|sass|scss|less|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico|webmanifest|xml)$": "jest-transform-stub"
     },
-    "silent": false,
+    "silent": true,
     "verbose": true
   }
 }
