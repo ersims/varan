@@ -1,7 +1,6 @@
 import path from 'path';
 import MemoryFileSystem from 'memory-fs';
 import fs from 'fs';
-import zlib from 'zlib';
 import build from '../../../src/lib/build';
 import { getFiles, hasFile, resolver } from '../../fixtures/utils';
 import BuildError from '../../../src/lib/BuildError';
@@ -72,11 +71,7 @@ it('should keep webpack warnings', async done => {
 });
 it('should work with default values', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(15);
-
-  // TODO: Remove when support for node v8 is dropped on 31.12.2019
-  const isBrotliSupported = !!zlib.brotliCompress;
-  if (isBrotliSupported) expect.assertions(16);
+  expect.assertions(16);
 
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');
@@ -120,7 +115,7 @@ it('should work with default values', async done => {
 
   // Asset Manifest
   const assetManifest = JSON.parse(mfs.readFileSync(resolve('dist/client/asset-manifest.json')));
-  expect(Object.keys(assetManifest)).toHaveLength(4);
+  expect(Object.keys(assetManifest)).toHaveLength(5);
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
@@ -129,18 +124,13 @@ it('should work with default values', async done => {
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js).toHaveLength(isBrotliSupported ? 5 : 4);
+  expect(js).toHaveLength(5);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
 
-  if (isBrotliSupported) {
-    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.br/);
-    expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-    expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
-  } else {
-    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-    expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
-  }
+  expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.br/);
+  expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+  expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);
@@ -152,11 +142,7 @@ it('should work with default values', async done => {
 });
 it('should work with typescript', async done => {
   jest.setTimeout(slowTimeout);
-  expect.assertions(15);
-
-  // TODO: Remove when support for node v8 is dropped on 31.12.2019
-  const isBrotliSupported = !!zlib.brotliCompress;
-  if (isBrotliSupported) expect.assertions(16);
+  expect.assertions(16);
 
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic-typescript');
@@ -200,7 +186,7 @@ it('should work with typescript', async done => {
 
   // Asset Manifest
   const assetManifest = JSON.parse(mfs.readFileSync(resolve('dist/client/asset-manifest.json')));
-  expect(Object.keys(assetManifest)).toHaveLength(4);
+  expect(Object.keys(assetManifest)).toHaveLength(5);
 
   // CSS
   const css = getFiles(mfs, resolve('dist/client/static/css'));
@@ -209,18 +195,13 @@ it('should work with typescript', async done => {
 
   // JS
   const js = getFiles(mfs, resolve('dist/client/static/js'));
-  expect(js).toHaveLength(isBrotliSupported ? 5 : 4);
+  expect(js).toHaveLength(5);
   expect(js[0].name).toMatch(/main\.([a-z0-9]{8})\.([a-z0-9]{8})\.js/);
   expect(js[1].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js/);
 
-  if (isBrotliSupported) {
-    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.br/);
-    expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-    expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
-  } else {
-    expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
-    expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
-  }
+  expect(js[2].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.br/);
+  expect(js[3].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.gz/);
+  expect(js[4].name).toMatch(/vendor\.([a-z0-9]{8})\.([a-z0-9]{8})\.chunk\.js\.LICENSE/);
 
   // Server
   expect(hasFile(mfs, resolve('dist/server/bin/web.js'))).toBe(true);

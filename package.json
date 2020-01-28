@@ -26,8 +26,8 @@
   },
   "homepage": "https://github.com/ersims/varan#README.md",
   "engines": {
-    "node": ">= 8.11.3",
-    "npm": ">= 5.6.0"
+    "node": ">= 10.18.1",
+    "npm": ">= 6.9.0"
   },
   "husky": {
     "hooks": {
@@ -118,7 +118,7 @@
       "^.+\\.(j|t)sx?$": "ts-jest",
       ".+\\.(styl|css|sass|scss|less|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|ico|webmanifest|xml)$": "jest-transform-stub"
     },
-    "silent": true,
+    "silent": false,
     "verbose": true
   }
 }
