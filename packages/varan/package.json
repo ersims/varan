@@ -88,7 +88,7 @@
     "table": "^5.4.5",
     "terser-webpack-plugin": "^2.1.0",
     "update-notifier": "^3.0.1",
-    "url-loader": "^2.1.0",
+    "url-loader": "^3.0.0",
     "wait-on": "^3.3.0",
     "webpack": "^4.39.1",
     "webpack-assets-manifest": "^3.1.1",
