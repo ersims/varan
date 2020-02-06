@@ -2,7 +2,7 @@ import { DefinePlugin } from 'webpack';
 import createClientConfig from '../../../src/webpack/createClientConfig';
 
 // Init
-const ClientDefinePluginMock = DefinePlugin as jest.Mock;
+const ClientDefinePluginMock = (DefinePlugin as unknown) as jest.Mock;
 
 // Mocks
 jest.mock('webpack', () => ({
