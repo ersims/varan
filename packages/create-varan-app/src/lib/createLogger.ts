@@ -10,8 +10,16 @@ interface Options {
 export default function createLogger(options: Partial<Options> = {}) {
   const logFn = console.log;
   return {
-    info: options.silent ? (...args: string[]) => {} : logFn,
-    warn: options.silent ? (...args: string[]) => {} : logFn,
+    info: options.silent
+      ? (...args: string[]) => {
+          // Empty
+        }
+      : logFn,
+    warn: options.silent
+      ? (...args: string[]) => {
+          // Empty
+        }
+      : logFn,
     error: logFn,
   };
 }

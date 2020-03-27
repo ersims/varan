@@ -7,7 +7,7 @@ const path = require('path');
 const babelConfig = require('babel-preset-varan');
 
 // Init
-const resolve = p => path.resolve(process.env.TEST_USER_CWD, p);
+const resolve = (p) => path.resolve(process.env.TEST_USER_CWD, p);
 
 // Exports
 module.exports = {

@@ -2,9 +2,8 @@
   "compilerOptions": {
     "diagnostics": false,
     "declaration": true,
-    "incremental": true,
     "traceResolution": false,
-    "allowJs": false,
+    "allowJs": true,
     "checkJs": false,
     "jsx": "react",
     "noEmit": true,

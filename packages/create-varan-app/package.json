@@ -41,7 +41,7 @@
   ],
   "scripts": {
     "build": "tsc --build",
-    "build:watch": "tsc --build --watch",
+    "build:watch": "tsc --build --incremental --watch",
     "check:types": "tsc --noEmit",
     "clean": "del-cli ./dist tsconfig.tsbuildinfo",
     "prepare": "npm run build"

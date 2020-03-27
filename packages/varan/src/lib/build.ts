@@ -64,7 +64,7 @@ export default async function build(options: Partial<Options>) {
   // Setup
   process.env.BABEL_ENV = opts.env;
   const configs = getConfigs(opts.configs, opts);
-  const multiCompiler: webpack.MultiCompiler = webpack(configs.map(c => omit(c, ['devServer'])));
+  const multiCompiler: webpack.MultiCompiler = webpack(configs.map((c) => omit(c, ['devServer'])));
   if (opts.inputFileSystem) multiCompiler.inputFileSystem = opts.inputFileSystem;
   if (opts.outputFileSystem) multiCompiler.outputFileSystem = opts.outputFileSystem;
   const taskOptions: ListrOptions & { showSubtasks: boolean } = {
@@ -104,7 +104,7 @@ export default async function build(options: Partial<Options>) {
                       task: async (ctx: TaskListContext) => {
                         const statsPlugin =
                           compiler.options.plugins &&
-                          (compiler.options.plugins.find(p => p instanceof StatsWriterPlugin) as StatsWriterPlugin);
+                          (compiler.options.plugins.find((p) => p instanceof StatsWriterPlugin) as StatsWriterPlugin);
                         if (statsPlugin) {
                           try {
                             const searchPath = compiler.outputPath;
@@ -159,7 +159,7 @@ export default async function build(options: Partial<Options>) {
                       task: async (ctx: TaskListContext) => {
                         const statsPlugin =
                           compiler.options.plugins &&
-                          (compiler.options.plugins.find(p => p instanceof StatsWriterPlugin) as StatsWriterPlugin);
+                          (compiler.options.plugins.find((p) => p instanceof StatsWriterPlugin) as StatsWriterPlugin);
                         if (statsPlugin) {
                           try {
                             const searchPath = compiler.outputPath;
@@ -172,7 +172,7 @@ export default async function build(options: Partial<Options>) {
                             if (
                               ctx.stats[i].currentBuild &&
                               Object.values((ctx.stats[i].currentBuild as BuildStats).chunks).some(
-                                chunk => chunk.size > opts.warnChunkSize,
+                                (chunk) => chunk.size > opts.warnChunkSize,
                               )
                             ) {
                               ctx.stats[i].warnings.push(
@@ -186,7 +186,7 @@ export default async function build(options: Partial<Options>) {
                             if (
                               ctx.stats[i].currentBuild &&
                               Object.values((ctx.stats[i].currentBuild as BuildStats).assets).some(
-                                asset => asset.size > opts.warnAssetSize,
+                                (asset) => asset.size > opts.warnAssetSize,
                               )
                             ) {
                               ctx.stats[i].warnings.push(
@@ -214,8 +214,8 @@ export default async function build(options: Partial<Options>) {
         title: 'Calculate build stats',
         task: (ctx: TaskListContext) => {
           const stats = Object.values(ctx.stats)
-            .filter(s => s.build && s.build.stats)
-            .map(s => (s.build as TaskContextBuild).stats);
+            .filter((s) => s.build && s.build.stats)
+            .map((s) => (s.build as TaskContextBuild).stats);
           ctx.totals = getCompilerStats(stats);
           return `${chalk.green(emojis.success)} Build statistics calculated successfully`;
         },

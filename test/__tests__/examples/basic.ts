@@ -12,7 +12,7 @@ beforeEach(() => {
   fs.removeSync(path.join(dir, 'dist'));
   process.chdir(dir);
 });
-it('watches successfully', async done => {
+it('watches successfully', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(10);
 
@@ -27,8 +27,8 @@ it('watches successfully', async done => {
       if (!runner.stderr) reject(new Error('No stderr from watcher'));
       else if (!runner.stdout) reject(new Error('No stdout from watcher'));
       else {
-        runner.stderr.once('data', e => reject(e.toString()));
-        runner.stdout.on('data', async data => {
+        runner.stderr.once('data', (e) => reject(e.toString()));
+        runner.stdout.on('data', async (data) => {
           if (data.includes('Development server is now ready and you can view your project in the browser')) {
             resolve();
           }
@@ -58,7 +58,7 @@ it('watches successfully', async done => {
     done();
   }
 });
-it('builds successfully', async done => {
+it('builds successfully', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(35);
 
@@ -112,7 +112,7 @@ it('builds successfully', async done => {
     // main.js - Brotli
     expect(js[1].size).toBeGreaterThan(0);
     expect(js[1].size).toBeLessThan(2 * 1024);
-    expect(js[1].size).toBeLessThan(js[2].size);
+    expect(js[1].size).toBeLessThan(js[2].size as number);
 
     // main.js - Gzip
     expect(js[2].size).toBeGreaterThan(0);
@@ -125,7 +125,7 @@ it('builds successfully', async done => {
     // vendor.js - Brotli
     expect(js[4].size).toBeGreaterThan(0);
     expect(js[4].size).toBeLessThan(70 * 1024);
-    expect(js[4].size).toBeLessThan(js[5].size);
+    expect(js[4].size).toBeLessThan(js[5].size as number);
 
     // vendor.js - Gzip
     expect(js[5].size).toBeGreaterThan(0);

@@ -70,10 +70,10 @@ export default async function buildAndRunDevServer(
         devServerConfig,
       );
       devServer.waitForPromise = opts.waitForPromise;
-      devServer.listen(port, host, err => {
+      devServer.listen(port, host, (err) => {
         if (err) reject(err);
       });
-      compiler.hooks.done.tap(pkg.name, stats => {
+      compiler.hooks.done.tap(pkg.name, (stats) => {
         if (initialBuild) {
           initialBuild = false;
           resolve({

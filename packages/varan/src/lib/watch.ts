@@ -95,8 +95,8 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
     throw new Error('Too many config files provided. Maximum two config files are supported in `watch` mode.');
   }
   const configs = getConfigs(opts.configs, opts);
-  const clientConfig = configs.find(c => !c.target || c.target === 'web');
-  const serverConfig = configs.find(c => c.target === 'node');
+  const clientConfig = configs.find((c) => !c.target || c.target === 'web');
+  const serverConfig = configs.find((c) => c.target === 'node');
 
   // Check if config is valid
   if (configs.length >= 2 && (!clientConfig || !serverConfig)) {
@@ -134,7 +134,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
               {
                 title: 'Build and start client development server',
                 enabled: () => !!clientConfig,
-                task: async ctx => {
+                task: async (ctx) => {
                   opts.devServerProxy = !!serverConfig;
                   const devServerOpts = {
                     ...opts,
@@ -144,7 +144,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
                           {
                             resources: [`tcp:${opts.serverHost}:${opts.serverPort}`],
                           },
-                          err => {
+                          (err) => {
                             if (err) return reject(err);
                             return resolve();
                           },
@@ -164,7 +164,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
               {
                 title: 'Build server',
                 enabled: () => !!serverConfig,
-                task: async ctx => {
+                task: async (ctx) => {
                   const serverOpts = { ...opts };
                   ctx.server = await buildServer(serverConfig, serverOpts);
                   return `${chalk.green(emojis.success)} Server built successfully!`;
@@ -222,7 +222,7 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
           return Promise.all(
             [
               // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-              result.client && result.client.runner && new Promise(resolve => result!.client!.runner.close(resolve)),
+              result.client && result.client.runner && new Promise((resolve) => result!.client!.runner.close(resolve)),
             ].filter(Boolean) as Promise<any>[],
           ) as Promise<any>;
         },
@@ -236,8 +236,8 @@ export default async function watch(options: Partial<Options>): Promise<VaranWat
         watcher: result.server.watcher,
         async close() {
           return Promise.all([
-            new Promise(resolve => result.server && result.server.watcher.close(resolve)),
-            new Promise(resolve => {
+            new Promise((resolve) => result.server && result.server.watcher.close(resolve)),
+            new Promise((resolve) => {
               if (result.server) {
                 result.server.runner.once('close', resolve);
                 result.server.runner.kill();

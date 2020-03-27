@@ -163,7 +163,7 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
                 cwd: appName,
                 strict: true,
               },
-              [`examples/${example}`].map(f => `${fileName}/${f}`),
+              [`examples/${example}`].map((f) => `${fileName}/${f}`),
             );
             sourceTarballResponse.data.pipe(extractExampleSourceCode);
 
@@ -174,13 +174,13 @@ export default async function init(options: Partial<Options> & Pick<Options, 'na
                 cwd: appName,
                 strict: true,
               },
-              ['editorconfig', '.gitignore'].map(f => `${fileName}/${f}`),
+              ['editorconfig', '.gitignore'].map((f) => `${fileName}/${f}`),
             );
             sourceTarballResponse.data.pipe(extractProjectFiles);
 
             await Promise.all([
-              new Promise(resolve => extractExampleSourceCode.on('finish', resolve)),
-              new Promise(resolve => extractProjectFiles.on('finish', resolve)),
+              new Promise((resolve) => extractExampleSourceCode.on('finish', resolve)),
+              new Promise((resolve) => extractProjectFiles.on('finish', resolve)),
             ]);
           } catch (err) {
             throw new Error(

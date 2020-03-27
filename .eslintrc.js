@@ -63,7 +63,7 @@ module.exports = {
     'prettier/@typescript-eslint',
   ],
   settings: {
-    'import/extensions': ['.js', '.jsx'],
+    'import/extensions': ['.mjs', '.js', '.jsx', '.ts', '.tsx'],
     'import/ignore': [/node_modules/],
     'react/jsx-filename-extension': {
       extensions: ['.jsx', '.tsx'],
@@ -77,8 +77,19 @@ module.exports = {
     'no-useless-constructor': 0,
     '@typescript-eslint/no-useless-constructor': 'error',
 
-    // Disabled as named exports are maybe preferred
+    // Disabled as we prefer named exports
     'import/prefer-default-export': 0,
+    'import/extensions': [
+      'error',
+      'ignorePackages',
+      {
+        js: 'never',
+        mjs: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+      },
+    ],
 
     'lines-between-class-members': 0,
     'no-dupe-class-members': 0,
