@@ -12,7 +12,7 @@ const getFile = (fs: MemoryFileSystem, p: string) =>
 const getFiles = (fs: MemoryFileSystem, p: string): Array<{ name: string; size: number; isFile: () => boolean }> =>
   fs
     .readdirSync(p)
-    .map(f => getFile(fs, path.resolve(p, f)))
+    .map((f) => getFile(fs, path.resolve(p, f)))
     .filter(Boolean)
     .sort((a, b) => (a as any).name.localeCompare((b as any).name)) as Array<{
     name: string;
@@ -20,7 +20,7 @@ const getFiles = (fs: MemoryFileSystem, p: string): Array<{ name: string; size: 
     isFile: () => boolean;
   }>;
 const getMatch = (fs: MemoryFileSystem, p: string, regex: RegExp) =>
-  getFiles(fs, p).filter(f => !!f && regex.test(f.name));
+  getFiles(fs, p).filter((f) => !!f && regex.test(f.name));
 const resolver = (...args: string[]) => (...p: string[]) =>
   path.resolve(...args, (p && p.length > 0 && p.join(path.sep)) || '');
 

@@ -24,13 +24,13 @@ export default async function runServer(options: Partial<Options> & { entry: Opt
     ...new Set(
       launchArgs
         .concat(process.env.NODE_DEBUG_OPTION || [])
-        .filter(arg => arg.startsWith('--inspect') || arg.startsWith('--debug')),
+        .filter((arg) => arg.startsWith('--inspect') || arg.startsWith('--debug')),
     ),
   ];
   const debugPort = debugArgs.length > 0 ? process.debugPort + 1 : process.debugPort;
   const execArgs = launchArgs
-    .filter(arg => !debugArgs.includes(arg))
-    .concat(debugArgs.map(arg => arg.replace(process.debugPort.toString(), debugPort.toString())));
+    .filter((arg) => !debugArgs.includes(arg))
+    .concat(debugArgs.map((arg) => arg.replace(process.debugPort.toString(), debugPort.toString())));
   if (opts.waitForPromise) await opts.waitForPromise;
   const server = execa('node', execArgs.concat(opts.entry));
   return { server };

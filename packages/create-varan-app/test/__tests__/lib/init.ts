@@ -11,7 +11,7 @@ jest.mock('execa', () => jest.fn(() => ({})));
 beforeEach(jest.resetAllMocks);
 
 // Tests
-it('should clone the advanced boilerplate by default', async done => {
+it('should clone the advanced boilerplate by default', async (done) => {
   expect.assertions(7);
   const orgChdir = process.chdir;
   process.chdir = jest.fn();
@@ -66,7 +66,7 @@ it('should clone the advanced boilerplate by default', async done => {
   // Done
   done();
 });
-it('should respect `opts.fromGitRepo`', async done => {
+it('should respect `opts.fromGitRepo`', async (done) => {
   expect.assertions(1);
   const orgChdir = process.chdir;
   process.chdir = jest.fn();
@@ -88,7 +88,7 @@ it('should respect `opts.fromGitRepo`', async done => {
   // Done
   done();
 });
-it('should respect `opts.verbose`', async done => {
+it('should respect `opts.verbose`', async (done) => {
   expect.assertions(1);
   const orgChdir = process.chdir;
   process.chdir = jest.fn();
@@ -114,7 +114,7 @@ it('should respect `opts.verbose`', async done => {
   // Done
   done();
 });
-it('should reject invalid project names', async done => {
+it('should reject invalid project names', async (done) => {
   expect.assertions(4);
   const appDir = os.tmpdir();
 
@@ -135,7 +135,7 @@ it('should reject invalid project names', async done => {
   // Done
   done();
 });
-it('should reject creating a project if it already exists', async done => {
+it('should reject creating a project if it already exists', async (done) => {
   expect.assertions(2);
   const orgExistsSync = fs.existsSync;
   fs.existsSync = jest.fn(() => true);
@@ -155,7 +155,7 @@ it('should reject creating a project if it already exists', async done => {
   // Done
   done();
 });
-it('should give useful feedback if git clone fails', async done => {
+it('should give useful feedback if git clone fails', async (done) => {
   expect.assertions(1);
   const name = 'test-project';
   const appDir = os.tmpdir();
@@ -179,7 +179,7 @@ it('should give useful feedback if git clone fails', async done => {
   // Done
   done();
 });
-it('should fail if git fails to remove connection to origin remote', async done => {
+it('should fail if git fails to remove connection to origin remote', async (done) => {
   expect.assertions(1);
   const orgChdir = process.chdir;
   process.chdir = jest.fn();

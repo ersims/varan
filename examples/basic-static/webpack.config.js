@@ -8,7 +8,7 @@ const sourceDir = path.resolve(__dirname, 'src');
 const targetDir = path.resolve(__dirname, 'dist');
 
 // Exports
-module.exports = options =>
+module.exports = (options) =>
   merge(
     client({
       ...options,

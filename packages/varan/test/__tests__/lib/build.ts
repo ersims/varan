@@ -9,7 +9,7 @@ import BuildError from '../../../src/lib/BuildError';
 const slowTimeout = 40000;
 
 // Tests
-it('should reject a broken build and give meaningful error message', async done => {
+it('should reject a broken build and give meaningful error message', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(3);
   const mfs = new MemoryFileSystem();
@@ -21,9 +21,9 @@ it('should reject a broken build and give meaningful error message', async done 
   await expect(
     build({
       appDir: resolve(),
-      configs: ['../../fixtures/webpack/customClientExtends.js'].map(p => path.resolve(__dirname, p)),
+      configs: ['../../fixtures/webpack/customClientExtends.js'].map((p) => path.resolve(__dirname, p)),
       outputFileSystem: mfs as any,
-    }).catch(err => {
+    }).catch((err) => {
       expect(err instanceof BuildError).toBe(true);
       expect(err.errors).toEqual(
         expect.arrayContaining([
@@ -39,7 +39,7 @@ it('should reject a broken build and give meaningful error message', async done 
   // Done
   done();
 });
-it('should keep webpack warnings', async done => {
+it('should keep webpack warnings', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(1);
   const mfs = new MemoryFileSystem();
@@ -50,7 +50,7 @@ it('should keep webpack warnings', async done => {
    */
   const { result } = await build({
     appDir: resolve(),
-    configs: ['../../fixtures/webpack/customClientExtends.js'].map(p => path.resolve(__dirname, p)),
+    configs: ['../../fixtures/webpack/customClientExtends.js'].map((p) => path.resolve(__dirname, p)),
     outputFileSystem: mfs as any,
     warnBundleSize: 1,
   });
@@ -69,7 +69,7 @@ it('should keep webpack warnings', async done => {
   // Done
   done();
 });
-it('should work with default values', async done => {
+it('should work with default values', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(16);
 
@@ -140,7 +140,7 @@ it('should work with default values', async done => {
   // Done
   done();
 });
-it('should work with typescript', async done => {
+it('should work with typescript', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(16);
 
@@ -211,7 +211,7 @@ it('should work with typescript', async done => {
   // Done
   done();
 });
-it('should support custom webpack config', async done => {
+it('should support custom webpack config', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(12);
   const mfs = new MemoryFileSystem();
@@ -227,7 +227,7 @@ it('should support custom webpack config', async done => {
     build({
       appDir: resolve(),
       outputFileSystem: mfs as any,
-      configs: ['../../fixtures/webpack/customClient.js'].map(p => path.resolve(__dirname, p)),
+      configs: ['../../fixtures/webpack/customClient.js'].map((p) => path.resolve(__dirname, p)),
     }),
   ).resolves.toEqual(expect.objectContaining({}));
 
@@ -243,7 +243,7 @@ it('should support custom webpack config', async done => {
   // JS
   expect(hasFile(mfs, resolve('dist/client/static/js'))).toBe(false);
   const js = getFiles(mfs, resolve('dist/client')).filter(
-    f => f.isFile() && (f.name.endsWith('.js') || f.name.endsWith('.js.map')),
+    (f) => f.isFile() && (f.name.endsWith('.js') || f.name.endsWith('.js.map')),
   );
   expect(js).toHaveLength(4);
   expect(js[0].name).toMatch('customFileName.js');

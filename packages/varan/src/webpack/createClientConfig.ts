@@ -87,7 +87,7 @@ export default (options: Partial<ClientOptions> = {}): webpack.Configuration => 
       liveReload: false,
       hot: true,
       injectHot: true,
-      writeToDisk: p => /^(?!.*(\.hot-update\.)).*/.test(p),
+      writeToDisk: (p) => /^(?!.*(\.hot-update\.)).*/.test(p),
       lazy: false,
       watchOptions: {
         ignored: ignoredFiles(opts.sourceDir),
@@ -97,7 +97,7 @@ export default (options: Partial<ClientOptions> = {}): webpack.Configuration => 
       },
       before(app) {
         app.use(errorOverlayMiddleware());
-        app.use(noopServiceWorkerMiddleware());
+        app.use(noopServiceWorkerMiddleware('/'));
       },
     } as WebpackDevServer.Configuration,
     performance: false,

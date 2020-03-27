@@ -12,7 +12,7 @@ import init from '../lib/init';
 const pkg = require('../../package.json');
 
 // Init
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   throw err;
 });
 

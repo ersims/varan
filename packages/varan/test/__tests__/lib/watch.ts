@@ -15,7 +15,7 @@ it('should give meaningful error message if too many config files are provided',
     'Too many config files provided. Maximum two config files are supported in `watch` mode.',
   );
 });
-it('should give meaningful error message if invalid config files are provided', async done => {
+it('should give meaningful error message if invalid config files are provided', async (done) => {
   expect.assertions(2);
   await expect(watch({ configs: [{ target: 'node' }, { target: 'node' }] })).rejects.toThrow(
     'One or more invalid config files provided. Maximum of one config file per target is supported.',
@@ -25,7 +25,7 @@ it('should give meaningful error message if invalid config files are provided', 
   );
   done();
 });
-it('should work with default values', async done => {
+it('should work with default values', async (done) => {
   jest.setTimeout(slowTimeout);
   expect.assertions(8);
   const mfs = new MemoryFileSystem();
@@ -60,7 +60,7 @@ it('should work with default values', async done => {
   await watcher.close();
   done();
 });
-it('should support custom webpack config', async done => {
+it('should support custom webpack config', async (done) => {
   jest.setTimeout(slowTimeout);
   const mfs = new MemoryFileSystem();
   const resolve = resolver(__dirname, '../../fixtures/projects/basic');

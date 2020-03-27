@@ -7,10 +7,8 @@ import { RawSource } from 'webpack-sources';
 // Helpers
 function getSRI(hashes: readonly string[], content: string) {
   return hashes
-    .map(hash => {
-      const integrity = createHash(hash)
-        .update(content, 'utf8')
-        .digest('base64');
+    .map((hash) => {
+      const integrity = createHash(hash).update(content, 'utf8').digest('base64');
       return `${hash}-${integrity}`;
     })
     .join(' ')
@@ -56,7 +54,7 @@ export default class WebpackVaranAssetsManifest extends WebpackAssetsManifest {
     // Add missing assets
     if (stats.assets) {
       stats.assets
-        .filter(asset => {
+        .filter((asset) => {
           // Ignore self
           if (asset.name === this.options.output) return false;
 
@@ -70,7 +68,7 @@ export default class WebpackVaranAssetsManifest extends WebpackAssetsManifest {
           return !ignoreExtension.includes(path.extname(asset.name).toLocaleLowerCase());
         })
         // Add to manifest
-        .forEach(asset => {
+        .forEach((asset) => {
           this.currentAsset = compilerCompilation.assets[asset.name];
 
           // `integrity` may have already been set by another plugin, like `webpack-subresource-integrity`.

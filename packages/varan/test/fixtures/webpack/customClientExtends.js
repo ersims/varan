@@ -3,7 +3,7 @@ const merge = require('webpack-merge');
 const createClientConfig = require('../../../src/webpack/createClientConfig').default;
 
 // Exports
-module.exports = options =>
+module.exports = (options) =>
   merge.smartStrategy({ plugins: 'replace' })(createClientConfig(options), {
     devtool: 'cheap-module-source-map',
     output: {

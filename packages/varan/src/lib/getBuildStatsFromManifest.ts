@@ -40,7 +40,7 @@ export default async function getBuildStatsFromManifest(
   try {
     // Locate all files
     const statistics = (manifest.assets || [])
-      .filter(asset => !ignoredExtensions.includes(path.extname(asset.name)))
+      .filter((asset) => !ignoredExtensions.includes(path.extname(asset.name)))
       .reduce<BuildStats>(
         (acc, asset) => {
           acc.assets[asset.name] = {
@@ -48,7 +48,7 @@ export default async function getBuildStatsFromManifest(
             size: asset.size,
             chunks: {},
           };
-          asset.chunkNames.forEach(chunkName => {
+          asset.chunkNames.forEach((chunkName) => {
             if (!acc.chunks[chunkName]) {
               acc.chunks[chunkName] = {
                 name: chunkName,

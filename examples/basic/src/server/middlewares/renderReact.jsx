@@ -12,7 +12,7 @@ export default (stats, assets, preload = []) => {
   // Load bundles list
   const { bundleJs, bundleCss } = Object.entries(stats.assetsByChunkName).reduce(
     (acc, [k, v]) => {
-      (Array.isArray(v) ? v : [v]).forEach(f => {
+      (Array.isArray(v) ? v : [v]).forEach((f) => {
         if (f.endsWith('.js')) acc.bundleJs.push(assets[`${k}.js`]);
         else if (f.endsWith('.css')) acc.bundleCss.push(assets[`${k}.css`]);
       });
@@ -22,10 +22,10 @@ export default (stats, assets, preload = []) => {
   );
 
   // Fetch preloaded assets
-  const preloadedAssets = preload.map(f => assets[f]);
+  const preloadedAssets = preload.map((f) => assets[f]);
 
   // Find manifest
-  let manifest = Object.keys(assets).find(k => /^manifest\.[a-f0-9]+\.json/.test(k));
+  let manifest = Object.keys(assets).find((k) => /^manifest\.[a-f0-9]+\.json/.test(k));
   if (manifest) manifest = assets[manifest];
 
   // Return react rendering middleware

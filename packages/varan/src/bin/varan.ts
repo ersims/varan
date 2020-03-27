@@ -25,7 +25,7 @@ import { BuildStats } from '../lib/getBuildStatsFromManifest';
 const pkg = require('../../package.json');
 
 // Init
-process.on('unhandledRejection', err => {
+process.on('unhandledRejection', (err) => {
   throw err;
 });
 const resolve = (file: string) => {
@@ -75,7 +75,7 @@ program
         env,
       });
 
-      const hasWarnings = result.stats.some(s => s.warnings.length > 0);
+      const hasWarnings = result.stats.some((s) => s.warnings.length > 0);
 
       // Fetch statistics
       log.info();
@@ -161,8 +161,8 @@ program
             const tableRows = [
               ...Object.values(stat.currentBuild.chunks),
               ...Object.values(stat.currentBuild.assets)
-                .filter(asset => !ignoreExtensions.includes(path.extname(asset.name).toLocaleLowerCase()))
-                .filter(asset => Object.keys(asset.chunks).length === 0),
+                .filter((asset) => !ignoreExtensions.includes(path.extname(asset.name).toLocaleLowerCase()))
+                .filter((asset) => Object.keys(asset.chunks).length === 0),
             ]
               .sort((a, b) => b.size - a.size)
               .reduce<(string | number | null | undefined)[][]>((acc, cur) => {
@@ -177,7 +177,7 @@ program
                   ]);
                   Object.values(cur.assets)
                     .sort((a, b) => b.size - a.size)
-                    .forEach(asset => {
+                    .forEach((asset) => {
                       let assetName;
                       if (options.warnAssetSize && asset.size > options.warnAssetSize)
                         assetName = chalk.yellow(asset.name);
@@ -199,10 +199,10 @@ program
             const previousBuildSum =
               stat.previousBuild &&
               Object.values(stat.previousBuild.assets)
-                .filter(asset => !!((stat.currentBuild && stat.currentBuild.assets[asset.name]) || false))
+                .filter((asset) => !!((stat.currentBuild && stat.currentBuild.assets[asset.name]) || false))
                 .reduce<{ sum: { name: string; [type: string]: number | string } }>(
                   (acc, cur) => {
-                    ['size', 'gzip', 'brotli'].forEach(k => {
+                    ['size', 'gzip', 'brotli'].forEach((k) => {
                       if (cur[k])
                         acc.sum[k] = acc.sum[k] ? ((acc.sum[k] as number) += cur[k] as number) : (cur[k] as number);
                     });
@@ -215,7 +215,7 @@ program
               [type: string]: number | string;
             }>(
               (acc, cur) => {
-                ['size', 'gzip', 'brotli'].forEach(k => {
+                ['size', 'gzip', 'brotli'].forEach((k) => {
                   if (cur[k]) acc[k] = acc[k] ? ((acc[k] as number) += cur[k] as number) : (cur[k] as number);
                 });
                 return acc;
@@ -227,7 +227,7 @@ program
               printRelativeSize('size', currentBuildSum, previousBuildSum || undefined),
               printRelativeSize('gzip', currentBuildSum, previousBuildSum || undefined),
               printRelativeSize('brotli', currentBuildSum, previousBuildSum || undefined),
-            ].map(c => chalk.bold(c || ''));
+            ].map((c) => chalk.bold(c || ''));
             const tableBuildStats = [tableHeaders, ...tableRows, tableSumRow];
 
             // Show table
@@ -241,13 +241,13 @@ program
           // Log warnings
           if (stat.warnings.length > 0) {
             log.warn(`  ${chalk.yellow(`${emojis.warning} Warnings`)}`);
-            stat.warnings.forEach(warning => log.warn(`   ${chalk.yellow(emojis.smallSquare)} ${warning}`));
+            stat.warnings.forEach((warning) => log.warn(`   ${chalk.yellow(emojis.smallSquare)} ${warning}`));
           }
 
           // Log errors
           if (stat.errors.length > 0) {
             log.error(`  ${chalk.red(`${emojis.failure} Errors`)}`);
-            stat.errors.forEach(error => log.error(`   ${chalk.red(emojis.smallSquare)} ${error}`));
+            stat.errors.forEach((error) => log.error(`   ${chalk.red(emojis.smallSquare)} ${error}`));
           }
         }
       });
@@ -269,8 +269,8 @@ program
   .usage('[options] [files...] -- --inspect')
   .option('-s, --silent', 'Disable output')
   .option('--host <host>', 'Specify host for both client and server to bind on')
-  .option('--client-port <port number>', 'Specify client dev server port to listen on', port => parseInt(port, 10))
-  .option('--server-port <port number>', 'Specify server port to listen on', port => parseInt(port, 10))
+  .option('--client-port <port number>', 'Specify client dev server port to listen on', (port) => parseInt(port, 10))
+  .option('--server-port <port number>', 'Specify server port to listen on', (port) => parseInt(port, 10))
   .option('--env <development|production>', 'Environment to use')
   .option('--open', 'Open app in browser automatically?')
   .action(async (rawFiles: string[], opts) => {
@@ -278,7 +278,7 @@ program
     // eslint-disable-next-line no-param-reassign
     opts.args = process.argv.includes('--') ? process.argv.slice(process.argv.indexOf('--') + 1) : [];
     const env = (opts && opts.env) || 'development';
-    const files = rawFiles.filter(f => !opts.args.includes(f));
+    const files = rawFiles.filter((f) => !opts.args.includes(f));
     const configs = (files.length > 0 && files.map(resolve)) || [
       path.resolve(__dirname, '..', '..', 'webpack', 'server'),
       path.resolve(__dirname, '..', '..', 'webpack', 'client'),
@@ -348,7 +348,7 @@ program
         watcher.server.compiler.hooks.invalid.tap(pkg.name, () => {
           serverCompileSpinner.start();
         });
-        watcher.server.compiler.hooks.done.tap(pkg.name, stats => {
+        watcher.server.compiler.hooks.done.tap(pkg.name, (stats) => {
           const compileStats = getCompilerStats(stats);
           const info = stats.toJson();
           if (stats.hasErrors()) {
@@ -372,13 +372,13 @@ program
         if (watcher.server.runner.stdout) {
           watcher.server.runner.stdout.on(
             'data',
-            data =>
+            (data) =>
               !data.toString().startsWith('[HMR]') &&
               log.info(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
           );
         }
         if (watcher.server.runner.stderr) {
-          watcher.server.runner.stderr.on('data', data =>
+          watcher.server.runner.stderr.on('data', (data) =>
             log.error(`${chalk.cyan(`${emojis.speechBalloon} SERVER:`)} ${data.toString()}`),
           );
         }
@@ -396,7 +396,7 @@ program
         watcher.client.compiler.hooks.invalid.tap(pkg.name, () => {
           clientCompileSpinner.start();
         });
-        watcher.client.compiler.hooks.done.tap(pkg.name, stats => {
+        watcher.client.compiler.hooks.done.tap(pkg.name, (stats) => {
           const compileStats = getCompilerStats(stats);
           if (stats.hasErrors()) {
             const stat: { errors: string[] } = stats.toJson();
@@ -407,7 +407,7 @@ program
                 )}`,
               ),
             );
-            stat.errors.forEach(error => log.error(`   ${chalk.red(emojis.smallSquare)} ${error}`));
+            stat.errors.forEach((error) => log.error(`   ${chalk.red(emojis.smallSquare)} ${error}`));
           } else {
             clientCompileSpinner.succeed(
               chalk.bold(`Client recompiled in ${chalk.cyan(`${compileStats.timings.duration}ms`)}`),
@@ -447,7 +447,7 @@ program
                 watcher.close().then(() => {
                   isDone = true;
                 }),
-                new Promise(resolvePromise => setTimeout(() => !isDone && resolvePromise(), 5000)),
+                new Promise((resolvePromise) => setTimeout(() => !isDone && resolvePromise(), 5000)),
               ]);
             }
             process.exit(0);

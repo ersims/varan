@@ -42,7 +42,7 @@ export class Html extends PureComponent {
               <link rel="manifest" href={manifest} crossOrigin="anonymous" />
             ))}
           {link}
-          {preload.map(asset => {
+          {preload.map((asset) => {
             const { src, integrity = undefined } = isAssetObject(asset) ? asset : { src: asset };
             if (/\.js$/.test(src))
               return (
@@ -62,7 +62,7 @@ export class Html extends PureComponent {
               );
             return null;
           })}
-          {bundleCss.map(css =>
+          {bundleCss.map((css) =>
             isAssetObject(css) ? (
               <link key={css.src} integrity={css.integrity} href={css.src} rel="stylesheet" crossOrigin="anonymous" />
             ) : (
@@ -86,7 +86,7 @@ export class Html extends PureComponent {
               }}
             />
           )}
-          {bundleJs.map(js =>
+          {bundleJs.map((js) =>
             isAssetObject(js) ? (
               <script
                 key={js.src}

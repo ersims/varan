@@ -6,4 +6,4 @@ export const listFiles = (p: string): Array<ReturnType<typeof fs.statSync> & { n
   fs
     .readdirSync(p)
     .sort((a, b) => a.localeCompare(b))
-    .map(f => Object.assign(fs.statSync(path.resolve(p, f)), { name: f }));
+    .map((f) => Object.assign(fs.statSync(path.resolve(p, f)), { name: f }));

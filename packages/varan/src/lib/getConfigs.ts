@@ -15,7 +15,7 @@ export default function getConfigs<T>(configFilesOrObjectsOrFns: ValidConfigurat
   if (configs.length === 0) throw new Error('Must specify at least one config');
 
   // Load config files
-  return configs.map(config => {
+  return configs.map((config) => {
     // eslint-disable-next-line
     const rawConfig = typeof config === 'string' ? require(config) : config;
     return typeof rawConfig === 'function' ? rawConfig(opts) : rawConfig;

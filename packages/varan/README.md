@@ -349,7 +349,7 @@ const merge = require('webpack-merge');
 const path = require('path');
 const client = require('varan/webpack/client');
 
-module.exports = options =>
+module.exports = (options) =>
   merge(client(options), {
     plugins: [
       new HtmlWebpackPlugin({
@@ -463,7 +463,7 @@ This is an example of a custom webpack config for solving the specific issue des
 ```javascript
 const server = require('varan/webpack/server');
 
-module.exports = options => server({ ...options, whitelistExternals: ['aws-amplify-react'] });
+module.exports = (options) => server({ ...options, whitelistExternals: ['aws-amplify-react'] });
 ```
 
 <a id="api"></a>
