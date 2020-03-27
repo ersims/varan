@@ -119,7 +119,7 @@
     "@types/sw-precache-webpack-plugin": "^0.11.0",
     "@types/table": "^4.0.6",
     "@types/terser-webpack-plugin": "^2.0.0",
-    "@types/update-notifier": "^2.5.0",
+    "@types/update-notifier": "^4.0.0",
     "@types/webpack-assets-manifest": "^3.0.0",
     "@types/webpack-bundle-analyzer": "^2.13.3",
     "@types/webpack-dev-server": "^3.1.7",
