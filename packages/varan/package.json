@@ -62,7 +62,7 @@
     "detect-port-alt": "^1.1.6",
     "dotenv": "^8.1.0",
     "execa": "^4.0.0",
-    "file-loader": "^5.0.0",
+    "file-loader": "^6.0.0",
     "filesize": "^6.0.0",
     "fs-extra": "^8.1.0",
     "imagemin-mozjpeg": "^8.0.0",
