@@ -54,6 +54,7 @@ const getStyleLoaders = (
     !!preProcessor && {
       loader: require.resolve('resolve-url-loader'),
       options: {
+        esModule: false,
         keepQuery: true,
       },
     },
@@ -184,14 +185,18 @@ export default (options: Partial<CommonOptions>): Configuration => {
               issuer: safeIssuers,
               loader: require.resolve('url-loader'),
               options: {
+                esModule: false,
                 limit: 10000,
                 name: 'static/media/[name].[hash:8].[ext]',
-                fallback: require.resolve('file-loader'),
+                fallback: {
+                  loader: require.resolve('file-loader'),
+                  options: { esModule: false },
+                },
               },
             },
             {
               loader: require.resolve('file-loader'),
-              options: { name: 'static/media/[name].[hash:8].[ext]' },
+              options: { esModule: false, name: 'static/media/[name].[hash:8].[ext]' },
             },
           ],
         },
@@ -208,6 +213,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
             {
               loader: require.resolve('url-loader'),
               options: {
+                esModule: false,
                 limit: 10000,
                 name: 'static/media/[name].[width].[hash:8].[ext]',
                 adapter: require('responsive-loader/sharp'),
@@ -225,6 +231,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
           use: [
             {
               loader: require.resolve('file-loader'),
+              options: { esModule: false },
             },
             {
               loader: require.resolve('app-manifest-loader'),
@@ -248,7 +255,7 @@ export default (options: Partial<CommonOptions>): Configuration => {
             ...manifests,
           ],
           loader: require.resolve('file-loader'),
-          options: { name: 'static/media/[name].[hash:8].[ext]' },
+          options: { esModule: false, name: 'static/media/[name].[hash:8].[ext]' },
         },
       ].filter(Boolean) as RuleSetRule[],
     },
