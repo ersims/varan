@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.17.1](https://github.com/ersims/varan/compare/varan@0.17.0...varan@0.17.1) (2020-03-28)
+
+### Bug Fixes
+
+- disable esmodules to prevent some parsing errors ([9b375ff](https://github.com/ersims/varan/commit/9b375ff5851239a9ffe3a3e6016e8a50a5b0498b))
+
 # [0.17.0](https://github.com/ersims/varan/compare/varan@0.16.3...varan@0.17.0) (2020-03-28)
 
 ### Bug Fixes
