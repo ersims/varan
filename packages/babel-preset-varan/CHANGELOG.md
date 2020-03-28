@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/ersims/varan/compare/babel-preset-varan@0.3.0...babel-preset-varan@0.3.1) (2020-03-28)
+
+### Bug Fixes
+
+- **deps:** update dependency @svgr/webpack to v5 ([73eb472](https://github.com/ersims/varan/commit/73eb472ba1313307a752278960e4076c49fe3e1c))
+
 # [0.3.0](https://github.com/ersims/varan/compare/babel-preset-varan@0.2.0...babel-preset-varan@0.3.0) (2019-11-18)
 
 **Note:** Version bump only for package babel-preset-varan

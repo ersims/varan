@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.17.0](https://github.com/ersims/varan/compare/varan@0.16.3...varan@0.17.0) (2020-03-28)
+
+### Bug Fixes
+
+- **deps:** update dependency execa to v4 ([bde5132](https://github.com/ersims/varan/commit/bde5132dbe328a70a339b9b2477c360a25355130))
+- **deps:** update dependency file-loader to v5 ([30f8ff9](https://github.com/ersims/varan/commit/30f8ff9f770f31fe9d79f4232b7c86693e50b5b0))
+- **deps:** update dependency file-loader to v6 ([4aaab77](https://github.com/ersims/varan/commit/4aaab77b05bad66940a786d6f0cf1fd0c099482b))
+- **deps:** update dependency mini-css-extract-plugin to ^0.9.0 ([3dfb8d1](https://github.com/ersims/varan/commit/3dfb8d1ee394fe01fa6d17e872555989e1e750e9))
+- **deps:** update dependency react-dev-utils to v10 ([dba8840](https://github.com/ersims/varan/commit/dba88408ed50af46ea1af14ba06581c86e062d30))
+- **deps:** update dependency sharp to ^0.24.0 ([beb8a09](https://github.com/ersims/varan/commit/beb8a0979117fcb747910f90bc53c5e318e1347d))
+- **deps:** update dependency sw-precache-webpack-plugin to v1 ([3c8bd65](https://github.com/ersims/varan/commit/3c8bd65a303572c39d22c1f1e39eeaf6d6b12c86))
+- **deps:** update dependency update-notifier to v4 ([f9885c3](https://github.com/ersims/varan/commit/f9885c3ad48efda178b3e09f4d56a474da85e91e))
+- **deps:** update dependency url-loader to v3 ([7770eda](https://github.com/ersims/varan/commit/7770edae7d49c8422dc55ac02fb16c4a632acc37))
+- **deps:** update dependency url-loader to v4 ([6ef6f15](https://github.com/ersims/varan/commit/6ef6f15cbca71a65434686cce4c31d3902ddcb3f))
+- **deps:** update dependency wait-on to v4 ([63422fb](https://github.com/ersims/varan/commit/63422fbd15412bbf54955fa2970fad56168f522f))
+
+### Features
+
+- drop support for node v8 ([be5b3d9](https://github.com/ersims/varan/commit/be5b3d90d2b360750aa956827e1315cc8585396f))
+
 ## [0.16.3](https://github.com/ersims/varan/compare/varan@0.16.2...varan@0.16.3) (2019-11-21)
 
 ### Features
