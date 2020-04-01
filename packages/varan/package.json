@@ -117,7 +117,7 @@
     "@types/react-dom": "^16.8.5",
     "@types/split": "^1.0.0",
     "@types/sw-precache-webpack-plugin": "^0.11.0",
-    "@types/table": "^4.0.6",
+    "@types/table": "^5.0.0",
     "@types/terser-webpack-plugin": "^2.0.0",
     "@types/update-notifier": "^4.1.0",
     "@types/webpack-assets-manifest": "^3.0.0",
