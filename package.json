@@ -78,7 +78,7 @@
     "execa": "^4.0.0",
     "fs-extra": "^9.0.0",
     "husky": "^4.0.0",
-    "jest": "^25.0.0",
+    "jest": "^26.0.0",
     "jest-transform-stub": "^2.0.0",
     "lerna": "^3.15.0",
     "lint-staged": "^10.0.0",
