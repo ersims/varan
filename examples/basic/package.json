@@ -39,7 +39,7 @@
     "@babel/core": "^7.5.5",
     "babel-core": "^7.0.0-bridge.0",
     "del-cli": "^3.0.0",
-    "jest": "^25.2.3",
+    "jest": "^26.0.0",
     "jest-transform-stub": "^2.0.0",
     "normalize.css": "^8.0.1",
     "react-test-renderer": "^16.8.6",
