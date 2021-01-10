@@ -47,7 +47,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "axios": "^0.19.0",
+    "axios": "^0.21.0",
     "chalk": "^3.0.0",
     "commander": "^5.0.0",
     "execa": "^4.0.0",
