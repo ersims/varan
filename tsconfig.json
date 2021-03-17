@@ -5,6 +5,7 @@
     "traceResolution": false,
     "allowJs": true,
     "checkJs": false,
+    "skipLibCheck": true,
     "jsx": "react",
     "noEmit": true,
     "target": "es2017",
@@ -25,7 +26,6 @@
     "pretty": true,
     "sourceMap": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": false,
     "resolveJsonModule": true,
     "rootDir": "./"
   }

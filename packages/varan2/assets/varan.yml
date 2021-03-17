@@ -1,0 +1,289 @@
+# The configurations that used for the recording, feel free to edit them
+config:
+  # Specify a command to be executed
+  # like `/bin/bash -l`, `ls`, or any other commands
+  # the default is bash for Linux
+  # or powershell.exe for Windows
+  command: zsh
+
+  # Specify the current working directory path
+  # the default is the current working directory path
+  cwd: /Users/demouser/projects
+
+  # Export additional ENV variables
+  env:
+    recording: true
+
+  # Explicitly set the number of columns
+  # or use `auto` to take the current
+  # number of columns of your shell
+  cols: 140
+
+  # Explicitly set the number of rows
+  # or use `auto` to take the current
+  # number of rows of your shell
+  rows: 24
+
+  # Amount of times to repeat GIF
+  # If value is -1, play once
+  # If value is 0, loop indefinitely
+  # If value is a positive number, loop n times
+  repeat: 0
+
+  # Quality
+  # 1 - 100
+  quality: 100
+
+  # Delay between frames in ms
+  # If the value is `auto` use the actual recording delays
+  frameDelay: auto
+
+  # Maximum delay between frames in ms
+  # Ignored if the `frameDelay` isn't set to `auto`
+  # Set to `auto` to prevent limiting the max idle time
+  maxIdleTime: 'auto'
+
+  # The surrounding frame box
+  # The `type` can be null, window, floating, or solid`
+  # To hide the title use the value null
+  # Don't forget to add a backgroundColor style with a null as type
+  frameBox:
+    type: floating
+    title: varan
+    style:
+      border: 0px black solid
+      # backgroundColor: transparent
+      # boxShadow: none
+      # margin: 0px
+
+  # Add a watermark image to the rendered gif
+  # You need to specify an absolute path for
+  # the image on your machine or a URL, and you can also
+  # add your own CSS styles
+  watermark:
+    imagePath: null
+    style:
+      position: absolute
+      right: 15px
+      bottom: 15px
+      width: 100px
+      opacity: 0.9
+
+  # Cursor style can be one of
+  # `block`, `underline`, or `bar`
+  cursorStyle: block
+
+  # Font family
+  # You can use any font that is installed on your machine
+  # in CSS-like syntax
+  fontFamily: 'Monaco, Lucida Console, Ubuntu Mono, Monospace'
+
+  # The size of the font
+  fontSize: 12
+
+  # The height of lines
+  lineHeight: 1
+
+  # The spacing between letters
+  letterSpacing: 0
+
+  # Theme
+  theme:
+    background: 'transparent'
+    foreground: '#afafaf'
+    cursor: '#c7c7c7'
+    black: '#232628'
+    red: '#fc4384'
+    green: '#b3e33b'
+    yellow: '#ffa727'
+    blue: '#75dff2'
+    magenta: '#ae89fe'
+    cyan: '#708387'
+    white: '#d5d5d0'
+    brightBlack: '#626566'
+    brightRed: '#ff7fac'
+    brightGreen: '#c8ed71'
+    brightYellow: '#ebdf86'
+    brightBlue: '#75dff2'
+    brightMagenta: '#ae89fe'
+    brightCyan: '#b1c6ca'
+    brightWhite: '#f9f9f4'
+
+# Records, feel free to edit them
+records:
+  - delay: 250
+    content: "\r\e[0m\e[27m\e[24m\e[J\e[01;35mprojects \e[01;35m% \e[00m\e[K\e[?1h\e=\e[?2004h"
+  - delay: 1500
+    content: 'n'
+  - delay: 200
+    content: p
+  - delay: 200
+    content: x
+  - delay: 200
+    content: ' '
+  - delay: 200
+    content: c
+  - delay: 200
+    content: r
+  - delay: 200
+    content: e
+  - delay: 200
+    content: a
+  - delay: 200
+    content: t
+  - delay: 200
+    content: e
+  - delay: 200
+    content: '-'
+  - delay: 200
+    content: v
+  - delay: 200
+    content: a
+  - delay: 200
+    content: r
+  - delay: 200
+    content: a
+  - delay: 200
+    content: 'n'
+  - delay: 200
+    content: '-'
+  - delay: 200
+    content: a
+  - delay: 200
+    content: p
+  - delay: 200
+    content: p
+  - delay: 200
+    content: ' '
+  - delay: 200
+    content: m
+  - delay: 200
+    content: 'y'
+  - delay: 200
+    content: '-'
+  - delay: 200
+    content: a
+  - delay: 200
+    content: p
+  - delay: 200
+    content: p
+  - delay: 200
+    content: "\e[?2004l\r\r\n\e]2;npx create-varan-app my-app\a\e]1;npx\a"
+  - delay: 300
+    content: "\r\n  Creating new project \e[34mmy-app\e[39m using \e[34mcreate-varan-app\e[39m \e[34mv0.3.0\e[39m \e[32m\U0001F916\e[39m\r\n\r\n"
+  - delay: 300
+    content: "\e[?25l  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠙\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠹\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠸\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠼\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠴\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠦\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠧\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠇\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[33m⠏\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n    Changing working directory\r\n    Preparing new git repository\r\n    Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠙\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠹\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠸\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠼\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠴\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠦\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠧\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[33m⠇\e[39m Installing project dependencies\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prerequisite checks\r\n  \e[32m✔\e[39m Cloning project from \e[34mhttps://github.com/ersims/varan-boilerplate.git\e[39m\r\n  \e[32m✔\e[39m Changing working directory\r\n  \e[32m✔\e[39m Preparing new git repository\r\n  \e[32m✔\e[39m Installing project dependencies\r\n\e[?25h\r\n  \e[32m\U0001F680\e[39m Success! \e[32m\U0001F680\e[39m\r\n  Project \e[34mmy-app\e[39m is now created at \e[34m/Users/demouser/projects/my-app\e[39m\r\n\r\n  To get started, run the following commands\r\n    \e[34mcd my-app\e[39m\r\n    \e[34mnpx varan watch\e[39m\r\n\r\n  For more information on how to use \e[34mmy-app\e[39m, please refer to the \e[34mREADME.md\e[39m file or visit \e[34mhttps://github.com/ersims/varan#README.md\e[39m\r\n\r\n"
+  - delay: 300
+    content: "\r\e[0m\e[27m\e[24m\e[J\e[01;35mprojects \e[01;35m% \e[00m\e[K\e[?1h\e=\e[?2004h"
+  - delay: 1500
+    content: c
+  - delay: 200
+    content: d
+  - delay: 200
+    content: ' '
+  - delay: 200
+    content: m
+  - delay: 200
+    content: 'y'
+  - delay: 200
+    content: '-'
+  - delay: 200
+    content: a
+  - delay: 200
+    content: p
+  - delay: 200
+    content: p
+  - delay: 200
+    content: "\e[?1l\e>\e[?2004l\r\r\n\e]2;cd my-app\a\e]1;cd\a"
+  - delay: 200
+    content: "\r\e[0m\e[27m\e[24m\e[J\e[01;35mprojects/my-app \e[01;35m% \e[00m\e[K\e[?1h\e=\e[?2004h"
+  - delay: 1500
+    content: 'n'
+  - delay: 200
+    content: p
+  - delay: 200
+    content: x
+  - delay: 200
+    content: ' '
+  - delay: 200
+    content: v
+  - delay: 200
+    content: a
+  - delay: 200
+    content: r
+  - delay: 200
+    content: a
+  - delay: 200
+    content: 'n'
+  - delay: 200
+    content: ' '
+  - delay: 200
+    content: w
+  - delay: 200
+    content: a
+  - delay: 200
+    content: t
+  - delay: 200
+    content: c
+  - delay: 200
+    content: h
+  - delay: 500
+    content: "\e[?1l\e>\e[?2004l\r\r\n\e]2;npx varan watch\a\e]1;npx\a"
+  - delay: 1000
+    content: "\r\n  Watching project with \e[34m2\e[39m configs in \e[34mdevelopment\e[39m mode using \e[34mvaran\e[39m \e[34mv0.14.0\e[39m \e[32m\U0001F916\e[39m\r\n\r\n"
+  - delay: 1500
+    content: "\e[?25l  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠙\e[39m Build and start client development server\r\n    \e[33m⠙\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠹\e[39m Build and start client development server\r\n    \e[33m⠹\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠸\e[39m Build and start client development server\r\n    \e[33m⠸\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠼\e[39m Build and start client development server\r\n    \e[33m⠼\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠴\e[39m Build and start client development server\r\n    \e[33m⠴\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠦\e[39m Build and start client development server\r\n    \e[33m⠦\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠧\e[39m Build and start client development server\r\n    \e[33m⠧\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠇\e[39m Build and start client development server\r\n    \e[33m⠇\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[33m❯\e[39m Build\r\n    \e[33m⠏\e[39m Build and start client development server\r\n    \e[33m⠏\e[39m Build server\r\n    Calculate statistics\r\n"
+  - delay: 300
+    content: "\e[?25l\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[1A\e[2K\e[G  \e[32m✔\e[39m Prepare\r\n  \e[32m✔\e[39m Build\r\n  \e[32m✔\e[39m Calculate statistics\r\n  \e[32m✔\e[39m Start server\r\n\e[?25h\r\n\r\n  \e[32m\U0001F680\e[39m Success! \e[32m\U0001F680\e[39m\r\n  Compiled \e[34m2\e[39m configs in \e[34m4835ms\e[39m\r\n  Server compiled in \e[34m4430ms\e[39m\r\n  Client compiled in \e[34m4835ms\e[39m\r\n\r\n\r\n  Development server is now ready and you can view your project in the browser\r\n\r\n      \e[34m\U0001F449\e[39m  \e[1m\e[34mhttp://localhost:3000/\e[39m\e[22m  \e[34m\U0001F448\e[39m\r\n\r\n\r\n"
+  - delay: 4000
+    content: "\e[?2004l\r\r\n"
