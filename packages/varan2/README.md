@@ -530,8 +530,8 @@ These are exported as functions that take some options (see below) and returns a
 ## TODO
 
 - [ ] Enable support for `fibers` (see https://github.com/webpack-contrib/sass-loader)
-- [ ] Fast refresh
-- [ ] Complete build stats
+- [x] Fast refresh
+- [x] Complete build stats
 - [ ] Compare previous build stats
 - [ ] No server side assets?
 - [ ] BP index.html for client only apps
@@ -539,11 +539,18 @@ These are exported as functions that take some options (see below) and returns a
 - [ ] 2-page demo site in boilerplate
 - [ ] aws-cdk example
 - [ ] make everything the same version
+- [ ] service-worker
+- [ ] dev/prod mode in configs?
 - [ ] fix api for custom configs
 - [ ] complete asset manifest
 - [ ] good image resizing
-- [ ] default build outputs should be build/<target>/(public|dist|build) (to enable outputs that are not public, e.g. manifests)
+- [ ] default build outputs should be build/<target>/(public|dist|build) (to enable outputs that are not public, e.g. manifests and source maps)
 - [ ] add varan build env vars for locating stuff
+- [ ] handle initial build fail for web and node
+- [ ] autorestart on rebuild if no devserver (e.g. node)?
+- [ ] fix source maps (duplicates, separated etc)
+- [ ] add react-dev-utils scripts/middlewares (e.g. noopserviceworker)
+- [ ] custom web-static and web-ssr webpack config
 
 ## License
 

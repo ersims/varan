@@ -1,15 +1,20 @@
-import path from 'path';
+import path, { relative, normalize } from 'path';
 import chalk from 'chalk';
 import { getBorderCharacters, table } from 'table';
-import { build as buildWebpack } from '../lib/build';
+import internalIp from 'internal-ip';
+import { watch as watchWebpack } from '../lib/watch';
 import { loadConfig } from '../lib/config/loadConfig';
 import { validateConfig } from '../lib/config/validateConfig';
-import { createManifestComparisonTable } from '../lib/createManifestComparisonTable';
 import { VaranCliOptions } from '../types/VaranCliOptions';
 import { emojis } from '../lib/emojis';
+import { watcherRecompileSpinner } from '../lib/watcherRecompileSpinner';
+import { resolveAppRelativePath } from '../lib/resolveAppRelativePath';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const pkg = require('../../package.json');
 
 // Types
-interface BuildCommandOptions extends VaranCliOptions {}
+interface WatchCommandOptions extends VaranCliOptions {}
 
 // Init
 const mark = (v: string) => chalk.cyan(v);
@@ -17,7 +22,7 @@ const warn = (v: string) => chalk.yellow(v);
 const bad = (v: string) => chalk.red(v);
 
 // Exports
-export const build = async (options: BuildCommandOptions) => {
+export const watch = async (options: WatchCommandOptions) => {
   const { config, silent } = options;
 
   // Load a user configuration if possible
@@ -29,8 +34,8 @@ export const build = async (options: BuildCommandOptions) => {
   // Validate and apply defaults
   const customConfig = validateConfig({ ...userConfig });
 
-  // Run build
-  const { tasks, endTime, startTime } = await buildWebpack(customConfig);
+  // Run watcher
+  const { tasks, endTime, startTime } = await watchWebpack(customConfig);
   const mode = tasks.reduce((acc, { stats }, i) => {
     const out = stats?.compilation.options.mode || acc;
     if (i === 0) return out;
@@ -40,6 +45,9 @@ export const build = async (options: BuildCommandOptions) => {
 
   // Print beautiful tables with stats if not silent
   if (!silent) {
+    // Init
+    const networkIp = await internalIp.v4();
+
     /**
      * Success summary
      */
@@ -52,7 +60,7 @@ export const build = async (options: BuildCommandOptions) => {
     );
     console.log();
     console.log(
-      `  Compiled ${mark(tasks.length.toString())} config${tasks.length !== 1 ? 's' : ''} in ${mark(
+      `  Watching ${mark(tasks.length.toString())} config${tasks.length !== 1 ? 's' : ''} in ${mark(
         mode,
       )} mode in ${mark(`${endTime! - startTime}ms`)}`,
     );
@@ -61,16 +69,31 @@ export const build = async (options: BuildCommandOptions) => {
     /**
      * Task stats
      */
-    tasks.forEach(({ config: taskConfig, stats, currentManifest, lastManifest }, i) => {
+    tasks.forEach(({ config: taskConfig, stats, compiler, devServer }, i) => {
       /**
        * Summary
        */
       if (stats) {
+        // Fetch devServer listening url
+        let devServerLocalUrl;
+        let devServerInternalUrl;
+        if (devServer && compiler) {
+          const protocol = compiler.options.devServer?.https ? 'https' : 'http';
+          const host = compiler.options.devServer?.host || 'localhost';
+          const port = compiler.options.devServer?.port || 3000;
+          devServerLocalUrl = new URL(
+            `${protocol}://${['0.0.0.0', '::'].includes(host) ? 'localhost' : host}:${port}`,
+          ).toString();
+          devServerInternalUrl = new URL(`${protocol}://${networkIp}:${port}`).toString();
+        }
+
         const tableTotals = [
           [`Config file (${mark((i + 1).toString())}/${mark(tasks.length.toString())})`, mark(taskConfig)],
           ['Target directory', mark(stats.compilation.outputOptions.path || '-')],
           ['Duration', mark(`${stats.endTime - stats.startTime!}ms`)],
-        ];
+          devServerLocalUrl && [`Local address ${chalk.cyan(emojis.pointRight)}`, mark(devServerLocalUrl)],
+          devServerInternalUrl && [`Network address ${chalk.cyan(emojis.pointRight)}`, mark(devServerInternalUrl)],
+        ].filter(Boolean);
         console.log();
         console.log(
           table(tableTotals, {
@@ -86,21 +109,29 @@ export const build = async (options: BuildCommandOptions) => {
         );
       }
 
-      /**
-       * Asset list
-       */
-      if (currentManifest) {
-        const warnSize = stats?.compilation.options.performance
-          ? stats.compilation.options.performance.maxAssetSize || null
-          : null;
-        console.log();
-        console.log(
-          createManifestComparisonTable({
-            warnSize,
-            currentManifest,
-            lastManifest,
-          }),
-        );
+      // Integrate with compiler
+      if (compiler) {
+        const clientCompileSpinner = watcherRecompileSpinner('Recompiling');
+        // Add hooks for compile feedback
+        compiler.hooks.invalid.tap(pkg.name, (file) => {
+          const sourceFile = file && normalize(relative(resolveAppRelativePath(''), file));
+          clientCompileSpinner.start(chalk.bold(sourceFile ? `Recompiling ${sourceFile}` : 'Recompiling'));
+        });
+        compiler.hooks.done.tap(pkg.name, (newStats) => {
+          if (newStats.hasErrors()) {
+            const { errors, timings } = newStats.toJson({ errors: true, timings: true });
+            clientCompileSpinner.fail(
+              chalk.bold(
+                `Failed to recompile in ${mark(`${newStats.endTime - newStats.startTime}ms`)} due to ${bad('errors')}`,
+              ),
+            );
+            errors!.forEach((error) => console.log(`   ${bad(emojis.smallSquare)} ${error.message}`));
+          } else {
+            clientCompileSpinner.succeed(
+              chalk.bold(`Successfully recompiled in ${mark(`${newStats.endTime - newStats.startTime}ms`)}`),
+            );
+          }
+        });
       }
 
       const stat = stats?.toJson({ errors: true, warnings: true });

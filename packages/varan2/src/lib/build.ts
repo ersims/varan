@@ -13,7 +13,6 @@ import { VaranAssetManifest } from '../types/VaranAssetManifest';
 
 // Types
 interface BuildOptions extends VaranConfiguration {}
-
 interface TaskListContext {
   startTime: number;
   endTime: number | null;
@@ -39,7 +38,9 @@ export const build = async ({
   silent,
 }: BuildOptions): Promise<Pick<TaskListContext, 'startTime' | 'endTime' | 'tasks'>> => {
   // Fetch configs
-  const webpackConfigs = await Promise.all(configs.map(getWebpackConfig));
+  const webpackConfigs = await Promise.all(
+    configs.map((config) => getWebpackConfig(config, {}, { mode: 'production' })),
+  );
 
   // Prepare webpack
   const multiCompiler = webpack(webpackConfigs);
@@ -101,11 +102,13 @@ export const build = async ({
                       task: (ctx: TaskListContext) =>
                         new Promise((resolve, reject) =>
                           compiler.run(async (err, stats) => {
+                            const task = ctx.tasks[i];
+
                             if (err) return reject(err);
                             if (!stats) return reject(new Error('Invalid webpack result'));
 
                             // Store current task stats
-                            ctx.tasks[i].stats = stats;
+                            task.stats = stats;
 
                             // Check for errors
                             if (stats.hasErrors()) {
@@ -125,9 +128,11 @@ export const build = async ({
                     {
                       title: 'Measure',
                       task: async (ctx: TaskListContext) => {
+                        const task = ctx.tasks[i];
+
                         // Try to load the asset manifest
                         const isVaranAssetManifest = (MaybeManifest: any): MaybeManifest is VaranAssetManifest => true;
-                        const manifest = ctx.tasks[i].stats?.compilation.getAsset(manifestFileName)?.name;
+                        const manifest = task.stats?.compilation.getAsset(manifestFileName)?.name;
                         if (!manifest || !isVaranAssetManifest(manifest)) {
                           return failureMessage('Manifest could not be created');
                         }
@@ -135,7 +140,7 @@ export const build = async ({
                         // Load manifest
                         try {
                           const outputPath = compiler.options.output.path || resolveAppRelativePath('dist');
-                          ctx.tasks[i].currentManifest = JSON.parse(
+                          task.currentManifest = JSON.parse(
                             await readFileAsync(path.resolve(outputPath, manifestFileName), 'utf-8'),
                           );
                           return successMessage('Manifest created');
@@ -160,6 +165,8 @@ export const build = async ({
     ],
     taskOptions,
   );
+
+  // Run
   const { tasks, endTime, startTime } = await taskList.run();
   return { tasks, endTime, startTime };
 };

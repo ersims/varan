@@ -1,7 +1,7 @@
 // Exports
 export interface VaranAssetManifest {
   [source: string]: {
-    sri: string | null;
+    integrity: string | null;
     name: string;
     size: number;
     gzip: { name: string; size: number } | null;

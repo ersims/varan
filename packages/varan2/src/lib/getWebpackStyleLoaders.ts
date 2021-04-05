@@ -6,6 +6,7 @@ export const getWebpackStyleLoaders = (
   { isDev, isNode }: { isDev: boolean; isNode: boolean },
   cssOptions: { [key: string]: any },
   preProcessor?: { [key: string]: any },
+  // TODO: Type returntype correctly
 ): any[] => {
   return [
     !isNode && (isDev ? { loader: require.resolve('style-loader') } : { loader: MiniCssExtractPlugin.loader }),

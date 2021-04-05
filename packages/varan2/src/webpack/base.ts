@@ -1,6 +1,5 @@
-import { resolve } from 'path';
+import { RuleSetUseItem } from 'webpack';
 import babelPreset from 'babel-preset-varan';
-// import { WebpackManifestPlugin } from 'webpack-manifest-plugin';
 import { WebpackConfigurationFunction } from '../types/WebpackConfigurationFunction';
 import { resolveAppRelativePath } from '../lib/resolveAppRelativePath';
 import { getWebpackStyleLoaders } from '../lib/getWebpackStyleLoaders';
@@ -10,16 +9,21 @@ const sources = /\.(jsx?|mjs|tsx?)$/;
 
 // Exports
 export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
-  // const mode = argv.mode || 'production';
-  // const isDev = !env.production;
-  const mode = 'production';
-  const isDev = false;
+  const mode = argv?.mode || 'production';
+  const isDev = mode === 'development';
   const isNode = argv?.target === 'node';
   return {
     mode,
     bail: !isDev,
     performance: isDev ? { hints: false } : undefined,
+    // Source maps should be configured per config instead
+    devtool: false,
+    // Handle errors outside of webpack
     stats: 'errors-only',
+    infrastructureLogging: {
+      debug: false,
+      level: 'error',
+    },
     resolve: {
       extensions: ['.js', '.jsx', '.mjs', '.json', '.ts', '.tsx'],
     },
@@ -27,10 +31,6 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
       path: resolveAppRelativePath('dist'),
       pathinfo: isDev,
       globalObject: 'this',
-
-      // Point sourcemap entries to original disk location (format as URL on Windows)
-      devtoolModuleFilenameTemplate: (info: { absoluteResourcePath: string }): string =>
-        `file://${resolve(info.absoluteResourcePath).replace(/\\/g, '/')}`,
     },
     module: {
       strictExportPresence: true,
@@ -47,6 +47,7 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
           options: {
             cacheDirectory: isDev,
             presets: [[babelPreset]],
+            plugins: [!isNode && isDev && require.resolve('react-refresh/babel')].filter(Boolean),
           },
         },
 
@@ -124,12 +125,16 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
          */
         {
           exclude: [/\.html$/, /\.(le|sa|sc|c)ss$/, /\.json$/, /\.(ejs|pug|hbs)$/, /\.(jsx?|mjs|tsx?)$/, /\.vue$/],
-          loader: require.resolve('file-loader'),
-          options: { esModule: false, name: 'static/media/[name].[hash:8].[ext]' },
+          use: ({ compiler }: { compiler: string }) =>
+            [
+              compiler !== 'HtmlWebpackCompiler' && {
+                loader: require.resolve('file-loader'),
+                options: { esModule: false, name: 'static/media/[name].[hash:8].[ext]' },
+              },
+            ].filter(Boolean) as RuleSetUseItem[],
         },
       ],
     },
-    // TIO
     plugins: [
       // new WebpackManifestPlugin(),
       // new WebpackVaranAssetsManifestPlugin()
