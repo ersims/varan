@@ -1,5 +1,5 @@
-import { WebpackPluginInstance, SourceMapDevToolPlugin } from 'webpack';
-import { resolve, normalize, relative } from 'path';
+import { SourceMapDevToolPlugin, WebpackPluginInstance } from 'webpack';
+import { resolve } from 'path';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import CssMinimizerPlugin from 'css-minimizer-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
@@ -11,6 +11,7 @@ import { base } from './base';
 import { WebpackVaranAssetsManifestPlugin } from '../lib/WebpackVaranAssetsManifestPlugin';
 
 // Init
+const target = 'web';
 const publicDir = 'public';
 const distPath = resolveAppRelativePath('dist/web');
 const publicPath = resolve(distPath, publicDir);
@@ -18,13 +19,13 @@ const publicPath = resolve(distPath, publicDir);
 // Exports
 export const web: WebpackConfigurationFunction = (env = {}, argv = {}) => {
   const isDev = argv?.mode === 'development';
-  const baseConfig = base(env, argv);
+  const baseConfig = base(env, { ...argv, target });
   const sockHost = 'localhost';
   const sockPath = '/ws';
   const sockPort = 3000;
   return {
     ...baseConfig,
-    target: 'web',
+    target,
     // TODO: should this be configurable?
     entry: resolveAppRelativePath('src/client/index'),
     output: {
@@ -40,11 +41,14 @@ export const web: WebpackConfigurationFunction = (env = {}, argv = {}) => {
       hot: true,
       compress: true,
       liveReload: false,
-      static: {
-        directory: publicPath,
-        watch: true,
-      },
+      // static: {
+      //   publicPath: '/',
+      //   directory: publicPath,
+      //   watch: true,
+      // },
+      static: publicPath,
       dev: {
+        publicPath: '/',
         stats: false,
         writeToDisk: (p: string) => /^(?!.*(\.hot-update\.)).*/.test(p),
       },
@@ -150,7 +154,7 @@ export const web: WebpackConfigurationFunction = (env = {}, argv = {}) => {
       //     return `file://${namespace}/${normalizedResourcePath.replace(/\\/g, '/')}`;
       //   },
       // }),
-      new WebpackVaranAssetsManifestPlugin(),
+      new WebpackVaranAssetsManifestPlugin({ filename: '../varan.manifest.json' }),
     ].filter(Boolean) as WebpackPluginInstance[],
   };
 };

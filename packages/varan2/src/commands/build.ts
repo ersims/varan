@@ -1,4 +1,4 @@
-import path from 'path';
+import { resolve } from 'path';
 import chalk from 'chalk';
 import { getBorderCharacters, table } from 'table';
 import { build as buildWebpack } from '../lib/build';
@@ -21,7 +21,7 @@ export const build = async (options: BuildCommandOptions) => {
   const { config, silent } = options;
 
   // Load a user configuration if possible
-  let userConfig = await loadConfig(path.resolve(process.cwd(), config));
+  let userConfig = await loadConfig(resolve(process.cwd(), config));
 
   // Handle the configuration factory pattern
   if (typeof userConfig === 'function') userConfig = await userConfig(options);

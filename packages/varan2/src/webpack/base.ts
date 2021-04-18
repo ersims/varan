@@ -11,9 +11,11 @@ const sources = /\.(jsx?|mjs|tsx?)$/;
 export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
   const mode = argv?.mode || 'production';
   const isDev = mode === 'development';
-  const isNode = argv?.target === 'node';
+  const target = argv?.target;
+  const isNode = target === 'node';
   return {
     mode,
+    target,
     bail: !isDev,
     performance: isDev ? { hints: false } : undefined,
     // Source maps should be configured per config instead
@@ -23,6 +25,8 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
     infrastructureLogging: {
       debug: false,
       level: 'error',
+      // debug: true,
+      // level: 'verbose',
     },
     resolve: {
       extensions: ['.js', '.jsx', '.mjs', '.json', '.ts', '.tsx'],
@@ -47,7 +51,7 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
           options: {
             cacheDirectory: isDev,
             presets: [[babelPreset]],
-            plugins: [!isNode && isDev && require.resolve('react-refresh/babel')].filter(Boolean),
+            plugins: [isDev && require.resolve('react-refresh/babel')].filter(Boolean),
           },
         },
 
@@ -69,7 +73,9 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
             { isDev, isNode },
             {
               modules: {
-                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64]',
+                mode: 'local',
+                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64:8]',
+                exportOnlyLocals: isNode,
               },
             },
           ),
@@ -105,7 +111,9 @@ export const base: WebpackConfigurationFunction = (env = {}, argv = {}) => {
             { isDev, isNode },
             {
               modules: {
-                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64]',
+                mode: 'local',
+                localIdentName: isDev ? '[path][name]__[local]' : '[hash:base64:8]',
+                exportOnlyLocals: isNode,
               },
             },
             {

@@ -1,19 +1,23 @@
-import webpack from 'webpack';
+import { Configuration } from 'webpack';
 import { resolveAppRelativePath } from './resolveAppRelativePath';
-import { WebpackArguments, WebpackEnvironment } from '../types/WebpackConfigurationFunction';
+import { WebpackConfigurationFunction } from '../types/WebpackConfigurationFunction';
+import { WebpackMultiConfigurationFunction } from '../types/WebpackMultiConfigurationFunction';
+import { WebpackEnvironment } from '../types/WebpackEnvironment';
+import { WebpackArguments } from '../types/WebpackArguments';
 
 // Types
 export type ValidConfiguration =
   | string
-  | webpack.Configuration
-  | ((env?: WebpackEnvironment, argv?: WebpackArguments) => webpack.Configuration);
+  | Configuration
+  | WebpackConfigurationFunction
+  | WebpackMultiConfigurationFunction;
 
 // Exports
 export const getWebpackConfig = async (
   configFileOrObjectOrFn: ValidConfiguration,
   env?: WebpackEnvironment,
   argv?: WebpackArguments,
-): Promise<webpack.Configuration> => {
+): Promise<Configuration | Configuration[]> => {
   // eslint-disable-next-line
   const rawConfig =
     typeof configFileOrObjectOrFn === 'string'

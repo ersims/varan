@@ -1,4 +1,4 @@
-import webpack, { Stats } from 'webpack';
+import webpack, { Configuration, Stats } from 'webpack';
 import Listr, { ListrOptions } from 'listr';
 import chalk from 'chalk';
 import path from 'path';
@@ -38,9 +38,9 @@ export const build = async ({
   silent,
 }: BuildOptions): Promise<Pick<TaskListContext, 'startTime' | 'endTime' | 'tasks'>> => {
   // Fetch configs
-  const webpackConfigs = await Promise.all(
-    configs.map((config) => getWebpackConfig(config, {}, { mode: 'production' })),
-  );
+  const webpackConfigs = (
+    await Promise.all(configs.flatMap((config) => getWebpackConfig(config, {}, { mode: 'production' })))
+  ).flat(1);
 
   // Prepare webpack
   const multiCompiler = webpack(webpackConfigs);
@@ -87,7 +87,7 @@ export const build = async ({
 
                         // Check for previous manifest to compare against
                         try {
-                          const outputPath = compiler.options.output.path || resolveAppRelativePath('dist');
+                          const outputPath = compiler.outputPath || resolveAppRelativePath('dist');
                           ctx.tasks[i].lastManifest = JSON.parse(
                             await readFileAsync(path.resolve(outputPath, manifestFileName), 'utf-8'),
                           );
@@ -139,7 +139,7 @@ export const build = async ({
 
                         // Load manifest
                         try {
-                          const outputPath = compiler.options.output.path || resolveAppRelativePath('dist');
+                          const outputPath = compiler.outputPath || resolveAppRelativePath('dist');
                           task.currentManifest = JSON.parse(
                             await readFileAsync(path.resolve(outputPath, manifestFileName), 'utf-8'),
                           );

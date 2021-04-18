@@ -1,24 +1,23 @@
 import webpack, { Compilation, Compiler } from 'webpack';
 import path from 'path';
-import { createHash } from 'crypto';
 import { VaranAssetManifest } from '../types/VaranAssetManifest';
 
-// Init
-function getSRI(hashes: readonly string[], content: string) {
-  return hashes
-    .map((hash) => {
-      const integrity = createHash(hash).update(content, 'utf8').digest('base64');
-      return `${hash}-${integrity}`;
-    })
-    .join(' ')
-    .trim();
+// Types
+interface WebpackVaranAssetsManifestPluginOptions {
+  filename: string;
 }
 
 // Exports
 export class WebpackVaranAssetsManifestPlugin {
-  protected readonly options = {
-    integrityHashes: ['SHA512'],
+  public readonly options: {
+    filename: string;
   };
+  constructor(options?: WebpackVaranAssetsManifestPluginOptions) {
+    this.options = {
+      filename: 'varan.manifest.json',
+      ...options,
+    };
+  }
   apply(compiler: Compiler) {
     const hookOptions = {
       name: 'WebpackVaranAssetsManifestPlugin',
@@ -31,7 +30,7 @@ export class WebpackVaranAssetsManifestPlugin {
         const manifest = this.createManifest(compilation);
         if (manifest) {
           const output = Buffer.from(JSON.stringify(manifest, null, 2));
-          compilation.emitAsset('varan.manifest.json', new webpack.sources.RawSource(output));
+          compilation.emitAsset(this.options.filename, new webpack.sources.RawSource(output));
         }
       });
     });
@@ -77,10 +76,7 @@ export class WebpackVaranAssetsManifestPlugin {
                     size: compilation.assets[brotliName].size(),
                   }
                 : null,
-              integrity: getSRI(
-                this.options.integrityHashes || [],
-                compilation.assets[asset.name].source().toString('utf-8'),
-              ),
+              integrity: asset.integrity || null,
             };
             return manifest;
           }, {})

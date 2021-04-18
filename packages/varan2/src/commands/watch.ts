@@ -69,7 +69,7 @@ export const watch = async (options: WatchCommandOptions) => {
     /**
      * Task stats
      */
-    tasks.forEach(({ config: taskConfig, stats, compiler, devServer }, i) => {
+    tasks.forEach(({ config: taskConfig, stats, compiler, server, devServer }, i) => {
       /**
        * Summary
        */
@@ -89,7 +89,7 @@ export const watch = async (options: WatchCommandOptions) => {
 
         const tableTotals = [
           [`Config file (${mark((i + 1).toString())}/${mark(tasks.length.toString())})`, mark(taskConfig)],
-          ['Target directory', mark(stats.compilation.outputOptions.path || '-')],
+          ['Target directory', mark(stats.compilation.compiler.outputPath || '-')],
           ['Duration', mark(`${stats.endTime - stats.startTime!}ms`)],
           devServerLocalUrl && [`Local address ${chalk.cyan(emojis.pointRight)}`, mark(devServerLocalUrl)],
           devServerInternalUrl && [`Network address ${chalk.cyan(emojis.pointRight)}`, mark(devServerInternalUrl)],
@@ -119,7 +119,7 @@ export const watch = async (options: WatchCommandOptions) => {
         });
         compiler.hooks.done.tap(pkg.name, (newStats) => {
           if (newStats.hasErrors()) {
-            const { errors, timings } = newStats.toJson({ errors: true, timings: true });
+            const { errors } = newStats.toJson({ errors: true });
             clientCompileSpinner.fail(
               chalk.bold(
                 `Failed to recompile in ${mark(`${newStats.endTime - newStats.startTime}ms`)} due to ${bad('errors')}`,
@@ -130,6 +130,13 @@ export const watch = async (options: WatchCommandOptions) => {
             clientCompileSpinner.succeed(
               chalk.bold(`Successfully recompiled in ${mark(`${newStats.endTime - newStats.startTime}ms`)}`),
             );
+            if (server) {
+              const preRestart = Date.now();
+              clientCompileSpinner.succeed(chalk.bold(`Restarting server`));
+              server.restart().then(() => {
+                clientCompileSpinner.succeed(chalk.bold(`Restarted server in ${mark(`${Date.now() - preRestart}ms`)}`));
+              });
+            }
           }
         });
       }
@@ -157,6 +164,14 @@ export const watch = async (options: WatchCommandOptions) => {
             console.error(`   ${bad(emojis.smallSquare)} ${error.message}`);
           });
         }
+      }
+
+      /**
+       * Integrate with runners
+       */
+      // Enable server logs
+      if (server) {
+        server.enableLogs();
       }
     });
   }

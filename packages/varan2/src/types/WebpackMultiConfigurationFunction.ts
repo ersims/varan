@@ -3,4 +3,4 @@ import { WebpackEnvironment } from './WebpackEnvironment';
 import { WebpackArguments } from './WebpackArguments';
 
 // Exports
-export type WebpackConfigurationFunction = (env: WebpackEnvironment, argv: WebpackArguments) => Configuration;
+export type WebpackMultiConfigurationFunction = (env: WebpackEnvironment, argv: WebpackArguments) => Configuration[];

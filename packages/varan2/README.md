@@ -529,10 +529,13 @@ These are exported as functions that take some options (see below) and returns a
 
 ## TODO
 
-- [ ] Enable support for `fibers` (see https://github.com/webpack-contrib/sass-loader)
+- [x] Compare previous build stats
 - [x] Fast refresh
 - [x] Complete build stats
-- [ ] Compare previous build stats
+- [ ] Enable support for `fibers` (see https://github.com/webpack-contrib/sass-loader)
+- [ ] Consistent logging per config (e.g. \[configname]:xxx)
+- [ ] Consistent naming of configs, path resolving etc (separate logic out into small pure functions) and keep varan/webpack/node as specified (or just keep it as entered by user?)
+- [ ] Fast refresh/HMR on server
 - [ ] No server side assets?
 - [ ] BP index.html for client only apps
 - [ ] Server side SSR?
