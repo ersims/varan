@@ -55,7 +55,7 @@
     "listr": "^0.14.2",
     "lodash.defaults": "^4.2.0",
     "source-map-support": "^0.5.13",
-    "tar": "^6.0.0",
+    "tar": "^4.4.15",
     "update-notifier": "^4.0.0",
     "validate-npm-package-name": "^3.0.0",
     "write-pkg": "^4.0.0"
